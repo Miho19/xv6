@@ -59,6 +59,43 @@ void machinit(void)
     memset(cpus, 0, sizeof(struct cpu)*NCPU);
 }
 
+void test(void) 
+{
+	int nDevices = USPiMassStorageDeviceAvailable();
+	int deviceIndex = 0;
+	int result = 0;
+	unsigned char buffer[512];
+	int i = 0;
+	int offset = 0;
+
+	if (nDevices < 1) {
+		cprintf("No Mass Storage Device available\n");
+		return;
+	}
+
+	for(deviceIndex = 0; deviceIndex < nDevices;deviceIndex++){
+		offset = 0;		
+		while((result = USPiMassStorageDeviceRead(offset*512,buffer,512,deviceIndex) ) == sizeof buffer){
+			//cprintf("READ AT OFFSET: %d\n",offset);
+                	for(i = 0;i<512;i++){
+                        	if(buffer[i] != 0 ){
+                        		cprintf("%d ",buffer[i]);
+                        	}
+                	}
+        		cprintf("\n");
+		offset++;
+		}
+
+
+		if((result = USPiMassStorageDeviceRead(0,buffer,512,deviceIndex) ) != sizeof buffer){
+			cprintf("Read Error: %d \n",result);
+			return;
+		}
+
+	}
+	free(buffer);
+
+}
 
 void enableirqminiuart(void);
 
@@ -115,6 +152,9 @@ int cmain()
     timer3init();
     cprintf("timer3init: OK\n");
     enableirqminiuart();
+    cprintf("testing storage\n");
+    test();
+
     cprintf("Handing off to scheduler...\n");
 
     scheduler();

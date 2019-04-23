@@ -4,6 +4,7 @@
 #include <uspios.h>
 #include <mailbox.h>
 #include <uspi/string.h>
+
 #include <uspienv/timer.h>
 
 #define MAILBOX_FULL  0x80000000
@@ -15,6 +16,7 @@ static void KeyPressedHandler (const char *pString);
 static char *bufend, *bufptr;
 
 static int usb_strlen(const char *p)
+
 {
 int len;
 char *s;
@@ -29,6 +31,7 @@ static int usbgetc(void)
 char *ptr;
 
 	if(bufptr < bufend) {
+
 	    ptr = bufptr;
 	    bufptr ++;
 	    return(*ptr);
@@ -76,6 +79,7 @@ void usDelay (unsigned nMicroSeconds) {
 	while ( * timestamp < stop ) {
 		__asm__("nop");
 	}
+
 }
 
 // returns the timer handle (hTimer)
@@ -149,6 +153,7 @@ int usbinit () {
         return 0;
     } else {
         cprintf("usb: USB init OK\n");
+	
         if ( ! USPiKeyboardAvailable() ) {
             cprintf("usb: keyboard not found\n");
         }
@@ -156,7 +161,6 @@ int usbinit () {
             cprintf("usb: keyboard OK\n");
             USPiKeyboardRegisterKeyPressedHandler (KeyPressedHandler);
         };
-
 //        cli(); // disable interrupts, will be re-enabled by scheduler
         return 1;
     };

@@ -1,0 +1,36 @@
+#include "types.h"
+#include "user.h"
+#include "stat.h"
+#include "defs.h"
+#include "uspi.h"
+#include "uspios.h"
+
+void first(){
+        int i;
+        int nDevices  = USPiMassStorageDeviceAvailable();
+        printf(2,"JOSH TEST 1 \n");
+        printf(2,"NUMBER OF DEVICES: %d\n",nDevices);
+        char *test = malloc(512 * sizeof(char));
+        test = "hello world\n";
+
+        //USPiMassStorageDeviceWrite(1,&test,strlen(test),0);
+        //char *reader = malloc(strlen(test)*sizeof(char));
+        if((i=USPiMassStorageDeviceRead(0, test, 512, 0)) != 512) {
+                printf(2,"Read failed NB=%d\n", i);
+                return;
+        }
+        printf(2,"%d bytes read are: \n", i);
+
+        for(i=0; i<512; i++) printf(2,"%d ", test[i]);
+	printf(2,"\n");
+}
+
+
+int main(void){
+		
+	printf(2,"please work \n");
+	first();
+
+	exit();
+}
+
