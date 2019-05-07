@@ -59,6 +59,37 @@ void machinit(void)
     memset(cpus, 0, sizeof(struct cpu)*NCPU);
 }
 
+
+void readTest(int offset,int deviceIndex){
+	int i = 0;
+	int result = 0;
+	unsigned char tbuffer[512];
+	unsigned char readBuffer[512];
+
+	for(i=0;i<512;i++) {
+		tbuffer[i] = 1;
+	}
+	
+	result = USPiMassStorageDeviceWrite(512*offset,tbuffer,512,deviceIndex);
+	
+	if(result != 512) {
+		cprintf("Write error\n");
+		return;
+	}
+	cprintf("Write / Read\n");
+	result = USPiMassStorageDeviceRead(512*offset,readBuffer,512,deviceIndex);
+
+	if(result != 512){
+		cprintf("Read error\n");
+		return;
+	}
+
+	for(i=0;i<512;i++) {
+		cprintf("%d",readBuffer[i]);
+	}
+
+}
+
 void test(void) 
 {
 	int nDevices = USPiMassStorageDeviceAvailable();
@@ -67,6 +98,7 @@ void test(void)
 	unsigned char buffer[512];
 	int i = 0;
 	int offset = 0;
+	int boolean = 0;
 
 	if (nDevices < 1) {
 		cprintf("No Mass Storage Device available\n");
@@ -79,11 +111,20 @@ void test(void)
 			//cprintf("READ AT OFFSET: %d\n",offset);
                 	for(i = 0;i<512;i++){
                         	if(buffer[i] != 0 ){
-                        		cprintf("%d ",buffer[i]);
+                        		//cprintf("%d ",buffer[i]);
+					boolean = 0;
+					break;
                         	}
                 	}
-        		cprintf("\n");
+        		//cprintf("\n");
+			// if that block is free, write to it
+			if(boolean == 1){
+				cprintf("DEBUG: OFFSET = %d, INDEX = %d\n",offset,deviceIndex);
+				readTest(offset,deviceIndex);
+				return; 
+			}
 		offset++;
+		boolean = 1;
 		}
 
 
@@ -96,6 +137,9 @@ void test(void)
 	free(buffer);
 
 }
+
+
+
 
 void enableirqminiuart(void);
 
@@ -153,7 +197,7 @@ int cmain()
     cprintf("timer3init: OK\n");
     enableirqminiuart();
     cprintf("testing storage\n");
-    test();
+    
 
     cprintf("Handing off to scheduler...\n");
 
