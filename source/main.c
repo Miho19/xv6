@@ -59,7 +59,6 @@ void machinit(void)
     memset(cpus, 0, sizeof(struct cpu)*NCPU);
 }
 
-
 void readTest(int offset,int deviceIndex){
 	int i = 0;
 	int result = 0;
@@ -120,7 +119,7 @@ void test(void)
 			// if that block is free, write to it
 			if(boolean == 1){
 				cprintf("DEBUG: OFFSET = %d, INDEX = %d\n",offset,deviceIndex);
-				readTest(offset,deviceIndex);
+				readTest(1,deviceIndex);
 				return; 
 			}
 		offset++;
@@ -136,7 +135,14 @@ void test(void)
 	}
 	free(buffer);
 
+
 }
+
+void print_mount() {
+	int *info = mount();
+	int i = 0;
+
+} 
 
 
 
@@ -196,8 +202,9 @@ int cmain()
     timer3init();
     cprintf("timer3init: OK\n");
     enableirqminiuart();
-    cprintf("testing storage\n");
     
+
+       
 
     cprintf("Handing off to scheduler...\n");
 

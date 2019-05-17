@@ -14,6 +14,7 @@
 #include "file.h"
 #include "fcntl.h"
 
+
 // Fetch the nth word-sized system call argument as a file descriptor
 // and return both the descriptor and the corresponding struct file.
 static int
@@ -287,6 +288,13 @@ sys_open(void)
 
   if(argstr(0, &path) < 0 || argint(1, &omode) < 0)
     return -1;
+
+  if(path[0] == 117 && path[1] == 115 && path[2] == 98) {
+  	cprintf("trapped %s\n", path);
+	
+	return -1;
+  }
+
   if(omode & O_CREATE){
     begin_trans();
     ip = create(path, T_FILE, 0, 0);
