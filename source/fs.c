@@ -34,7 +34,6 @@ readsb(int dev, struct superblock *sb)
   brelse(bp);
 }
 
-
 // Zero a block.
 static void
 bzero(int dev, int bno)
@@ -96,24 +95,7 @@ bfree(int dev, uint b)
   brelse(bp);
 }
 
-int* mount(void) {
- int b = 0;
- int info[1];
- struct buf *bp;
- struct superblock sb;
- readsb(1,&sb);
- bp = 0;
 
- for(b=0;b < sb.size; b += BPB){ // search through all blocks
-	bp = bread(1, BBLOCK(b, sb.ninodes));
-
-
-
-
- }
-
- return info; 
-}
 
 // Inodes.
 //
@@ -674,3 +656,4 @@ nameiparent(char *path, char *name)
 {
   return namex(path, 1, name);
 }
+

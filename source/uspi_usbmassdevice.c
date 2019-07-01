@@ -25,6 +25,11 @@
 #include <uspi/assert.h>
 #include <uspios.h>
 
+
+#include <types.h>
+#include <fs.h>
+#include <file.h>
+
 // USB Mass Storage Bulk-Only Transport
 
 // Command Block Wrapper
@@ -426,6 +431,79 @@ boolean USBBulkOnlyMassStorageDeviceConfigure (TUSBDevice *pUSBDevice)
 	return TRUE;
 }
 
+
+
+int __USBBulkOnlyMassStorageDeviceCommand(TUSBBulkOnlyMassStorageDevice *pThis, void *pCmdBlk, unsigned nCmdBlkLen, void *pBuffer, unsigned nBufLen, boolean bIn)
+{
+
+	
+	char DG[] = "DEBUG:";
+	
+			assert(pThis != 0);
+			assert(pCmdBlk != 0);
+			assert(6 <= nCmdBlkLen && nCmdBlkLen <= 16);
+			assert(nBufLen == 0 || pBuffer != 0);
+
+			TCBW CBW;
+			memset(&CBW, 0, sizeof CBW);
+
+			TUSBHostController *pHost = USBDeviceGetHost(&pThis->m_USBDevice);
+			assert(pHost != 0);
+
+			CBW.dCWBSignature	   = CBWSIGNATURE;
+			CBW.dCWBTag		   = ++pThis->m_nCWBTag;
+			CBW.dCBWDataTransferLength = nBufLen;
+			CBW.bmCBWFlags		   = bIn ? CBWFLAGS_DATA_IN : 0;
+			CBW.bCBWLUN		   = CBWLUN;
+			CBW.bCBWCBLength	   = (u8) nCmdBlkLen;
+			memcpy (CBW.CBWCB, pCmdBlk, nCmdBlkLen);
+
+
+	
+
+	/**
+		status: -> Maybe make this an enum ? 
+			0 = CBW
+			1 = DataTransfer
+			2 = CSW
+			3 = Reset
+			
+		tCounter: AsyncTransferCounter -> Have to complete 3, if any false -> return -1 and go into reset
+			
+	*/
+
+	if(device_handler[device_index].status == 0)  
+	{
+		if(device_handler[device_index].tCounter != 0 && device_handler[device_index].tCounter < 4){	
+				
+			if(DWHCIDeviceTransfer(pHost, pThis->m_pEndpointOut, &CBW, sizeof CBW) != -12345){
+				LogWrite(DG, LOG_ERROR, "How did we get here");
+			}
+		}
+		
+		else
+		{
+			
+
+
+			// Begin a new Transaction
+			if(DWHCIDeviceTransfer(pHost, pThis->m_pEndpointOut, &CBW, sizeof CBW) != -12345)
+			{
+				LogWrite(DG, LOG_ERROR, "CBW failure");
+				return -1; // TODO RETURN INTO DEVICE RESET
+			}
+			device_handler[device_index].tCounter = 1;
+			device_handler[device_index].in_busy = 1;
+			return -12345;
+		}
+	}
+	
+	
+
+	
+	return -1;	
+}
+
 int USBBulkOnlyMassStorageDeviceRead (TUSBBulkOnlyMassStorageDevice *pThis, void *pBuffer, unsigned nCount)
 {
 	assert (pThis != 0);
@@ -433,13 +511,26 @@ int USBBulkOnlyMassStorageDeviceRead (TUSBBulkOnlyMassStorageDevice *pThis, void
 	unsigned nTries = 4;
 
 	int nResult;
+	
+//josh
+
+
+		
+	if(device_handler[device_index].usb_active && device_handler[device_index].nTries != 0) {
+		nResult = USBBulkOnlyMassStorageDeviceTryRead(pThis, pBuffer, nCount);
+		return nResult;
+	}
+
 
 	do
 	{
+
+
 		nResult = USBBulkOnlyMassStorageDeviceTryRead (pThis, pBuffer, nCount);
 
 		if (nResult != (int) nCount)
 		{
+			
 			int nStatus = USBBulkOnlyMassStorageDeviceReset (pThis);
 			if (nStatus != 0)
 			{
@@ -449,6 +540,7 @@ int USBBulkOnlyMassStorageDeviceRead (TUSBBulkOnlyMassStorageDevice *pThis, void
 	}
 	while (   nResult != (int) nCount
 	       && --nTries > 0);
+
 
 	return nResult;
 }
@@ -514,6 +606,8 @@ int USBBulkOnlyMassStorageDeviceTryRead (TUSBBulkOnlyMassStorageDevice *pThis, v
 		return -1;
 	}
 	unsigned short usTransferLength = (unsigned short) (nCount >> UMSD_BLOCK_SHIFT);
+	
+
 
 	//LogWrite (FromUmsd, LOG_DEBUG, "TryRead %u/0x%X/%u", nBlockAddress, (unsigned) pBuffer, (unsigned) usTransferLength);
 
@@ -525,10 +619,32 @@ int USBBulkOnlyMassStorageDeviceTryRead (TUSBBulkOnlyMassStorageDevice *pThis, v
 	SCSIRead.TransferLength		= uspi_le2be16 (usTransferLength);
 	SCSIRead.Control		= SCSI_CONTROL;
 
+
+
+	if(device_handler[device_index].usb_active){
+		LogWrite("DEBUG", LOG_ERROR, "DEVICE HANDLER SET UP");
+
+				
+		if (__USBBulkOnlyMassStorageDeviceCommand (pThis, &SCSIRead, sizeof SCSIRead,
+							 pBuffer, nCount,
+							 TRUE) != (int) nCount)
+		{
+		
+
+			LogWrite (FromUmsd, LOG_ERROR, "TryRead failed");
+
+			return -1;
+		}
+		
+	}
+
+
 	if (USBBulkOnlyMassStorageDeviceCommand (pThis, &SCSIRead, sizeof SCSIRead,
 						 pBuffer, nCount,
 						 TRUE) != (int) nCount)
 	{
+		
+
 		LogWrite (FromUmsd, LOG_ERROR, "TryRead failed");
 
 		return -1;
@@ -578,6 +694,9 @@ int USBBulkOnlyMassStorageDeviceTryWrite (TUSBBulkOnlyMassStorageDevice *pThis, 
 	return nCount;
 }
 
+
+
+
 int USBBulkOnlyMassStorageDeviceCommand (TUSBBulkOnlyMassStorageDevice *pThis,
 					 void *pCmdBlk, unsigned nCmdBlkLen,
 					 void *pBuffer, unsigned nBufLen, boolean bIn)
@@ -588,6 +707,7 @@ int USBBulkOnlyMassStorageDeviceCommand (TUSBBulkOnlyMassStorageDevice *pThis,
 	assert (6 <= nCmdBlkLen && nCmdBlkLen <= 16);
 	assert (nBufLen == 0 || pBuffer != 0);
 
+	
 	TCBW CBW;
 	memset (&CBW, 0, sizeof CBW);
 
@@ -600,6 +720,7 @@ int USBBulkOnlyMassStorageDeviceCommand (TUSBBulkOnlyMassStorageDevice *pThis,
 
 	memcpy (CBW.CBWCB, pCmdBlk, nCmdBlkLen);
 
+
 	TUSBHostController *pHost = USBDeviceGetHost (&pThis->m_USBDevice);
 	assert (pHost != 0);
 	
@@ -609,7 +730,9 @@ int USBBulkOnlyMassStorageDeviceCommand (TUSBBulkOnlyMassStorageDevice *pThis,
 
 		return -1;
 	}
+	
 
+	
 	int nResult = 0;
 	
 	if (nBufLen > 0)
@@ -622,6 +745,8 @@ int USBBulkOnlyMassStorageDeviceCommand (TUSBBulkOnlyMassStorageDevice *pThis,
 			return -1;
 		}
 	}
+
+	
 
 	TCSW CSW;
 

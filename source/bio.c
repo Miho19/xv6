@@ -102,7 +102,7 @@ bread(uint dev, uint sector)
 
   b = bget(dev, sector);
   if(!(b->flags & B_VALID))
-    iderw(b);
+    usbrw(b);
   return b;
 }
 
@@ -113,7 +113,7 @@ bwrite(struct buf *b)
   if((b->flags & B_BUSY) == 0)
     panic("bwrite");
   b->flags |= B_DIRTY;
-  iderw(b);
+  usbrw(b);
 }
 
 // Release a B_BUSY buffer.

@@ -1,3 +1,5 @@
+#include <uspi/dwhcidevice.h>
+
 struct file {
   enum { FD_NONE, FD_PIPE, FD_INODE } type;
   int ref; // reference count
@@ -34,5 +36,24 @@ struct devsw {
 };
 
 extern struct devsw devsw[];
+#define MAX_DEVICE 10
+struct device_handler {
+	short major;
+	int deviceIndex;
+	int (*read)(struct inode*, char*, int);
+	int(*write)(struct inode*, char*, int);
+	int usb_active;
+	int in_busy;
+	struct file *f;
+	int status;
+	int tCounter;
+	int nTries;
+	TUSBRequest *CBWURB;
+	TUSBRequest *DATAURB;
+	TUSBRequest *CSWURB;
+	TUSBRequest *RESETURB;		
+};
+
+extern struct device_handler device_handler[];
 
 #define CONSOLE 1

@@ -14,7 +14,8 @@
 #include "proc.h"
 #include "arm.h"
 #include "mailbox.h"
-
+#include "fs.h"
+#include "file.h"
 #include <uspi.h>
 #include <uspios.h>
 
@@ -22,6 +23,9 @@ extern char end[]; // first address after kernel loaded from ELF file
 extern pde_t *kpgdir;
 extern volatile uint *mailbuffer;
 extern unsigned int pm_size;
+struct device_handler device_handler[MAX_DEVICE];
+
+
 
 void OkLoop()
 {
@@ -52,6 +56,12 @@ unsigned int getpmsize()
     readmailbox(8);
     if(mailbuffer[1] != 0x80000000) cprintf("Error readmailbox: %x\n", MPI_TAG_GET_ARM_MEMORY);
     return mailbuffer[MB_HEADER_LENGTH + TAG_HEADER_LENGTH+1];
+}
+
+
+void dhandlerinit(void)
+{
+	memset(device_handler, 0, sizeof(struct device_handler)*MAX_DEVICE);
 }
 
 void machinit(void)
@@ -89,6 +99,16 @@ void readTest(int offset,int deviceIndex){
 
 }
 
+void test2(void)
+{
+	int result = 0;
+	unsigned char buffer[512];
+	cprintf("Reading before scheduler\n");
+
+	result = USPiMassStorageDeviceRead(63*512, buffer, 512, 0);
+	cprintf("End of before scheduler reading\n");
+}
+
 void test(void) 
 {
 	int nDevices = USPiMassStorageDeviceAvailable();
@@ -105,19 +125,21 @@ void test(void)
 	}
 
 	for(deviceIndex = 0; deviceIndex < nDevices;deviceIndex++){
-		offset = 0;		
+		offset = 0;
+		cprintf("Reading from device: %d\n", deviceIndex);		
 		while((result = USPiMassStorageDeviceRead(offset*512,buffer,512,deviceIndex) ) == sizeof buffer){
-			//cprintf("READ AT OFFSET: %d\n",offset);
+			cprintf("READ AT OFFSET: %d DEVICE: %d \n",offset, deviceIndex);
                 	for(i = 0;i<512;i++){
                         	if(buffer[i] != 0 ){
-                        		//cprintf("%d ",buffer[i]);
+                        		cprintf("%d ",buffer[i]);
 					boolean = 0;
 					break;
                         	}
                 	}
-        		//cprintf("\n");
+        		if(boolean == 1)
+				cprintf("\n");
 			// if that block is free, write to it
-			if(boolean == 1){
+			if(boolean == 10){
 				cprintf("DEBUG: OFFSET = %d, INDEX = %d\n",offset,deviceIndex);
 				readTest(1,deviceIndex);
 				return; 
@@ -138,15 +160,7 @@ void test(void)
 
 }
 
-void print_mount() {
-	int *info = mount();
-	int i = 0;
-
-} 
-
-
-
-
+ 
 void enableirqminiuart(void);
 
 
@@ -202,10 +216,8 @@ int cmain()
     timer3init();
     cprintf("timer3init: OK\n");
     enableirqminiuart();
-    
-
-       
-
+    dhandlerinit();
+     
     cprintf("Handing off to scheduler...\n");
 
     scheduler();

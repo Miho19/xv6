@@ -40,7 +40,7 @@ unsigned nUSBTimerIRQ;
 
 void led18_on(void);
 void led18_off(void);
-
+int first_time = 0;
 void led25_on()
 {
    setgpiofunc(25, 1); // gpio 18 for Ok Led, set as an output
@@ -161,7 +161,8 @@ trap(struct trapframe *tf)
     uint istimer;
     volatile int *udp = &uart_disabled;
 
-//cprintf("Trap %d from cpu %d eip %x (cr2=0x%x)\n",
+
+ //cprintf("Trap %d from cpu %d eip %x (cr2=0x%x)\n",
 //              tf->trapno, curr_cpu->id, tf->eip, 0);
   //trap_oops(tf);
   if(tf->trapno == T_SYSCALL){
@@ -173,7 +174,10 @@ trap(struct trapframe *tf)
       exit();
     return;
   }
+ 
 
+
+	
   istimer = 0;
   switch(tf->trapno){
   case T_IRQ:
@@ -181,7 +185,6 @@ trap(struct trapframe *tf)
     while(ip->gpupending[0] || ip->gpupending[1] || ip->armpending) {
         if(ip->gpupending[0] & (1 << IRQ_TIMER3)) {
             istimer = 1;
-            //cprintf("trap: TIMER3INT!\n");
             timer3intr();
         }
         if(ip->gpupending[0] & (1 << nUSBTimerIRQ)) {

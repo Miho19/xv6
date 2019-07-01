@@ -8,4 +8,4 @@ build/uspi_usbmassdevice.o: source/uspi_usbmassdevice.c \
  include/uspi/dwhcixferstagedata.h include/uspi/dwhciframescheduler.h \
  include/uspi/dwhciregister.h include/uspi/dwhci.h include/uspi/bcm2835.h \
  include/uspios.h include/uspi/devicenameservice.h include/uspi/util.h \
- include/uspi/assert.h
+ include/uspi/assert.h include/types.h include/fs.h include/file.h

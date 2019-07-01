@@ -15,6 +15,7 @@
 #include "fcntl.h"
 
 
+
 // Fetch the nth word-sized system call argument as a file descriptor
 // and return both the descriptor and the corresponding struct file.
 static int
@@ -73,6 +74,13 @@ sys_read(void)
 
   if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
     return -1;
+
+	
+
+  if(f->ip->major == 15) {
+	return usb_fileread(f, p, n);
+ }
+	
   return fileread(f, p, n);
 }
 
@@ -289,12 +297,6 @@ sys_open(void)
   if(argstr(0, &path) < 0 || argint(1, &omode) < 0)
     return -1;
 
-  if(path[0] == 117 && path[1] == 115 && path[2] == 98) {
-  	cprintf("trapped %s\n", path);
-	
-	return -1;
-  }
-
   if(omode & O_CREATE){
     begin_trans();
     ip = create(path, T_FILE, 0, 0);
@@ -346,6 +348,7 @@ sys_mkdir(void)
 int
 sys_mknod(void)
 {
+   
   struct inode *ip;
   char *path;
   int len;
@@ -361,6 +364,12 @@ sys_mknod(void)
   }
   iunlockput(ip);
   commit_trans();
+  if(ip->major == 15) {
+	device_handler[0].major = 15;
+	device_handler[0].deviceIndex = 0;
+	device_handler[0].read = &usb_read;
+   //input wrapper function calls here		
+  }
   return 0;
 }
 

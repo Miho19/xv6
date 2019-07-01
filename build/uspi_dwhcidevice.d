@@ -6,4 +6,5 @@ build/uspi_dwhcidevice.o: source/uspi_dwhcidevice.c \
  include/uspi/usbrequest.h include/uspi/dwhcirootport.h \
  include/uspi/dwhcixferstagedata.h include/uspi/dwhciframescheduler.h \
  include/uspi/dwhciregister.h include/uspi/dwhci.h include/uspi/bcm2835.h \
- include/uspios.h include/uspi/synchronize.h include/uspi/assert.h
+ include/uspios.h include/uspi/synchronize.h include/uspi/assert.h \
+ include/types.h include/fs.h include/file.h

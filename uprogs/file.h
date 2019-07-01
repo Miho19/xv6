@@ -34,5 +34,14 @@ struct devsw {
 };
 
 extern struct devsw devsw[];
+#define MAX_DEVICE 10
+struct device_handler {
+	short major;
+	int deviceIndex;
+	int (*read)(struct inode*, char*, int);
+	int(*write)(struct inode*, char*, int);	
+};
+
+extern struct device_handler device_handler[];
 
 #define CONSOLE 1

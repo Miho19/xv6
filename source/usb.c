@@ -1,17 +1,34 @@
 #include <types.h>
 #include <defs.h>
+#include <fs.h>
+#include <file.h>
+#include <spinlock.h>
+
+
+
 #include <uspi.h>
+#include <uspi/util.h>
 #include <uspios.h>
 #include <mailbox.h>
 #include <uspi/string.h>
 
 #include <uspienv/timer.h>
 
+
+#include <uspi/dwhcidevice.h>
+#include <uspi/bcm2835.h>
+#include <uspi/synchronize.h>
+#include <uspi/assert.h>
+
 #define MAILBOX_FULL  0x80000000
 #define MAILBOX_EMPTY 0x40000000
 
+int device_index = 0;
+
 static TTimer USBTimer;
 static void KeyPressedHandler (const char *pString);
+
+
 
 static char *bufend, *bufptr;
 
@@ -130,7 +147,7 @@ void LogWrite (const char *pSource,		// short name of module
     String (&Message);
     StringFormatV (&Message, pMessage, var);
     const char *pString = StringGet (&Message);
-    // done processing, ready to print
+    // done processing, eeady to print
     cprintf("usb: %s: %s\n", pSource, pString);
     // clean up
     va_end (var);
@@ -164,7 +181,89 @@ int usbinit () {
 //        cli(); // disable interrupts, will be re-enabled by scheduler
         return 1;
     };
+	
+		
+	
 }
+
+
+void newRequest(void)
+{
+	device_handler[device_index].usb_active = 1;
+	device_handler[device_index].nTries = 4;
+	device_handler[device_index].status = 0;
+	device_handler[device_index].tCounter = 0;
+	
+}
+
+void clearDevice(void)
+{
+	device_handler[device_index].usb_active = 0;
+	device_handler[device_index].in_busy = 0;
+	
+}
+
+
+
+
+/** 
+ 	error codes - > -1 no devices ready
+ 
+*/
+
+int usb_fileread(struct file *f, char *buf, int num)
+{
+
+	int index;
+	int found;
+	int result;
+
+	if(USPiMassStorageDeviceAvailable() < 1)
+		return -1;
+
+	for(index = 0;index<MAX_DEVICE;index++)
+	{
+		if(device_handler[index].major == f->ip->major)
+		{
+			found = 1;
+			break;
+		}
+	}
+
+	if(!found)
+		return -1;
+	device_index = index;
+	
+
+	if(!device_handler[device_index].usb_active)
+		newRequest();
+	
+	result = USPiMassStorageDeviceRead(1*512, buf, 512, 0);
+
+	if(result == -12345)
+		cprintf("it returned\n");
+	if(device_handler[device_index].status == 256)
+		clearDevice();
+	//for now
+
+	
+
+	return 0;
+ 						
+}
+
+
+
+/** 
+ Current issue potentially other functions calling usb_read using
+ devsw[major].read which doesnt force it through usb_fileread interface
+
+ num = number of bytes
+
+*/int usb_read(struct inode *ip, char *buf, int num) {
+	return -1;
+}
+
 
 #ifndef NDEBUG
 

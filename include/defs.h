@@ -10,6 +10,10 @@ struct superblock;
 
 void OkLoop(void);
 void NotOkLoop(void);
+// usb.c
+int usb_read(struct inode *ip, char *buf,int num);
+int usb_fileread(struct file *f, char*buf, int num);
+void test(void);
 
 // mmu.c
 void mmuinit0(void);
@@ -56,12 +60,13 @@ struct inode*   nameiparent(char*, char*);
 int             readi(struct inode*, char*, uint, uint);
 void            stati(struct inode*, struct stat*);
 int             writei(struct inode*, char*, uint, uint);
-int*		mount(void);
+void 		dhandlerinit(void);
 
 // ide.c
 void            ideinit(void);
 void            ideintr(void);
 void            iderw(struct buf*);
+void		usbrw(struct buf*);
 
 // exec.c
 int             exec(char*, char**);

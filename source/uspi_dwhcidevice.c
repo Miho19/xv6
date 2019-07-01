@@ -28,6 +28,10 @@
 #include <uspi/synchronize.h>
 #include <uspi/assert.h>
 
+#include <types.h>
+#include <fs.h>
+#include <file.h>
+
 #define ARM_IRQ_USB		9		// for ConnectInterrupt()
 
 #define DEVICE_ID_USB_HCD	3		// for SetPowerStateOn()
@@ -245,7 +249,6 @@ int DWHCIDeviceControlMessage (TDWHCIDevice *pThis, TUSBEndpoint *pEndpoint,
 	USBRequest (&URB, pEndpoint, pData, usDataSize, pSetup);
 
 	int nResult = -1;
-
 	if (DWHCIDeviceSubmitBlockingRequest (pThis, &URB))
 	{
 		nResult = USBRequestGetResultLength (&URB);
@@ -262,16 +265,22 @@ int DWHCIDeviceTransfer (TDWHCIDevice *pThis, TUSBEndpoint *pEndpoint, void *pBu
 {
 	assert (pThis != 0);
 
+	
 	TUSBRequest URB;
 	USBRequest (&URB, pEndpoint, pBuffer, nBufSize, 0);
 
+
 	int nResult = -1;
+
+	if(device_handler[device_index].usb_active)
+		return DWHCIDeviceSubmitBlockingRequest(pThis, &URB);
 
 	if (DWHCIDeviceSubmitBlockingRequest (pThis, &URB))
 	{
 		nResult = USBRequestGetResultLength (&URB);
 	}
 
+	
 	_USBRequest (&URB);
 
 	return nResult;
@@ -283,9 +292,11 @@ boolean DWHCIDeviceSubmitBlockingRequest (TDWHCIDevice *pThis, TUSBRequest *pURB
 
 	DataMemBarrier ();
 
+	
 	assert (pURB != 0);
 	USBRequestSetStatus (pURB, 0);
 	
+// IT FAILS IN HERE	
 	if (USBEndpointGetType (USBRequestGetEndpoint (pURB)) == EndpointTypeControl)
 	{
 		TSetupData *pSetup = USBRequestGetSetupData (pURB);
@@ -711,6 +722,7 @@ boolean DWHCIDeviceTransferStage (TDWHCIDevice *pThis, TUSBRequest *pURB, boolea
 	assert (pThis != 0);
 
 	assert (pURB != 0);
+	
 	USBRequestSetCompletionRoutine (pURB, DWHCIDeviceCompletionRoutine, 0, pThis);
 
 	assert (!pThis->m_bWaiting);
@@ -723,11 +735,13 @@ boolean DWHCIDeviceTransferStage (TDWHCIDevice *pThis, TUSBRequest *pURB, boolea
 		return FALSE;
 	}
 
-	while (pThis->m_bWaiting)
-	{
-		// do nothing
+	if(device_handler[device_index].usb_active){
+		return -12345;
 	}
 
+	// Do nothing
+	while (pThis->m_bWaiting){}
+	
 	return USBRequestGetStatus (pURB);
 }
 
@@ -757,9 +771,11 @@ boolean DWHCIDeviceTransferStageAsync (TDWHCIDevice *pThis, TUSBRequest *pURB, b
 
 	assert (pThis->m_pStageData[nChannel] == 0);
 	pThis->m_pStageData[nChannel] = pStageData;
-
+ 
+//josh 
 	DWHCIDeviceEnableChannelInterrupt (pThis, nChannel);
-	
+			
+
 	if (!DWHCITransferStageDataIsSplit (pStageData))
 	{
 		DWHCITransferStageDataSetState (pStageData, StageStateNoSplitTransfer);
@@ -961,6 +977,7 @@ void DWHCIDeviceChannelInterruptHandler (TDWHCIDevice *pThis, unsigned nChannel)
 	TUSBRequest *pURB = DWHCITransferStageDataGetURB (pStageData);
 	assert (pURB != 0);
 
+
 	switch (DWHCITransferStageDataGetSubState (pStageData))
 	{
 	case StageSubStateWaitForChannelDisable:
@@ -982,6 +999,8 @@ void DWHCIDeviceChannelInterruptHandler (TDWHCIDevice *pThis, unsigned nChannel)
 		// restart halted transaction
 		if (DWHCIRegisterRead (&ChanInterrupt) == DWHCI_HOST_CHAN_INT_HALTED)
 		{
+			
+			LogWrite (FromDWHCI, LOG_ERROR, "Restarted Transaction");
 			DWHCIDeviceStartTransaction (pThis, pStageData);
 			return;
 		}

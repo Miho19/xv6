@@ -156,11 +156,14 @@ int USPiMassStorageDeviceRead (unsigned long long ullOffset, void *pBuffer, unsi
 	{
 		return -1;
 	}
+	
 
 	if (USBBulkOnlyMassStorageDeviceSeek (s_pLibrary->pUMSD[nDeviceIndex], ullOffset) != ullOffset)
 	{
 		return -1;
 	}
+	
+	
 
 	return USBBulkOnlyMassStorageDeviceRead (s_pLibrary->pUMSD[nDeviceIndex], pBuffer, nCount);
 }

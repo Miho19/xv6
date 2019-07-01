@@ -47,6 +47,11 @@ extern "C" {
 // Undefine this if you want to use your own implementation of the functions in uspi/util.h
 #define USPI_PROVIDE_MEM_FUNCTIONS	// mem*()
 #define USPI_PROVIDE_STR_FUNCTIONS	// str*()
+// test conditions
+
+extern int usb_active;
+extern int in_busy;
+extern int device_index;
 
 // xv6 usb init
 int usbinit (void);
