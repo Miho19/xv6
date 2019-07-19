@@ -9,7 +9,7 @@
 
 
 int fd;
-unsigned char buf[512];
+unsigned char *buf;
 
 void clean(void){
 	free(buf);
@@ -20,6 +20,7 @@ void clean(void){
 
 int main(int argc, char *argv[]) {
 	
+	buf = malloc(512*sizeof(buf));	
 
 
 	if(mkdir("dev") != 0){
@@ -46,10 +47,11 @@ int main(int argc, char *argv[]) {
 	}
 	printf(1,"opened : %s FD: %d\n",argv[1],fd);
 
-	if(read(fd,&buf,512)< 0) {
-		printf(1, "Did not read all bytes\n");
-		sleep(10);
-		printf(1,"bytes read: %d\n",read(fd,&buf,512));
-	} 
+
+	while(read(fd, buf, 512) != -1){
+			
+	}
+	printf(1,"somehow we left the looop\n");
+ 
 	clean();
 }

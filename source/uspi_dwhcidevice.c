@@ -266,14 +266,85 @@ int DWHCIDeviceTransfer (TDWHCIDevice *pThis, TUSBEndpoint *pEndpoint, void *pBu
 	assert (pThis != 0);
 
 	
-	TUSBRequest URB;
-	USBRequest (&URB, pEndpoint, pBuffer, nBufSize, 0);
-
 
 	int nResult = -1;
 
-	if(device_handler[device_index].usb_active)
-		return DWHCIDeviceSubmitBlockingRequest(pThis, &URB);
+	if(usb_active)
+	 {
+		//LogWrite (FromDWHCI, LOG_ERROR, "tCounter = %d status = %d ", device_handler[device_index].tCounter, device_handler[device_index].status);
+		// CBW REQUEST ONLY
+		if(device_handler[device_index].status == 0)
+		{ 
+			if(device_handler[device_index].tCounter == 0) 
+			{		
+				//LogWrite (FromDWHCI, LOG_ERROR, "NEW CBW REQUEST");
+				TUSBRequest *URB = malloc(sizeof(TUSBRequest));
+				USBRequest(URB, pEndpoint, pBuffer, nBufSize, 0);
+				device_handler[device_index].CBWURB = URB;
+
+				if((nResult = DWHCIDeviceSubmitBlockingRequest(pThis, device_handler[device_index].CBWURB)) == -12345)
+				{
+					return -12345;	
+				} else {
+					return -1;
+				} 
+			}
+
+			if(device_handler[device_index].tCounter != 0) 
+			{	
+				//LogWrite (FromDWHCI, LOG_ERROR, "Reissue CBW REQUEST");		
+				if(DWHCIDeviceTransferStage (pThis, device_handler[device_index].CBWURB,USBEndpointIsDirectionIn (USBRequestGetEndpoint (device_handler[device_index].CBWURB)), FALSE))
+				{
+					device_handler[device_index].status = 1;
+					device_handler[device_index].tCounter = 0;	
+					nResult = USBRequestGetResultLength(device_handler[device_index].CBWURB);
+					//LogWrite (FromDWHCI, LOG_ERROR, "CBW PASSED: nResult = %d ", nResult);
+					_USBRequest(device_handler[device_index].CBWURB);
+					free(device_handler[device_index].CBWURB);
+					return nResult;
+				}	
+			} 
+		} // END OF CBW REQUEST
+	
+		// DATA TRANSFER ONLY
+		if(device_handler[device_index].status == 1)
+		{
+
+			LogWrite("hello", LOG_ERROR, "from here");
+			if(device_handler[device_index].tCounter == 0)
+			{
+				TUSBRequest *URB = malloc(sizeof(TUSBRequest));
+				USBRequest(URB, pEndpoint, pBuffer, nBufSize, 0);
+				device_handler[device_index].DATAURB = URB;
+				LogWrite("DATA TRANSFER" , LOG_ERROR, "attempted request");
+				if((nResult = DWHCIDeviceSubmitBlockingRequest(pThis, device_handler[device_index].DATAURB) == -12345 ))
+				{
+					LogWrite("DATA TRANSFER", LOG_ERROR, "nRESULT == %d", nResult);
+					device_handler[device_index].tCounter = 1;
+					return -12345;
+				} else {
+					LogWrite("DATA TRANSFER", LOG_ERROR, "we got %d instead", nResult);
+					return -1;
+				}
+			}
+			
+			if(device_handler[device_index].tCounter == 1)
+			{
+				LogWrite("TRAPPED: ", LOG_ERROR, "Counter incremented");
+			}
+
+
+
+		} // END OF DATA TRANSFER
+
+
+
+	}// END OF USB_ACTIVE
+
+	TUSBRequest URB;
+	USBRequest (&URB, pEndpoint, pBuffer, nBufSize, 0);
+
+	
 
 	if (DWHCIDeviceSubmitBlockingRequest (pThis, &URB))
 	{
@@ -305,6 +376,11 @@ boolean DWHCIDeviceSubmitBlockingRequest (TDWHCIDevice *pThis, TUSBRequest *pURB
 		if (pSetup->bmRequestType & REQUEST_IN)
 		{
 			assert (USBRequestGetBufLen (pURB) > 0);
+						
+			if(usb_active && device_handler[device_index].status == 1){
+				
+				LogWrite (FromDWHCI, LOG_ERROR, "first");
+			}
 			
 			if (   !DWHCIDeviceTransferStage (pThis, pURB, FALSE, FALSE)
 			    || !DWHCIDeviceTransferStage (pThis, pURB, TRUE,  FALSE)
@@ -315,6 +391,11 @@ boolean DWHCIDeviceSubmitBlockingRequest (TDWHCIDevice *pThis, TUSBRequest *pURB
 		}
 		else
 		{
+			
+			if(usb_active && device_handler[device_index].status == 1){
+				
+				LogWrite (FromDWHCI, LOG_ERROR, "second");
+			}
 			if (USBRequestGetBufLen (pURB) == 0)
 			{
 				if (   !DWHCIDeviceTransferStage (pThis, pURB, FALSE, FALSE)
@@ -336,10 +417,18 @@ boolean DWHCIDeviceSubmitBlockingRequest (TDWHCIDevice *pThis, TUSBRequest *pURB
 	}
 	else
 	{
+
 		assert (   USBEndpointGetType (USBRequestGetEndpoint (pURB)) == EndpointTypeBulk
 		        || USBEndpointGetType (USBRequestGetEndpoint (pURB)) == EndpointTypeInterrupt);
 		assert (USBRequestGetBufLen (pURB) > 0);
 		
+		if(usb_active) {
+
+		if (DWHCIDeviceTransferStage (pThis, pURB, USBEndpointIsDirectionIn (USBRequestGetEndpoint (pURB)), FALSE) == -12345)
+		{
+				return -12345;
+		}
+		}
 		if (!DWHCIDeviceTransferStage (pThis, pURB, USBEndpointIsDirectionIn (USBRequestGetEndpoint (pURB)), FALSE))
 		{
 			return FALSE;
@@ -735,8 +824,14 @@ boolean DWHCIDeviceTransferStage (TDWHCIDevice *pThis, TUSBRequest *pURB, boolea
 		return FALSE;
 	}
 
-	if(device_handler[device_index].usb_active){
+	if(usb_active && device_handler[device_index].tCounter == 0){
+		
+		//LogWrite (FromDWHCI, LOG_ERROR, "TRAP HOUSE RETURN ");
+		device_handler[device_index].tCounter = 1;
 		return -12345;
+	}
+	if(usb_active && device_handler[device_index].tCounter > 0) {
+		pThis->m_bWaiting = FALSE;
 	}
 
 	// Do nothing
