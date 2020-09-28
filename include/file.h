@@ -1,4 +1,3 @@
-#include <uspi/dwhcidevice.h>
 
 struct file {
   enum { FD_NONE, FD_PIPE, FD_INODE } type;
@@ -43,17 +42,10 @@ struct device_handler {
 	int (*read)(struct inode*, char*, int);
 	int(*write)(struct inode*, char*, int);
 	int usb_active;
-	int in_busy;
 	struct file *f;
-	int status;
-	int tCounter;
-	int nTries;
-	TUSBRequest *CBWURB;
-	TUSBRequest *DATAURB;
-	TUSBRequest *CSWURB;
-	TUSBRequest *RESETURB;		
+
 };
 
-extern struct device_handler device_handler[];
+extern struct device_handler device_handler[MAX_DEVICE];
 
 #define CONSOLE 1

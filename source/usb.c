@@ -187,24 +187,6 @@ int usbinit () {
 }
 
 
-void newRequest(void)
-{
-	cprintf("New REQUEST\n");
-	device_handler[device_index].usb_active = 1;
-	device_handler[device_index].nTries = 4;
-	device_handler[device_index].status = 0;
-	device_handler[device_index].tCounter = 0;
-	
-}
-
-void clearDevice(void)
-{
-	cprintf("Device cleared\n");
-	device_handler[device_index].usb_active = 0;
-	device_handler[device_index].in_busy = 0;
-	
-}
-
 
 
 
@@ -215,51 +197,8 @@ void clearDevice(void)
 
 int usb_fileread(struct file *f, char *buf, int num)
 {
+	return USPiMassStorageDeviceRead(1*512, buf, 512, 0);
 
-	int index;
-	int found;
-	int result;
-
-	if(device_handler[device_index].status == 1)cprintf("first\n");
-	if(USPiMassStorageDeviceAvailable() < 1)
-		return -1;
-
-	if(device_handler[device_index].status == 1)cprintf("second\n");
-	for(index = 0;index<MAX_DEVICE;index++)
-	{
-		if(device_handler[index].major == f->ip->major)
-		{
-			found = 1;
-			break;
-		}
-	}
-
-	if(device_handler[device_index].status == 1)cprintf("Third\n");
-	if(!found)
-		return -1;
-	device_index = index;
-	
-
-	if(!device_handler[device_index].usb_active)
-		newRequest();
-	usb_active = 1;
-	
-	if(device_handler[device_index].status == 1)cprintf("fourth\n");
-	result = USPiMassStorageDeviceRead(1*512, buf, 512, 0);
-
-	if(result == -12345){
-		cprintf("we got -12345 back status: %d  tCounter: %d \n", device_handler[device_index].status, device_handler[device_index].tCounter);
-		return 0;
-	}
-
-
-	if(device_handler[device_index].status == 256)
-		clearDevice();
-	//for now
-
-
-	cprintf("DIDN'T CATCH A RESULT: %d\n ",result);
-	return 0;
  						
 }
 

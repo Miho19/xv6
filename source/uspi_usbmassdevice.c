@@ -433,127 +433,6 @@ boolean USBBulkOnlyMassStorageDeviceConfigure (TUSBDevice *pUSBDevice)
 
 
 
-int __USBBulkOnlyMassStorageDeviceCommand(TUSBBulkOnlyMassStorageDevice *pThis, void *pCmdBlk, unsigned nCmdBlkLen, void *pBuffer, unsigned nBufLen, boolean bIn)
-{
-
-	
-	char DG[] = "DEBUG";
-	
-			assert(pThis != 0);
-			assert(pCmdBlk != 0);
-			assert(6 <= nCmdBlkLen && nCmdBlkLen <= 16);
-			assert(nBufLen == 0 || pBuffer != 0);
-
-			TCBW CBW;
-			memset(&CBW, 0, sizeof CBW);
-
-			TUSBHostController *pHost = USBDeviceGetHost(&pThis->m_USBDevice);
-			assert(pHost != 0);
-
-			CBW.dCWBSignature	   = CBWSIGNATURE;
-			CBW.dCWBTag		   = ++pThis->m_nCWBTag;
-			CBW.dCBWDataTransferLength = nBufLen;
-			CBW.bmCBWFlags		   = bIn ? CBWFLAGS_DATA_IN : 0;
-			CBW.bCBWLUN		   = CBWLUN;
-			CBW.bCBWCBLength	   = (u8) nCmdBlkLen;
-			memcpy (CBW.CBWCB, pCmdBlk, nCmdBlkLen);
-
-
-	
-
-	/**
-		status: -> Maybe make this an enum ? 
-			0 = CBW
-			1 = DataTransfer
-			2 = CSW
-			3 = Reset
-			
-		tCounter: AsyncTransferCounter -> Have to complete 3, if any false -> return -1 and go into reset
-		error code:
-			 -12345 = resend request
-			 -1 	= failure and reset needed
-			  0 	= unused
-			  1	= unused
-
-		nTries: Times you have tried to request the status of the request		
-	*/
-
-
-	LogWrite(DG, LOG_ERROR, "status %d, tCounter %d", device_handler[device_index].status, device_handler[device_index].tCounter);
-		
-	if(device_handler[device_index].status == 0)  
-	{
-		if(device_handler[device_index].tCounter != 0)
-		{	
-				
-			if(DWHCIDeviceTransfer(pHost, pThis->m_pEndpointOut, &CBW, sizeof CBW) <= 0)
-			{
-
-				device_handler[device_index].nTries = 0;
-				device_handler[device_index].status = 1;
-				device_handler[device_index].tCounter = 0;
-				LogWrite(DG, LOG_ERROR, " CBW SUCCESSSFUL status %d, tCounter %d", device_handler[device_index].status, device_handler[device_index].tCounter);
-				return -12345;
-			}else{
-				device_handler[device_index].nTries++;
-				return -12345;
-			}
-		}
-		
-		else
-		{
-			
-
-			int x;
-			// Begin a new Transaction
-			if((x = DWHCIDeviceTransfer(pHost, pThis->m_pEndpointOut, &CBW, sizeof CBW)) != -12345)
-			{
-				
-				LogWrite(DG, LOG_ERROR, "CBW failure: %d ",x);
-				return -1; // TODO RETURN INTO DEVICE RESET
-			}
-			return -12345;
-		}
-	}
-
-	if(nBufLen < 0){
-
-		LogWrite("BUFFER", LOG_ERROR, "LESS THAN ZERO");
-		return -1;
-
-	}
-
-	int nResult = 0;
-
-	if(device_handler[device_index].status == 1) 
-	{
-		
-		LogWrite(DG, LOG_ERROR, "we got in");
-
-		if(device_handler[device_index].tCounter == 0)
-		{
-
-			nResult = DWHCIDeviceTransfer(pHost, bIn ? pThis->m_pEndpointIn: pThis->m_pEndpointOut, pBuffer, nBufLen);
-			if(nResult != -12345)
-			{
-				LogWrite(DG, LOG_ERROR, "Data Transfer Failure: %d", nResult);
-				return -1; // TODO RESET DEVICE
-			}
-			LogWrite(DG, LOG_ERROR, "nResult = %d", nResult);
-			return -12345;
-		}
-		if(device_handler[device_index].tCounter != 0)
-		{
-			
-			LogWrite(DG, LOG_ERROR, "status %d, tCounter %d THIS IS NOT HANDLED YET", device_handler[device_index].status, device_handler[device_index].tCounter);
-			return -1;	
-		}
-
-	}
-	LogWrite(DG, LOG_ERROR, "this is a major error");
-	
-	return -1;	
-}
 
 int USBBulkOnlyMassStorageDeviceRead (TUSBBulkOnlyMassStorageDevice *pThis, void *pBuffer, unsigned nCount)
 {
@@ -567,10 +446,6 @@ int USBBulkOnlyMassStorageDeviceRead (TUSBBulkOnlyMassStorageDevice *pThis, void
 
 
 		
-	if(device_handler[device_index].usb_active && device_handler[device_index].nTries != 0) {
-		nResult = USBBulkOnlyMassStorageDeviceTryRead(pThis, pBuffer, nCount);
-		return nResult;
-	}
 
 
 	do
@@ -671,32 +546,6 @@ int USBBulkOnlyMassStorageDeviceTryRead (TUSBBulkOnlyMassStorageDevice *pThis, v
 	SCSIRead.Control		= SCSI_CONTROL;
 
 
-
-	if(device_handler[device_index].usb_active){
-		int result;
-
-				
-		if ((result = __USBBulkOnlyMassStorageDeviceCommand (pThis, &SCSIRead, sizeof SCSIRead,
-							 pBuffer, nCount,
-							 TRUE)) == -12345) // != (int) nCount
-		{
-		
-
-			if(device_handler[device_index].status == 1){
-				LogWrite("josh", LOG_ERROR, "we got -12345 at status 1");
-			}
-
-			return -12345;
-		}
-		if(result == -1){
-			LogWrite("uncessful", LOG_ERROR, "result = -1");
-		}
-
-		if(result == 1){
-			LogWrite("full success", LOG_ERROR, "%d", result);
-			return 1;
-		}
-	}
 
 
 	if (USBBulkOnlyMassStorageDeviceCommand (pThis, &SCSIRead, sizeof SCSIRead,

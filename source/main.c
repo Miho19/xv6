@@ -23,9 +23,8 @@ extern char end[]; // first address after kernel loaded from ELF file
 extern pde_t *kpgdir;
 extern volatile uint *mailbuffer;
 extern unsigned int pm_size;
+
 struct device_handler device_handler[MAX_DEVICE];
-
-
 
 void OkLoop()
 {
@@ -61,7 +60,8 @@ unsigned int getpmsize()
 
 void dhandlerinit(void)
 {
-	memset(device_handler, 0, sizeof(struct device_handler)*MAX_DEVICE);
+	memset(&device_handler, 0, sizeof(struct device_handler)*MAX_DEVICE);
+	
 }
 
 void machinit(void)
@@ -69,24 +69,25 @@ void machinit(void)
     memset(cpus, 0, sizeof(struct cpu)*NCPU);
 }
 
-void readTest(int offset,int deviceIndex){
+void readTest(){
 	int i = 0;
 	int result = 0;
 	unsigned char tbuffer[512];
 	unsigned char readBuffer[512];
 
 	for(i=0;i<512;i++) {
-		tbuffer[i] = 1;
+		tbuffer[i] = i;
 	}
-	
-	result = USPiMassStorageDeviceWrite(512*offset,tbuffer,512,deviceIndex);
+
+	device_handler[0].usb_active = 0;	
+	result = USPiMassStorageDeviceWrite(512*66,tbuffer,512,0);
 	
 	if(result != 512) {
 		cprintf("Write error\n");
 		return;
 	}
 	cprintf("Write / Read\n");
-	result = USPiMassStorageDeviceRead(512*offset,readBuffer,512,deviceIndex);
+	result = USPiMassStorageDeviceRead(512*66,readBuffer,512,0);
 
 	if(result != 512){
 		cprintf("Read error\n");
@@ -99,66 +100,6 @@ void readTest(int offset,int deviceIndex){
 
 }
 
-void test2(void)
-{
-	int result = 0;
-	unsigned char buffer[512];
-	cprintf("Reading before scheduler\n");
-
-	result = USPiMassStorageDeviceRead(63*512, buffer, 512, 0);
-	cprintf("End of before scheduler reading\n");
-}
-
-void test(void) 
-{
-	int nDevices = USPiMassStorageDeviceAvailable();
-	int deviceIndex = 0;
-	int result = 0;
-	unsigned char buffer[512];
-	int i = 0;
-	int offset = 0;
-	int boolean = 0;
-
-	if (nDevices < 1) {
-		cprintf("No Mass Storage Device available\n");
-		return;
-	}
-
-	for(deviceIndex = 0; deviceIndex < nDevices;deviceIndex++){
-		offset = 0;
-		cprintf("Reading from device: %d\n", deviceIndex);		
-		while((result = USPiMassStorageDeviceRead(offset*512,buffer,512,deviceIndex) ) == sizeof buffer){
-			cprintf("READ AT OFFSET: %d DEVICE: %d \n",offset, deviceIndex);
-                	for(i = 0;i<512;i++){
-                        	if(buffer[i] != 0 ){
-                        		cprintf("%d ",buffer[i]);
-					boolean = 0;
-					break;
-                        	}
-                	}
-        		if(boolean == 1)
-				cprintf("\n");
-			// if that block is free, write to it
-			if(boolean == 10){
-				cprintf("DEBUG: OFFSET = %d, INDEX = %d\n",offset,deviceIndex);
-				readTest(1,deviceIndex);
-				return; 
-			}
-		offset++;
-		boolean = 1;
-		}
-
-
-		if((result = USPiMassStorageDeviceRead(0,buffer,512,deviceIndex) ) != sizeof buffer){
-			cprintf("Read Error: %d \n",result);
-			return;
-		}
-
-	}
-	free(buffer);
-
-
-}
 
  
 void enableirqminiuart(void);
@@ -217,7 +158,7 @@ int cmain()
     cprintf("timer3init: OK\n");
     enableirqminiuart();
     dhandlerinit();
-     
+    readTest(); 
     cprintf("Handing off to scheduler...\n");
 
     scheduler();
