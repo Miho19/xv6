@@ -32,7 +32,7 @@
 #include <fs.h>
 #include <defs.h>
 #include <file.h>
-
+#include "usb_filestorage.h"
 #define ARM_IRQ_USB		9		// for ConnectInterrupt()
 
 #define DEVICE_ID_USB_HCD	3		// for SetPowerStateOn()

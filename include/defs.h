@@ -14,7 +14,7 @@ void NotOkLoop(void);
 int usb_read(struct inode *ip, char *buf,int num);
 int usb_fileread(struct file *f, char*buf, int num);
 void test(void);
-
+void storageinit(void);
 // mmu.c
 void mmuinit0(void);
 void mmuinit1(void);

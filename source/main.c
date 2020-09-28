@@ -24,7 +24,6 @@ extern pde_t *kpgdir;
 extern volatile uint *mailbuffer;
 extern unsigned int pm_size;
 
-struct device_handler device_handler[MAX_DEVICE];
 
 void OkLoop()
 {
@@ -58,46 +57,10 @@ unsigned int getpmsize()
 }
 
 
-void dhandlerinit(void)
-{
-	memset(&device_handler, 0, sizeof(struct device_handler)*MAX_DEVICE);
-	
-}
 
 void machinit(void)
 {
     memset(cpus, 0, sizeof(struct cpu)*NCPU);
-}
-
-void readTest(){
-	int i = 0;
-	int result = 0;
-	unsigned char tbuffer[512];
-	unsigned char readBuffer[512];
-
-	for(i=0;i<512;i++) {
-		tbuffer[i] = i;
-	}
-
-	device_handler[0].usb_active = 0;	
-	result = USPiMassStorageDeviceWrite(512*66,tbuffer,512,0);
-	
-	if(result != 512) {
-		cprintf("Write error\n");
-		return;
-	}
-	cprintf("Write / Read\n");
-	result = USPiMassStorageDeviceRead(512*66,readBuffer,512,0);
-
-	if(result != 512){
-		cprintf("Read error\n");
-		return;
-	}
-
-	for(i=0;i<512;i++) {
-		cprintf("%d",readBuffer[i]);
-	}
-
 }
 
 
@@ -157,8 +120,7 @@ int cmain()
     timer3init();
     cprintf("timer3init: OK\n");
     enableirqminiuart();
-    dhandlerinit();
-    readTest(); 
+    storageinit();
     cprintf("Handing off to scheduler...\n");
 
     scheduler();

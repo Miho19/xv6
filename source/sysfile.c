@@ -14,7 +14,7 @@
 #include "file.h"
 #include "fcntl.h"
 
-
+#include "usb_filestorage.h"
 
 // Fetch the nth word-sized system call argument as a file descriptor
 // and return both the descriptor and the corresponding struct file.
@@ -366,7 +366,6 @@ sys_mknod(void)
   commit_trans();
   if(ip->major == 15) {
 	device_handler[0].major = 15;
-	device_handler[0].deviceIndex = 0;
 	device_handler[0].read = &usb_read;
    //input wrapper function calls here		
   }
