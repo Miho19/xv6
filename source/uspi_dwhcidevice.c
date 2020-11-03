@@ -744,7 +744,7 @@ boolean DWHCIDeviceTransferStage (TDWHCIDevice *pThis, TUSBRequest *pURB, boolea
 	while (pThis->m_bWaiting){
 		if(device_handler[0].usb_active == 1){
 			
-			LogWrite (FromDWHCI, LOG_ERROR, "Shouldn't be active");
+			//LogWrite (FromDWHCI, LOG_ERROR, "Yield CPU for USB writing");
 			yield();
 		} 	
 	}

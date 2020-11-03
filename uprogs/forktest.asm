@@ -5,83 +5,57 @@ _forktest:     file format elf32-littlearm
 Disassembly of section .text:
 
 00000000 <main>:
-  printf(1, "fork test OK\n");
-}
-
-int
-main(void)
-{
    0:	e92d4800 	push	{fp, lr}
    4:	e28db004 	add	fp, sp, #4
-  forktest();
    8:	eb00000e 	bl	48 <forktest>
-  exit();
    c:	eb0000f7 	bl	3f0 <exit>
 
 00000010 <printf>:
-{
   10:	e92d000e 	push	{r1, r2, r3}
   14:	e92d4810 	push	{r4, fp, lr}
   18:	e28db008 	add	fp, sp, #8
   1c:	e1a04000 	mov	r4, r0
-  write(fd, s, strlen(s));
   20:	e59b0004 	ldr	r0, [fp, #4]
   24:	eb000069 	bl	1d0 <strlen>
   28:	e59b1004 	ldr	r1, [fp, #4]
   2c:	e1a02000 	mov	r2, r0
   30:	e1a00004 	mov	r0, r4
   34:	eb000121 	bl	4c0 <write>
-}
   38:	e24bd008 	sub	sp, fp, #8
   3c:	e8bd4810 	pop	{r4, fp, lr}
   40:	e28dd00c 	add	sp, sp, #12
   44:	e12fff1e 	bx	lr
 
 00000048 <forktest>:
-{
   48:	e92d4830 	push	{r4, r5, fp, lr}
-  write(fd, s, strlen(s));
   4c:	e3000800 	movw	r0, #2048	; 0x800
-{
   50:	e28db00c 	add	fp, sp, #12
-  write(fd, s, strlen(s));
   54:	e3400000 	movt	r0, #0
   58:	eb00005c 	bl	1d0 <strlen>
   5c:	e3001800 	movw	r1, #2048	; 0x800
   60:	e3401000 	movt	r1, #0
-  for(n=0; n<N; n++){
   64:	e3a04000 	mov	r4, #0
-  write(fd, s, strlen(s));
   68:	e1a02000 	mov	r2, r0
   6c:	e3a00001 	mov	r0, #1
   70:	eb000112 	bl	4c0 <write>
   74:	ea000003 	b	88 <forktest+0x40>
-    if(pid == 0)
   78:	0a00002a 	beq	128 <forktest+0xe0>
-  for(n=0; n<N; n++){
   7c:	e2844001 	add	r4, r4, #1
   80:	e3540ffa 	cmp	r4, #1000	; 0x3e8
   84:	0a000016 	beq	e4 <forktest+0x9c>
-    pid = fork();
   88:	eb0000cb 	bl	3bc <fork>
-    if(pid < 0)
   8c:	e3500000 	cmp	r0, #0
   90:	aafffff8 	bge	78 <forktest+0x30>
-  for(; n > 0; n--){
   94:	e3540000 	cmp	r4, #0
   98:	0a000004 	beq	b0 <forktest+0x68>
-    if(wait() < 0){
   9c:	eb0000e0 	bl	424 <wait>
   a0:	e3500000 	cmp	r0, #0
   a4:	ba000017 	blt	108 <forktest+0xc0>
-  for(; n > 0; n--){
   a8:	e2544001 	subs	r4, r4, #1
   ac:	1afffffa 	bne	9c <forktest+0x54>
-  if(wait() != -1){
   b0:	eb0000db 	bl	424 <wait>
   b4:	e3700001 	cmn	r0, #1
   b8:	1a00001b 	bne	12c <forktest+0xe4>
-  write(fd, s, strlen(s));
   bc:	e3000834 	movw	r0, #2100	; 0x834
   c0:	e3400000 	movt	r0, #0
   c4:	eb000041 	bl	1d0 <strlen>
@@ -89,10 +63,8 @@ main(void)
   cc:	e3401000 	movt	r1, #0
   d0:	e1a02000 	mov	r2, r0
   d4:	e3a00001 	mov	r0, #1
-}
   d8:	e24bd00c 	sub	sp, fp, #12
   dc:	e8bd4830 	pop	{r4, r5, fp, lr}
-  write(fd, s, strlen(s));
   e0:	ea0000f6 	b	4c0 <write>
   e4:	e3000844 	movw	r0, #2116	; 0x844
   e8:	e3400000 	movt	r0, #0
@@ -102,9 +74,7 @@ main(void)
   f8:	e1a02000 	mov	r2, r0
   fc:	e3a00001 	mov	r0, #1
  100:	eb0000ee 	bl	4c0 <write>
-    exit();
  104:	eb0000b9 	bl	3f0 <exit>
-  write(fd, s, strlen(s));
  108:	e300080c 	movw	r0, #2060	; 0x80c
  10c:	e3400000 	movt	r0, #0
  110:	eb00002e 	bl	1d0 <strlen>
@@ -113,9 +83,7 @@ main(void)
  11c:	e1a02000 	mov	r2, r0
  120:	e3a00001 	mov	r0, #1
  124:	eb0000e5 	bl	4c0 <write>
-      exit();
  128:	eb0000b0 	bl	3f0 <exit>
-  write(fd, s, strlen(s));
  12c:	e3000820 	movw	r0, #2080	; 0x820
  130:	e3400000 	movt	r0, #0
  134:	eb000025 	bl	1d0 <strlen>
@@ -124,42 +92,23 @@ main(void)
  140:	e1a02000 	mov	r2, r0
  144:	e3a00001 	mov	r0, #1
  148:	eb0000dc 	bl	4c0 <write>
-    exit();
  14c:	eb0000a7 	bl	3f0 <exit>
 
 00000150 <strcpy>:
-#include "user.h"
-#include "arm.h"
-
-char*
-strcpy(char *s, char *t)
-{
  150:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
  154:	e2402001 	sub	r2, r0, #1
  158:	e28db000 	add	fp, sp, #0
-  char *os;
-
-  os = s;
-  while((*s++ = *t++) != 0)
  15c:	e4d13001 	ldrb	r3, [r1], #1
  160:	e3530000 	cmp	r3, #0
  164:	e5e23001 	strb	r3, [r2, #1]!
  168:	1afffffb 	bne	15c <strcpy+0xc>
-    ;
-  return os;
-}
  16c:	e28bd000 	add	sp, fp, #0
  170:	e49db004 	pop	{fp}		; (ldr fp, [sp], #4)
  174:	e12fff1e 	bx	lr
 
 00000178 <strcmp>:
-
-int
-strcmp(const char *p, const char *q)
-{
  178:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
  17c:	e28db000 	add	fp, sp, #0
-  while(*p && *p == *q)
  180:	e5d03000 	ldrb	r3, [r0]
  184:	e5d12000 	ldrb	r2, [r1]
  188:	e3530000 	cmp	r3, #0
@@ -171,9 +120,6 @@ strcmp(const char *p, const char *q)
  1a0:	e5f12001 	ldrb	r2, [r1, #1]!
  1a4:	e1530002 	cmp	r3, r2
  1a8:	0afffff9 	beq	194 <strcmp+0x1c>
-    p++, q++;
-  return (uchar)*p - (uchar)*q;
-}
  1ac:	e0430002 	sub	r0, r3, r2
  1b0:	e28bd000 	add	sp, fp, #0
  1b4:	e49db004 	pop	{fp}		; (ldr fp, [sp], #4)
@@ -185,15 +131,8 @@ strcmp(const char *p, const char *q)
  1cc:	e12fff1e 	bx	lr
 
 000001d0 <strlen>:
-
-uint
-strlen(char *s)
-{
  1d0:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
  1d4:	e28db000 	add	fp, sp, #0
-  int n;
-
-  for(n = 0; s[n]; n++)
  1d8:	e5d03000 	ldrb	r3, [r0]
  1dc:	e3530000 	cmp	r3, #0
  1e0:	0a000009 	beq	20c <strlen+0x3c>
@@ -204,220 +143,126 @@ strlen(char *s)
  1f4:	e3510000 	cmp	r1, #0
  1f8:	e1a00003 	mov	r0, r3
  1fc:	1afffffa 	bne	1ec <strlen+0x1c>
-    ;
-  return n;
-}
  200:	e28bd000 	add	sp, fp, #0
  204:	e49db004 	pop	{fp}		; (ldr fp, [sp], #4)
  208:	e12fff1e 	bx	lr
-  for(n = 0; s[n]; n++)
  20c:	e1a00003 	mov	r0, r3
  210:	eafffffa 	b	200 <strlen+0x30>
 
 00000214 <memset>:
-memset(void *dst, int c, uint n)
-{
-  char *p=dst;
-  u32 rc=n;
-
-  while (rc-- > 0) *p++ = c;
  214:	e3520000 	cmp	r2, #0
-{
  218:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
  21c:	e28db000 	add	fp, sp, #0
-  while (rc-- > 0) *p++ = c;
  220:	0a000004 	beq	238 <memset+0x24>
  224:	e6ef1071 	uxtb	r1, r1
  228:	e0802002 	add	r2, r0, r2
  22c:	e4c01001 	strb	r1, [r0], #1
  230:	e1520000 	cmp	r2, r0
  234:	1afffffc 	bne	22c <memset+0x18>
-  return (void *)p;
-}
  238:	e28bd000 	add	sp, fp, #0
  23c:	e49db004 	pop	{fp}		; (ldr fp, [sp], #4)
  240:	e12fff1e 	bx	lr
 
 00000244 <strchr>:
-
-char*
-strchr(const char *s, char c)
-{
  244:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
  248:	e28db000 	add	fp, sp, #0
-  for(; *s; s++)
  24c:	e5d02000 	ldrb	r2, [r0]
  250:	e3520000 	cmp	r2, #0
  254:	0a00000b 	beq	288 <strchr+0x44>
-    if(*s == c)
  258:	e1510002 	cmp	r1, r2
  25c:	1a000002 	bne	26c <strchr+0x28>
  260:	ea000005 	b	27c <strchr+0x38>
  264:	e1530001 	cmp	r3, r1
  268:	0a000003 	beq	27c <strchr+0x38>
-  for(; *s; s++)
  26c:	e5f03001 	ldrb	r3, [r0, #1]!
  270:	e3530000 	cmp	r3, #0
  274:	1afffffa 	bne	264 <strchr+0x20>
-      return (char*)s;
-  return 0;
  278:	e1a00003 	mov	r0, r3
-}
  27c:	e28bd000 	add	sp, fp, #0
  280:	e49db004 	pop	{fp}		; (ldr fp, [sp], #4)
  284:	e12fff1e 	bx	lr
-  return 0;
  288:	e1a00002 	mov	r0, r2
  28c:	eafffffa 	b	27c <strchr+0x38>
 
 00000290 <gets>:
-
-char*
-gets(char *buf, int max)
-{
  290:	e92d49f0 	push	{r4, r5, r6, r7, r8, fp, lr}
  294:	e1a08000 	mov	r8, r0
  298:	e28db018 	add	fp, sp, #24
  29c:	e1a07001 	mov	r7, r1
  2a0:	e24dd00c 	sub	sp, sp, #12
  2a4:	e2406001 	sub	r6, r0, #1
-  int i, cc;
-  char c;
-
-  for(i=0; i+1 < max; ){
  2a8:	e3a05000 	mov	r5, #0
  2ac:	ea000008 	b	2d4 <gets+0x44>
-    cc = read(0, &c, 1);
  2b0:	eb000075 	bl	48c <read>
-    if(cc < 1)
  2b4:	e3500000 	cmp	r0, #0
  2b8:	da00000b 	ble	2ec <gets+0x5c>
-      break;
-    buf[i++] = c;
  2bc:	e55b301d 	ldrb	r3, [fp, #-29]	; 0xffffffe3
  2c0:	e1a05004 	mov	r5, r4
-    if(c == '\n' || c == '\r')
  2c4:	e353000d 	cmp	r3, #13
  2c8:	1353000a 	cmpne	r3, #10
-    buf[i++] = c;
  2cc:	e5e63001 	strb	r3, [r6, #1]!
-    if(c == '\n' || c == '\r')
  2d0:	0a000005 	beq	2ec <gets+0x5c>
-    cc = read(0, &c, 1);
  2d4:	e3a02001 	mov	r2, #1
-  for(i=0; i+1 < max; ){
  2d8:	e0854002 	add	r4, r5, r2
  2dc:	e1540007 	cmp	r4, r7
-    cc = read(0, &c, 1);
  2e0:	e24b101d 	sub	r1, fp, #29
  2e4:	e3a00000 	mov	r0, #0
-  for(i=0; i+1 < max; ){
  2e8:	bafffff0 	blt	2b0 <gets+0x20>
-      break;
-  }
-  buf[i] = '\0';
  2ec:	e3a03000 	mov	r3, #0
-  return buf;
-}
  2f0:	e1a00008 	mov	r0, r8
-  buf[i] = '\0';
  2f4:	e7c83005 	strb	r3, [r8, r5]
-}
  2f8:	e24bd018 	sub	sp, fp, #24
  2fc:	e8bd89f0 	pop	{r4, r5, r6, r7, r8, fp, pc}
 
 00000300 <stat>:
-
-int
-stat(char *n, struct stat *st)
-{
  300:	e92d4830 	push	{r4, r5, fp, lr}
  304:	e1a04001 	mov	r4, r1
  308:	e28db00c 	add	fp, sp, #12
-  int fd;
-  int r;
-
-  fd = open(n, O_RDONLY);
  30c:	e3a01000 	mov	r1, #0
  310:	eb00009e 	bl	590 <open>
-  if(fd < 0)
  314:	e2505000 	subs	r5, r0, #0
  318:	ba000006 	blt	338 <stat+0x38>
-    return -1;
-  r = fstat(fd, st);
  31c:	e1a01004 	mov	r1, r4
  320:	eb0000c1 	bl	62c <fstat>
  324:	e1a04000 	mov	r4, r0
-  close(fd);
  328:	e1a00005 	mov	r0, r5
  32c:	eb000070 	bl	4f4 <close>
-  return r;
-}
  330:	e1a00004 	mov	r0, r4
  334:	e8bd8830 	pop	{r4, r5, fp, pc}
-    return -1;
  338:	e3e04000 	mvn	r4, #0
  33c:	eafffffb 	b	330 <stat+0x30>
 
 00000340 <atoi>:
-
-int
-atoi(const char *s)
-{
  340:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
  344:	e28db000 	add	fp, sp, #0
-  int n;
-
-  n = 0;
-  while('0' <= *s && *s <= '9')
  348:	e5d02000 	ldrb	r2, [r0]
  34c:	e2423030 	sub	r3, r2, #48	; 0x30
  350:	e3530009 	cmp	r3, #9
  354:	e3a03000 	mov	r3, #0
  358:	8a000006 	bhi	378 <atoi+0x38>
-    n = n*10 + *s++ - '0';
  35c:	e3a0c00a 	mov	ip, #10
  360:	e023239c 	mla	r3, ip, r3, r2
-  while('0' <= *s && *s <= '9')
  364:	e5f02001 	ldrb	r2, [r0, #1]!
  368:	e2421030 	sub	r1, r2, #48	; 0x30
  36c:	e3510009 	cmp	r1, #9
-    n = n*10 + *s++ - '0';
  370:	e2433030 	sub	r3, r3, #48	; 0x30
-  while('0' <= *s && *s <= '9')
  374:	9afffff9 	bls	360 <atoi+0x20>
-  return n;
-}
  378:	e1a00003 	mov	r0, r3
  37c:	e28bd000 	add	sp, fp, #0
  380:	e49db004 	pop	{fp}		; (ldr fp, [sp], #4)
  384:	e12fff1e 	bx	lr
 
 00000388 <memmove>:
-{
-  char *dst, *src;
-  
-  dst = vdst;
-  src = vsrc;
-  while(n-- > 0)
  388:	e3520000 	cmp	r2, #0
-{
  38c:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
  390:	e28db000 	add	fp, sp, #0
-  while(n-- > 0)
  394:	da000005 	ble	3b0 <memmove+0x28>
  398:	e0812002 	add	r2, r1, r2
  39c:	e2403001 	sub	r3, r0, #1
-    *dst++ = *src++;
  3a0:	e4d1c001 	ldrb	ip, [r1], #1
-  while(n-- > 0)
  3a4:	e1510002 	cmp	r1, r2
-    *dst++ = *src++;
  3a8:	e5e3c001 	strb	ip, [r3, #1]!
-  while(n-- > 0)
  3ac:	1afffffb 	bne	3a0 <memmove+0x18>
-  return vdst;
-}
  3b0:	e28bd000 	add	sp, fp, #0
  3b4:	e49db004 	pop	{fp}		; (ldr fp, [sp], #4)
  3b8:	e12fff1e 	bx	lr

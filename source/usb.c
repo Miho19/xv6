@@ -190,30 +190,6 @@ int usbinit () {
 
 
 
-/** 
- 	error codes - > -1 no devices ready
- 
-*/
-
-int usb_fileread(struct file *f, char *buf, int num)
-{
-	return USPiMassStorageDeviceRead(1*512, buf, 512, 0);
-
- 						
-}
-
-
-
-/** 
- Current issue potentially other functions calling usb_read using
- devsw[major].read which doesnt force it through usb_fileread interface
-
- num = number of bytes
-
-*/int usb_read(struct inode *ip, char *buf, int num) {
-	return -1;
-}
-
 
 #ifndef NDEBUG
 

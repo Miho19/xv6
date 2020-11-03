@@ -19,7 +19,7 @@ void clean(void){
 }
 
 int main(int argc, char *argv[]) {
-	
+	int i;
 	buf = malloc(512*sizeof(buf));	
 
 
@@ -48,9 +48,11 @@ int main(int argc, char *argv[]) {
 	printf(1,"opened : %s FD: %d\n",argv[1],fd);
 
 
-	while(read(fd, buf, 512) != -1){
-			
+	read(fd, buf, 512);
+	for(i=0;i<512;i++){
+		printf(1, "%d", buf[i]);
 	}
+	printf(1,"\n");
 	printf(1,"somehow we left the looop\n");
  
 	clean();

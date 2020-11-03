@@ -8,6 +8,9 @@
 #include "file.h"
 #include "usb_filestorage.h"
 #include "uspi.h"
+
+#define DEVICE_NUMBER 0
+
 struct device_handler device_handler[MAX_DEVICE];
 
 void dhandlerinit(void) {
@@ -34,7 +37,7 @@ void readTest(void) {
 	memset(&readBuffer, 0, sizeof(readBuffer[0]) * 512);
 	
 	result = 0;
-	result = USPiMassStorageDeviceRead(512 * 66, readBuffer, 512, 0);
+	result = USPiMassStorageDeviceRead(512 * 66, readBuffer, 512, DEVICE_NUMBER);
 	if(result != 512){
 		cprintf("Read error %d \n", result);
 		return;
@@ -45,4 +48,19 @@ void readTest(void) {
 
 
 
+int usb_fileread(struct file *f, char *buf, int num) {
+	unsigned int result;
 
+	result = 0;
+	device_handler[0].usb_active = 1;
+	
+	result = USPiMassStorageDeviceRead(512 * f->off, buf, num, DEVICE_NUMBER);
+
+		
+	cprintf("file off -> %d\n result -> %d\n new offset -> %d\n",
+ f->off, result, f->off + result);
+
+	f->off += result;
+	
+	return result;
+}

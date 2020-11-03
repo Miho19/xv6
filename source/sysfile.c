@@ -76,10 +76,10 @@ sys_read(void)
     return -1;
 
 	
-
-  if(f->ip->major == 15) {
+  // USB FILE READ HARD CODED
+  if(f->ip->major == 15) 
 	return usb_fileread(f, p, n);
- }
+ 
 	
   return fileread(f, p, n);
 }
@@ -366,7 +366,7 @@ sys_mknod(void)
   commit_trans();
   if(ip->major == 15) {
 	device_handler[0].major = 15;
-	device_handler[0].read = &usb_read;
+	device_handler[0].read = &usb_fileread;
    //input wrapper function calls here		
   }
   return 0;
