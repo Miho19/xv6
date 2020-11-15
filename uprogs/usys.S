@@ -59,6 +59,22 @@ wait:
     pop {lr}
     bx lr
 
+.global lseek
+lseek:
+    push {lr}
+    push {r3}
+    push {r2}
+    push {r1}
+    push {r0}
+    mov r0, #SYS_lseek
+    swi #T_SYSCALL
+    pop {r1} /* to avoid overwrite of r0 */
+    pop {r1}
+    pop {r2}
+    pop {r3}
+    pop {lr}
+    bx lr
+
 .globl pipe
 pipe:
     push {lr}
@@ -371,4 +387,5 @@ SYSCALL(getpid)
 SYSCALL(sbrk)
 SYSCALL(sleep)
 SYSCALL(uptime)
+SYSCALL(lseek)
 */

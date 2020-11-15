@@ -20,7 +20,7 @@ Disassembly of section .text:
   28:	e59b1004 	ldr	r1, [fp, #4]
   2c:	e1a02000 	mov	r2, r0
   30:	e1a00004 	mov	r0, r4
-  34:	eb000121 	bl	4c0 <write>
+  34:	eb00012e 	bl	4f4 <write>
   38:	e24bd008 	sub	sp, fp, #8
   3c:	e8bd4810 	pop	{r4, fp, lr}
   40:	e28dd00c 	add	sp, sp, #12
@@ -28,16 +28,16 @@ Disassembly of section .text:
 
 00000048 <forktest>:
   48:	e92d4830 	push	{r4, r5, fp, lr}
-  4c:	e3000800 	movw	r0, #2048	; 0x800
+  4c:	e3000834 	movw	r0, #2100	; 0x834
   50:	e28db00c 	add	fp, sp, #12
   54:	e3400000 	movt	r0, #0
   58:	eb00005c 	bl	1d0 <strlen>
-  5c:	e3001800 	movw	r1, #2048	; 0x800
+  5c:	e3001834 	movw	r1, #2100	; 0x834
   60:	e3401000 	movt	r1, #0
   64:	e3a04000 	mov	r4, #0
   68:	e1a02000 	mov	r2, r0
   6c:	e3a00001 	mov	r0, #1
-  70:	eb000112 	bl	4c0 <write>
+  70:	eb00011f 	bl	4f4 <write>
   74:	ea000003 	b	88 <forktest+0x40>
   78:	0a00002a 	beq	128 <forktest+0xe0>
   7c:	e2844001 	add	r4, r4, #1
@@ -56,42 +56,42 @@ Disassembly of section .text:
   b0:	eb0000db 	bl	424 <wait>
   b4:	e3700001 	cmn	r0, #1
   b8:	1a00001b 	bne	12c <forktest+0xe4>
-  bc:	e3000834 	movw	r0, #2100	; 0x834
+  bc:	e3000868 	movw	r0, #2152	; 0x868
   c0:	e3400000 	movt	r0, #0
   c4:	eb000041 	bl	1d0 <strlen>
-  c8:	e3001834 	movw	r1, #2100	; 0x834
+  c8:	e3001868 	movw	r1, #2152	; 0x868
   cc:	e3401000 	movt	r1, #0
   d0:	e1a02000 	mov	r2, r0
   d4:	e3a00001 	mov	r0, #1
   d8:	e24bd00c 	sub	sp, fp, #12
   dc:	e8bd4830 	pop	{r4, r5, fp, lr}
-  e0:	ea0000f6 	b	4c0 <write>
-  e4:	e3000844 	movw	r0, #2116	; 0x844
+  e0:	ea000103 	b	4f4 <write>
+  e4:	e3000878 	movw	r0, #2168	; 0x878
   e8:	e3400000 	movt	r0, #0
   ec:	eb000037 	bl	1d0 <strlen>
-  f0:	e3001844 	movw	r1, #2116	; 0x844
+  f0:	e3001878 	movw	r1, #2168	; 0x878
   f4:	e3401000 	movt	r1, #0
   f8:	e1a02000 	mov	r2, r0
   fc:	e3a00001 	mov	r0, #1
- 100:	eb0000ee 	bl	4c0 <write>
+ 100:	eb0000fb 	bl	4f4 <write>
  104:	eb0000b9 	bl	3f0 <exit>
- 108:	e300080c 	movw	r0, #2060	; 0x80c
+ 108:	e3000840 	movw	r0, #2112	; 0x840
  10c:	e3400000 	movt	r0, #0
  110:	eb00002e 	bl	1d0 <strlen>
- 114:	e300180c 	movw	r1, #2060	; 0x80c
+ 114:	e3001840 	movw	r1, #2112	; 0x840
  118:	e3401000 	movt	r1, #0
  11c:	e1a02000 	mov	r2, r0
  120:	e3a00001 	mov	r0, #1
- 124:	eb0000e5 	bl	4c0 <write>
+ 124:	eb0000f2 	bl	4f4 <write>
  128:	eb0000b0 	bl	3f0 <exit>
- 12c:	e3000820 	movw	r0, #2080	; 0x820
+ 12c:	e3000854 	movw	r0, #2132	; 0x854
  130:	e3400000 	movt	r0, #0
  134:	eb000025 	bl	1d0 <strlen>
- 138:	e3001820 	movw	r1, #2080	; 0x820
+ 138:	e3001854 	movw	r1, #2132	; 0x854
  13c:	e3401000 	movt	r1, #0
  140:	e1a02000 	mov	r2, r0
  144:	e3a00001 	mov	r0, #1
- 148:	eb0000dc 	bl	4c0 <write>
+ 148:	eb0000e9 	bl	4f4 <write>
  14c:	eb0000a7 	bl	3f0 <exit>
 
 00000150 <strcpy>:
@@ -193,7 +193,7 @@ Disassembly of section .text:
  2a4:	e2406001 	sub	r6, r0, #1
  2a8:	e3a05000 	mov	r5, #0
  2ac:	ea000008 	b	2d4 <gets+0x44>
- 2b0:	eb000075 	bl	48c <read>
+ 2b0:	eb000082 	bl	4c0 <read>
  2b4:	e3500000 	cmp	r0, #0
  2b8:	da00000b 	ble	2ec <gets+0x5c>
  2bc:	e55b301d 	ldrb	r3, [fp, #-29]	; 0xffffffe3
@@ -219,14 +219,14 @@ Disassembly of section .text:
  304:	e1a04001 	mov	r4, r1
  308:	e28db00c 	add	fp, sp, #12
  30c:	e3a01000 	mov	r1, #0
- 310:	eb00009e 	bl	590 <open>
+ 310:	eb0000ab 	bl	5c4 <open>
  314:	e2505000 	subs	r5, r0, #0
  318:	ba000006 	blt	338 <stat+0x38>
  31c:	e1a01004 	mov	r1, r4
- 320:	eb0000c1 	bl	62c <fstat>
+ 320:	eb0000ce 	bl	660 <fstat>
  324:	e1a04000 	mov	r4, r0
  328:	e1a00005 	mov	r0, r5
- 32c:	eb000070 	bl	4f4 <close>
+ 32c:	eb00007d 	bl	528 <close>
  330:	e1a00004 	mov	r0, r4
  334:	e8bd8830 	pop	{r4, r5, fp, pc}
  338:	e3e04000 	mvn	r4, #0
@@ -312,13 +312,13 @@ Disassembly of section .text:
  450:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  454:	e12fff1e 	bx	lr
 
-00000458 <pipe>:
+00000458 <lseek>:
  458:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  45c:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  460:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  464:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  468:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 46c:	e3a00004 	mov	r0, #4
+ 46c:	e3a00016 	mov	r0, #22
  470:	ef000040 	svc	0x00000040
  474:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  478:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -327,13 +327,13 @@ Disassembly of section .text:
  484:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  488:	e12fff1e 	bx	lr
 
-0000048c <read>:
+0000048c <pipe>:
  48c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  490:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  494:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  498:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  49c:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 4a0:	e3a00005 	mov	r0, #5
+ 4a0:	e3a00004 	mov	r0, #4
  4a4:	ef000040 	svc	0x00000040
  4a8:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  4ac:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -342,13 +342,13 @@ Disassembly of section .text:
  4b8:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  4bc:	e12fff1e 	bx	lr
 
-000004c0 <write>:
+000004c0 <read>:
  4c0:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  4c4:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  4c8:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  4cc:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  4d0:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 4d4:	e3a00010 	mov	r0, #16
+ 4d4:	e3a00005 	mov	r0, #5
  4d8:	ef000040 	svc	0x00000040
  4dc:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  4e0:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -357,13 +357,13 @@ Disassembly of section .text:
  4ec:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  4f0:	e12fff1e 	bx	lr
 
-000004f4 <close>:
+000004f4 <write>:
  4f4:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  4f8:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  4fc:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  500:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  504:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 508:	e3a00015 	mov	r0, #21
+ 508:	e3a00010 	mov	r0, #16
  50c:	ef000040 	svc	0x00000040
  510:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  514:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -372,13 +372,13 @@ Disassembly of section .text:
  520:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  524:	e12fff1e 	bx	lr
 
-00000528 <kill>:
+00000528 <close>:
  528:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  52c:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  530:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  534:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  538:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 53c:	e3a00006 	mov	r0, #6
+ 53c:	e3a00015 	mov	r0, #21
  540:	ef000040 	svc	0x00000040
  544:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  548:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -387,13 +387,13 @@ Disassembly of section .text:
  554:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  558:	e12fff1e 	bx	lr
 
-0000055c <exec>:
+0000055c <kill>:
  55c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  560:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  564:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  568:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  56c:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 570:	e3a00007 	mov	r0, #7
+ 570:	e3a00006 	mov	r0, #6
  574:	ef000040 	svc	0x00000040
  578:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  57c:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -402,13 +402,13 @@ Disassembly of section .text:
  588:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  58c:	e12fff1e 	bx	lr
 
-00000590 <open>:
+00000590 <exec>:
  590:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  594:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  598:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  59c:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  5a0:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 5a4:	e3a0000f 	mov	r0, #15
+ 5a4:	e3a00007 	mov	r0, #7
  5a8:	ef000040 	svc	0x00000040
  5ac:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  5b0:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -417,13 +417,13 @@ Disassembly of section .text:
  5bc:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  5c0:	e12fff1e 	bx	lr
 
-000005c4 <mknod>:
+000005c4 <open>:
  5c4:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  5c8:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  5cc:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  5d0:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  5d4:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 5d8:	e3a00011 	mov	r0, #17
+ 5d8:	e3a0000f 	mov	r0, #15
  5dc:	ef000040 	svc	0x00000040
  5e0:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  5e4:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -432,13 +432,13 @@ Disassembly of section .text:
  5f0:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  5f4:	e12fff1e 	bx	lr
 
-000005f8 <unlink>:
+000005f8 <mknod>:
  5f8:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  5fc:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  600:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  604:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  608:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 60c:	e3a00012 	mov	r0, #18
+ 60c:	e3a00011 	mov	r0, #17
  610:	ef000040 	svc	0x00000040
  614:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  618:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -447,13 +447,13 @@ Disassembly of section .text:
  624:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  628:	e12fff1e 	bx	lr
 
-0000062c <fstat>:
+0000062c <unlink>:
  62c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  630:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  634:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  638:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  63c:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 640:	e3a00008 	mov	r0, #8
+ 640:	e3a00012 	mov	r0, #18
  644:	ef000040 	svc	0x00000040
  648:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  64c:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -462,13 +462,13 @@ Disassembly of section .text:
  658:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  65c:	e12fff1e 	bx	lr
 
-00000660 <link>:
+00000660 <fstat>:
  660:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  664:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  668:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  66c:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  670:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 674:	e3a00013 	mov	r0, #19
+ 674:	e3a00008 	mov	r0, #8
  678:	ef000040 	svc	0x00000040
  67c:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  680:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -477,13 +477,13 @@ Disassembly of section .text:
  68c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  690:	e12fff1e 	bx	lr
 
-00000694 <mkdir>:
+00000694 <link>:
  694:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  698:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  69c:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  6a0:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  6a4:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 6a8:	e3a00014 	mov	r0, #20
+ 6a8:	e3a00013 	mov	r0, #19
  6ac:	ef000040 	svc	0x00000040
  6b0:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  6b4:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -492,13 +492,13 @@ Disassembly of section .text:
  6c0:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  6c4:	e12fff1e 	bx	lr
 
-000006c8 <chdir>:
+000006c8 <mkdir>:
  6c8:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  6cc:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  6d0:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  6d4:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  6d8:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 6dc:	e3a00009 	mov	r0, #9
+ 6dc:	e3a00014 	mov	r0, #20
  6e0:	ef000040 	svc	0x00000040
  6e4:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  6e8:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -507,13 +507,13 @@ Disassembly of section .text:
  6f4:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  6f8:	e12fff1e 	bx	lr
 
-000006fc <dup>:
+000006fc <chdir>:
  6fc:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  700:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  704:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  708:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  70c:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 710:	e3a0000a 	mov	r0, #10
+ 710:	e3a00009 	mov	r0, #9
  714:	ef000040 	svc	0x00000040
  718:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  71c:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -522,13 +522,13 @@ Disassembly of section .text:
  728:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  72c:	e12fff1e 	bx	lr
 
-00000730 <getpid>:
+00000730 <dup>:
  730:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  734:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  738:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  73c:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  740:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 744:	e3a0000b 	mov	r0, #11
+ 744:	e3a0000a 	mov	r0, #10
  748:	ef000040 	svc	0x00000040
  74c:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  750:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -537,13 +537,13 @@ Disassembly of section .text:
  75c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  760:	e12fff1e 	bx	lr
 
-00000764 <sbrk>:
+00000764 <getpid>:
  764:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  768:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  76c:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  770:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  774:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 778:	e3a0000c 	mov	r0, #12
+ 778:	e3a0000b 	mov	r0, #11
  77c:	ef000040 	svc	0x00000040
  780:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  784:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -552,13 +552,13 @@ Disassembly of section .text:
  790:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  794:	e12fff1e 	bx	lr
 
-00000798 <sleep>:
+00000798 <sbrk>:
  798:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  79c:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  7a0:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  7a4:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  7a8:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 7ac:	e3a0000d 	mov	r0, #13
+ 7ac:	e3a0000c 	mov	r0, #12
  7b0:	ef000040 	svc	0x00000040
  7b4:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  7b8:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -567,13 +567,13 @@ Disassembly of section .text:
  7c4:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  7c8:	e12fff1e 	bx	lr
 
-000007cc <uptime>:
+000007cc <sleep>:
  7cc:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
  7d0:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
  7d4:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
  7d8:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
  7dc:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
- 7e0:	e3a0000e 	mov	r0, #14
+ 7e0:	e3a0000d 	mov	r0, #13
  7e4:	ef000040 	svc	0x00000040
  7e8:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
  7ec:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
@@ -581,3 +581,18 @@ Disassembly of section .text:
  7f4:	e49d3004 	pop	{r3}		; (ldr r3, [sp], #4)
  7f8:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
  7fc:	e12fff1e 	bx	lr
+
+00000800 <uptime>:
+ 800:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+ 804:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
+ 808:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
+ 80c:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
+ 810:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
+ 814:	e3a0000e 	mov	r0, #14
+ 818:	ef000040 	svc	0x00000040
+ 81c:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
+ 820:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
+ 824:	e49d2004 	pop	{r2}		; (ldr r2, [sp], #4)
+ 828:	e49d3004 	pop	{r3}		; (ldr r3, [sp], #4)
+ 82c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+ 830:	e12fff1e 	bx	lr

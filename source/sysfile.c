@@ -440,3 +440,26 @@ sys_pipe(void)
   fd[1] = fd1;
   return 0;
 }
+
+/**
+* ONLY SEEK_SET
+* type there for expansion	
+*/
+int
+sys_lseek(void)
+{
+	struct file *f;
+	int n;
+	int type;
+	int size;
+	
+	if(argfd(0, 0, &f) < 0 || argint(1, &n) < 0 || argint(2, &type) < 0)
+		return -1;
+	cprintf("current offset %d seek to %d type %d\n",f->off, n, type);
+	size = f->ip->size;
+	
+	if(n < 0) n= 0;
+	if(n > size) n = size;	
+	f->off = n;
+	return n;
+}

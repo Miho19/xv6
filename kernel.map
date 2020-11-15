@@ -228,7 +228,7 @@ LOAD build/uspi_dwhcirootport.o
                 0x00008200                INIT_END = .
                 0x80008200                . = (. + SHIFT)
 
-.text           0x80008200     0xf798 load address 0x00008200
+.text           0x80008200     0xf82c load address 0x00008200
  *.c.o(.text)
  *(.text .stub .text.*)
  .text          0x80008200       0x94 build/entry.o
@@ -333,7 +333,7 @@ LOAD build/uspi_dwhcirootport.o
                 0x80009f7c                dhandlerinit
                 0x80009f80                readTest
                 0x80009ff4                usb_fileread
- .text          0x8000a064      0xaf4 build/sysfile.o
+ .text          0x8000a064      0xb88 build/sysfile.o
                 0x8000a244                sys_dup
                 0x8000a2bc                sys_read
                 0x8000a340                sys_write
@@ -347,624 +347,625 @@ LOAD build/uspi_dwhcirootport.o
                 0x8000a954                sys_chdir
                 0x8000a9d4                sys_exec
                 0x8000aa90                sys_pipe
- .text          0x8000ab58      0x238 build/bio.o
-                0x8000ab58                binit
-                0x8000abe0                bread
-                0x8000ace0                bwrite
-                0x8000ad08                brelse
- .text          0x8000ad90      0x230 build/uspi_usbdevicefactory.o
-                0x8000ad90                GetDevice
-                0x8000af60                USBDeviceFactoryGetDevice
- .text          0x8000afc0      0xd54 build/fs.o
-                0x8000b098                readsb
-                0x8000b2fc                iinit
-                0x8000b32c                ialloc
-                0x8000b3dc                iupdate
-                0x8000b458                idup
-                0x8000b48c                ilock
-                0x8000b594                iunlock
-                0x8000b5f4                iput
-                0x8000b744                iunlockput
-                0x8000b75c                stati
-                0x8000b784                readi
-                0x8000b870                writei
-                0x8000b98c                namecmp
-                0x8000b994                dirlookup
-                0x8000bc14                dirlink
-                0x8000bcec                namei
-                0x8000bd08                nameiparent
- .text          0x8000bd14      0xaa8 build/console.o
-                0x8000bd14                consoleread
-                0x8000be08                setgpucolour
-                0x8000be18                initframebuf
-                0x8000be70                drawpixel
-                0x8000beb0                drawcursor
-                0x8000bf24                drawcharacter
-                0x8000bfbc                gpuputc
-                0x8000c1b4                consolewrite
-                0x8000c2c4                panic
-                0x8000c338                cprintf
-                0x8000c4bc                consputc
-                0x8000c558                consoleintr
-                0x8000c6c4                gpuinit
-                0x8000c720                consoleinit
- .text          0x8000c7bc      0x104 build/memide.o
-                0x8000c7bc                ideinit
-                0x8000c7f0                ideintr
-                0x8000c7f4                iderw
-                0x8000c8a4                usbrw
- .text          0x8000c8c0      0x108 build/mmu.o
-                0x8000c8c0                mmuinit0
-                0x8000c964                mmuinit1
- .text          0x8000c9c8      0x194 build/spinlock.o
-                0x8000c9c8                initlock
-                0x8000c9dc                getcallerpcs
-                0x8000c9e0                holding
-                0x8000ca08                pushcli
-                0x8000ca40                acquire
-                0x8000cabc                popcli
-                0x8000cb18                release
- .text          0x8000cb5c      0x3ac build/uspienv_timer.o
-                0x8000cb9c                TimerEnvInit
-                0x8000cbec                _Timer
-                0x8000cc00                TimerGetClockTicks
-                0x8000cc1c                TimerGetTicks
-                0x8000cc24                TimerGetTime
-                0x8000cc2c                TimerStartKernelTimer
-                0x8000cc98                TimerCancelKernelTimer
-                0x8000ccac                TimerMsDelay
-                0x8000ccc0                TimerusDelay
-                0x8000ccd4                TimerGet
-                0x8000cce4                TimerSimpleMsDelay
-                0x8000cd00                TimerSimpleusDelay
-                0x8000cd0c                TimerPollKernelTimers
-                0x8000cd84                TimerInterruptHandler
-                0x8000ce3c                TimerTuneMsDelay
-                0x8000cea0                TimerInitialize
- .text          0x8000cf08      0x270 build/main.o
-                0x8000cf08                OkLoop
-                0x8000cf4c                NotOkLoop
-                0x8000cf90                getpmsize
-                0x8000d004                machinit
-                0x8000d018                cmain
- .text          0x8000d178      0x20c build/uspi_usbendpoint.o
-                0x8000d178                USBEndpoint
-                0x8000d1a4                USBEndpoint2
-                0x8000d294                USBEndpointCopy
-                0x8000d2d0                _USBEndpoint
-                0x8000d2dc                USBEndpointGetDevice
-                0x8000d2e4                USBEndpointGetNumber
-                0x8000d2ec                USBEndpointGetType
-                0x8000d2f4                USBEndpointIsDirectionIn
-                0x8000d2fc                USBEndpointSetMaxPacketSize
-                0x8000d304                USBEndpointGetMaxPacketSize
-                0x8000d30c                USBEndpointGetInterval
-                0x8000d314                USBEndpointGetNextPID
-                0x8000d324                USBEndpointSkipPID
-                0x8000d378                USBEndpointResetPID
- .text          0x8000d384      0x1e4 build/uspi_usbconfigparser.o
-                0x8000d384                USBConfigurationParser
-                0x8000d494                _USBConfigurationParser
-                0x8000d4a0                USBConfigurationParserIsValid
-                0x8000d4a8                USBConfigurationParserGetDescriptor
-                0x8000d548                USBConfigurationParserError
- .text          0x8000d568      0x120 build/mailbox.o
-                0x8000d568                create_request
-                0x8000d5fc                mailboxinit
-                0x8000d614                readmailbox
-                0x8000d64c                writemailbox
- .text          0x8000d688      0xa34 build/uspi_usbstandardhub.o
-                0x8000d688                USBStandardHub
-                0x8000d6cc                _USBStandardHub
-                0x8000d758                USBStandardHubInitialize
-                0x8000d75c                USBStandardHubGetDeviceNames
-                0x8000d824                USBStandardHubEnumeratePorts
-                0x8000de0c                USBStandardHubConfigure
- .text          0x8000e0bc      0x18c build/uspi_dwhciframeschednper.o
-                0x8000e0bc                _DWHCIFrameSchedulerNonPeriodic
-                0x8000e0c8                DWHCIFrameSchedulerNonPeriodicStartSplit
-                0x8000e0d4                DWHCIFrameSchedulerNonPeriodicWaitForFrame
-                0x8000e0d8                DWHCIFrameSchedulerNonPeriodicIsOddFrame
-                0x8000e0e0                DWHCIFrameSchedulerNonPeriodicCompleteSplit
-                0x8000e134                DWHCIFrameSchedulerNonPeriodicTransactionComplete
-                0x8000e1f4                DWHCIFrameSchedulerNonPeriodic
- .text          0x8000e248      0x4ac build/uspi_dwhcixferstagedata.o
-                0x8000e248                DWHCITransferStageData
-                0x8000e418                _DWHCITransferStageData
-                0x8000e474                DWHCITransferStageDataTransactionComplete
-                0x8000e560                DWHCITransferStageDataSetSplitComplete
-                0x8000e568                DWHCITransferStageDataSetState
-                0x8000e570                DWHCITransferStageDataGetState
-                0x8000e578                DWHCITransferStageDataSetSubState
-                0x8000e580                DWHCITransferStageDataGetSubState
-                0x8000e588                DWHCITransferStageDataBeginSplitCycle
-                0x8000e590                DWHCITransferStageDataGetChannelNumber
-                0x8000e598                DWHCITransferStageDataIsPeriodic
-                0x8000e5b8                DWHCITransferStageDataGetDeviceAddress
-                0x8000e5c0                DWHCITransferStageDataGetEndpointType
-                0x8000e5ec                DWHCITransferStageDataGetEndpointNumber
-                0x8000e5f4                DWHCITransferStageDataGetMaxPacketSize
-                0x8000e5fc                DWHCITransferStageDataGetSpeed
-                0x8000e604                DWHCITransferStageDataGetPID
-                0x8000e634                DWHCITransferStageDataIsDirectionIn
-                0x8000e63c                DWHCITransferStageDataIsStatusStage
-                0x8000e644                DWHCITransferStageDataGetDMAAddress
-                0x8000e64c                DWHCITransferStageDataGetBytesToTransfer
-                0x8000e654                DWHCITransferStageDataGetPacketsToTransfer
-                0x8000e65c                DWHCITransferStageDataIsSplit
-                0x8000e664                DWHCITransferStageDataIsSplitComplete
-                0x8000e66c                DWHCITransferStageDataGetHubAddress
-                0x8000e674                DWHCITransferStageDataGetHubPortAddress
-                0x8000e67c                DWHCITransferStageDataGetSplitPosition
-                0x8000e684                DWHCITransferStageDataGetStatusMask
-                0x8000e6b8                DWHCITransferStageDataGetTransactionStatus
-                0x8000e6c0                DWHCITransferStageDataIsStageComplete
-                0x8000e6d0                DWHCITransferStageDataGetResultLen
-                0x8000e6e4                DWHCITransferStageDataGetURB
-                0x8000e6ec                DWHCITransferStageDataGetFrameScheduler
- .text          0x8000e6f4      0x2b8 build/uspi_keymap.o
-                0x8000e6f4                KeyMap
-                0x8000e718                _KeyMap
-                0x8000e71c                KeyMapClearTable
-                0x8000e754                KeyMapSetEntry
-                0x8000e7a4                KeyMapTranslate
-                0x8000e8c4                KeyMapGetString
-                0x8000e97c                KeyMapGetLEDStatus
- .text          0x8000e9ac      0x21c build/uspi_dwhciframeschedper.o
-                0x8000e9ac                _DWHCIFrameSchedulerPeriodic
-                0x8000e9b8                DWHCIFrameSchedulerPeriodicStartSplit
-                0x8000e9cc                DWHCIFrameSchedulerPeriodicIsOddFrame
-                0x8000e9d8                DWHCIFrameSchedulerPeriodicWaitForFrame
-                0x8000ea48                DWHCIFrameSchedulerPeriodicCompleteSplit
-                0x8000eab0                DWHCIFrameSchedulerPeriodicTransactionComplete
-                0x8000eb68                DWHCIFrameSchedulerPeriodic
- .text          0x8000ebc8      0x378 build/uspi_usbmidi.o
-                0x8000ec28                USBMIDIDeviceConfigure
-                0x8000eebc                USBMIDIDevice
-                0x8000eeec                _CUSBMIDIDevice
-                0x8000ef38                USBMIDIDeviceRegisterPacketHandler
- .text          0x8000ef40      0x6b4 build/uspi_usbdevice.o
-                0x8000ef40                USBDeviceConfigure
-                0x8000efa4                USBDevice
-                0x8000f014                USBDeviceCopy
-                0x8000f108                _USBDevice
-                0x8000f1a0                USBDeviceInitialize
-                0x8000f4a8                USBDeviceGetName
-                0x8000f59c                USBDeviceGetAddress
-                0x8000f5a4                USBDeviceGetSpeed
-                0x8000f5ac                USBDeviceGetHubAddress
-                0x8000f5b4                USBDeviceGetHubPortNumber
-                0x8000f5bc                USBDeviceGetEndpoint0
-                0x8000f5c4                USBDeviceGetHost
-                0x8000f5cc                USBDeviceGetDeviceDescriptor
-                0x8000f5d4                USBDeviceGetConfigurationDescriptor
-                0x8000f5dc                USBDeviceGetDescriptor
-                0x8000f5e4                USBDeviceConfigurationError
-                0x8000f5ec                USBDeviceSetAddress
- .text          0x8000f5f4      0x118 build/uspi_macaddress.o
-                0x8000f5f4                MACAddress
-                0x8000f600                _MACAddress
-                0x8000f60c                MACAddressIsEqual
-                0x8000f62c                MACAddressSet
-                0x8000f64c                MACAddress2
-                0x8000f650                MACAddressSetBroadcast
-                0x8000f674                MACAddressGet
-                0x8000f67c                MACAddressCopyTo
-                0x8000f690                MACAddressIsBroadcast
-                0x8000f6bc                MACAddressGetSize
-                0x8000f6c4                MACAddressFormat
- .text          0x8000f70c      0x5d0 build/uspi_smsc951x.o
-                0x8000f70c                SMSC951xDevice
-                0x8000f744                _SMSC951xDevice
-                0x8000f7b0                SMSC951xDeviceGetMACAddress
-                0x8000f7b8                SMSC951xDeviceSendFrame
-                0x8000f818                SMSC951xDeviceReceiveFrame
-                0x8000f900                SMSC951xDeviceWriteReg
-                0x8000f968                SMSC951xDeviceConfigure
-                0x8000fc74                SMSC951xDeviceReadReg
- .text          0x8000fcdc      0x3d8 build/uart.o
-                0x8000fd84                led18_on
-                0x8000fda8                led18_off
-                0x8000fdcc                setgpioval
-                0x8000fe30                setgpiofunc
-                0x8000fe3c                enableirqminiuart
-                0x8000fe54                disableirqminiuart
-                0x8000fe6c                uartputc
-                0x8000ff00                miniuartintr
-                0x8000ffe0                uartinit
- .text          0x800100b4      0xae4 build/uspi_usbmassdevice.o
-                0x800100b4                USBBulkOnlyMassStorageDevice
-                0x800100f0                _USBBulkOnlyMassStorageDevice
-                0x80010144                USBBulkOnlyMassStorageDeviceSeek
-                0x80010154                USBBulkOnlyMassStorageDeviceGetCapacity
-                0x8001015c                USBBulkOnlyMassStorageDeviceCommand
-                0x80010364                USBBulkOnlyMassStorageDeviceConfigure
-                0x800107b0                USBBulkOnlyMassStorageDeviceTryRead
-                0x800108a4                USBBulkOnlyMassStorageDeviceTryWrite
-                0x80010994                USBBulkOnlyMassStorageDeviceReset
-                0x80010ac8                USBBulkOnlyMassStorageDeviceRead
-                0x80010b30                USBBulkOnlyMassStorageDeviceWrite
- .text          0x80010b98      0x344 build/log.o
-                0x80010c80                initlog
-                0x80010d2c                begin_trans
-                0x80010d84                commit_trans
-                0x80010de0                log_write
- .text          0x80010edc      0x3e4 build/uspi_usbstring.o
-                0x80010edc                USBString
-                0x80010f04                USBStringCopy
-                0x80010f6c                _USBString
-                0x80010fac                USBStringGetFromDescriptor
-                0x80011154                USBStringGet
-                0x8001115c                USBStringGetLanguageID
- .text          0x800112c0      0x74c build/uspi_library.o
-                0x800112c0                USPiInitialize
-                0x800114d0                USPiKeyboardAvailable
-                0x800114ec                USPiKeyboardRegisterKeyPressedHandler
-                0x80011504                USPiKeyboardRegisterShutdownHandler
-                0x8001151c                USPiKeyboardRegisterKeyStatusHandlerRaw
-                0x80011534                USPiMouseAvailable
-                0x80011550                USPiMouseRegisterStatusHandler
-                0x80011568                USPiMassStorageDeviceAvailable
-                0x80011598                USPiMassStorageDeviceRead
-                0x8001160c                USPiMassStorageDeviceWrite
-                0x80011680                USPiMassStorageDeviceGetCapacity
-                0x800116b0                USPiEthernetAvailable
-                0x800116e0                USPiGetMACAddress
-                0x80011724                USPiSendFrame
-                0x80011778                USPiReceiveFrame
-                0x800117cc                USPiGamePadAvailable
-                0x800117fc                USPiGamePadRegisterStatusHandler
-                0x8001183c                USPiGamePadGetStatus
-                0x80011880                USPiMIDIAvailable
-                0x8001189c                USPiMIDIRegisterPacketHandler
-                0x800118b4                USPiDeviceGetInformation
- .text          0x80011a0c      0x7f0 build/vm.o
-                0x80011c08                setupkvm
-                0x80011c2c                setupkvm_new
-                0x80011cd0                kvmalloc
-                0x80011ce8                switchkvm
-                0x80011cec                switchkvm_new
-                0x80011d18                switchuvm
-                0x80011d60                inituvm
-                0x80011dd8                loaduvm
-                0x80011ebc                allocuvm
-                0x80011fb0                deallocuvm
-                0x80011fc4                freevm
-                0x80012034                clearpteu
-                0x80012068                copyuvm
-                0x80012148                uva2ka
-                0x8001217c                copyout
- .text          0x800121fc      0x2f8 build/usb.o
-                0x80012268                malloc
-                0x80012284                free
-                0x80012288                MsDelay
-                0x800122bc                usDelay
-                0x800122ec                StartKernelTimer
-                0x80012324                CancelKernelTimer
-                0x8001233c                SetPowerStateOn
-                0x800123c8                GetMACAddress
-                0x800123d0                LogWrite
-                0x8001242c                usbinit
- .text          0x800124f4      0x1b0 build/sysproc.o
-                0x800124f4                sys_fork
-                0x800124f8                sys_exit
-                0x80012508                sys_wait
-                0x8001250c                sys_kill
-                0x80012540                sys_getpid
-                0x80012554                sys_sbrk
-                0x800125a4                sys_sleep
-                0x80012674                sys_uptime
- .text          0x800126a4      0x350 build/file.o
-                0x800126a4                fileinit
-                0x800126d4                filealloc
-                0x80012740                filedup
-                0x80012788                fileclose
-                0x80012828                filestat
-                0x8001286c                fileread
-                0x800128f8                filewrite
- .text          0x800129f4      0x314 build/pipe.o
-                0x800129f4                pipealloc
-                0x80012ad0                pipeclose
-                0x80012b30                pipewrite
-                0x80012c04                piperead
- .text          0x80012d08       0xa8 build/uspi_synchronize.o
-                0x80012d08                uspi_EnterCritical
-                0x80012d44                uspi_LeaveCritical
-                0x80012d80                uspi_CleanAndInvalidateDataCacheRange
- .text          0x80012db0       0x10 build/uspienv_memio.o
-                0x80012db0                read32
-                0x80012db8                write32
- .text          0x80012dc0      0x3fc build/uspi_usbmouse.o
-                0x80012e20                USBMouseDeviceConfigure
-                0x8001312c                USBMouseDevice
-                0x80013168                _CUSBMouseDevice
-                0x800131b4                USBMouseDeviceRegisterStatusHandler
- .text          0x800131bc      0xad4 build/uspi_lan7800.o
-                0x800131bc                LAN7800Device
-                0x800131f4                _LAN7800Device
-                0x80013260                LAN7800DeviceGetMACAddress
-                0x80013268                LAN7800DeviceSendFrame
-                0x800132cc                LAN7800DeviceReceiveFrame
-                0x800133a8                LAN7800DeviceWriteReg
-                0x8001343c                LAN7800DeviceInitMACAddress
-                0x80013524                LAN7800DeviceReadReg
-                0x800135ac                LAN7800DeviceWaitReg
-                0x80013618                LAN7800DevicePHYWrite
-                0x8001369c                LAN7800DevicePHYRead
-                0x80013738                LAN7800DeviceIsLinkUp
-                0x80013760                LAN7800DeviceInitPHY
-                0x800137a4                LAN7800DeviceReadWriteReg
-                0x800137f0                LAN7800DeviceConfigure
- .text          0x80013c90      0x1f4 build/kalloc.o
-                0x80013c90                kfree
-                0x80013d24                freerange
-                0x80013d60                kinit1
-                0x80013dd4                kinit2
-                0x80013e20                kalloc
- .text          0x80013e84      0x224 build/uspi_util.o
-                0x80013e84                uspi_memset
-                0x80013ea8                uspi_memcpy
-                0x80013ecc                uspi_memcmp
-                0x80013f28                uspi_strlen
-                0x80013f50                uspi_strcmp
-                0x80013fc8                uspi_strcpy
-                0x80013ff4                uspi_strncpy
-                0x80014040                uspi_strcat
-                0x80014084                uspi_char2int
-                0x80014094                uspi_le2be16
-                0x800140a0                uspi_le2be32
- .text          0x800140a8       0x94 build/uart_pl011.o
-                0x800140a8                uartinit_fvp
-                0x800140dc                uartputc_fvp
-                0x80014120                uartgetc_fvp
- .text          0x8001413c     0x1a9c build/uspi_dwhcidevice.o
-                0x8001413c                DWHCIDeviceCompletionRoutine
-                0x80014148                DWHCIDevice
-                0x80014188                _DWHCIDevice
-                0x80014190                DWHCIDeviceEnableGlobalInterrupts
-                0x800141d4                DWHCIDeviceEnableCommonInterrupts
-                0x8001420c                DWHCIDeviceEnableHostInterrupts
-                0x80014268                DWHCIDeviceEnableChannelInterrupt
-                0x800142bc                DWHCIDeviceDisableChannelInterrupt
-                0x80014310                DWHCIDeviceStartChannel
-                0x80014688                DWHCIDeviceStartTransaction
-                0x80014758                DWHCIDeviceTimerHandler
-                0x800147c0                DWHCIDeviceChannelInterruptHandler
-                0x80014c14                DWHCIDeviceInterruptHandler
-                0x80014d0c                DWHCIDeviceAllocateChannel
-                0x80014d84                DWHCIDeviceTransferStageAsync
-                0x80014e9c                DWHCIDeviceSubmitAsyncRequest
-                0x80014ee0                DWHCIDeviceTransferStage
-                0x80014f70                DWHCIDeviceSubmitBlockingRequest
-                0x800150ac                DWHCIDeviceControlMessage
-                0x8001514c                DWHCIDeviceGetDescriptor
-                0x8001518c                DWHCIDeviceSetAddress
-                0x800151d4                DWHCIDeviceSetConfiguration
-                0x8001521c                DWHCIDeviceTransfer
-                0x80015274                DWHCIDeviceFreeChannel
-                0x8001529c                DWHCIDeviceWaitForBit
-                0x800152f8                DWHCIDeviceEnableRootPort
-                0x800153b8                DWHCIDeviceReset
-                0x80015464                DWHCIDeviceInitCore
-                0x80015638                DWHCIDeviceFlushTxFIFO
-                0x800156c4                DWHCIDeviceFlushRxFIFO
-                0x80015734                DWHCIDeviceInitHost
-                0x80015930                DWHCIDeviceInitialize
-                0x80015afc                DWHCIDeviceGetPortSpeed
-                0x80015b48                DWHCIDeviceOvercurrentDetected
-                0x80015b94                DWHCIDeviceDisableRootPort
- .text          0x80015bd8      0xbc4 build/uspi_usbgamepad.o
-                0x8001618c                USBGamePadDeviceConfigure
-                0x80016610                USBGamePadDevice
-                0x800166a4                _CUSBGamePadDevice
-                0x80016728                USBGamePadDeviceRegisterStatusHandler
-                0x80016730                USBGamePadDeviceGetReport
- .text          0x8001679c       0xf4 build/uspi_dwhciregister.o
-                0x8001679c                DWHCIRegister
-                0x800167ac                DWHCIRegister2
-                0x800167bc                _DWHCIRegister
-                0x800167c8                DWHCIRegisterRead
-                0x800167e4                DWHCIRegisterWrite
-                0x800167f4                DWHCIRegisterGet
-                0x800167fc                DWHCIRegisterSet
-                0x8001680c                DWHCIRegisterIsSet
-                0x80016820                DWHCIRegisterAnd
-                0x80016830                DWHCIRegisterOr
-                0x80016840                DWHCIRegisterClearBit
-                0x80016854                DWHCIRegisterSetBit
-                0x80016868                DWHCIRegisterClearAll
-                0x8001687c                DWHCIRegisterSetAll
- .text          0x80016890      0x89c build/proc.o
-                0x80016978                forkret
-                0x800169ac                pinit
-                0x800169dc                userinit
-                0x80016a8c                growproc
-                0x80016af0                fork
-                0x80016bd8                scheduler
-                0x80016c9c                sched
-                0x80016d30                exit
-                0x80016e7c                yield
-                0x80016eb4                sleep
-                0x80016f68                wait
-                0x80017044                wakeup
-                0x800170ac                kill
-                0x80017128                procdump
- .text          0x8001712c      0x540 build/uspi_usbkeyboard.o
-                0x8001718c                USBKeyboardDeviceConfigure
-                0x800175a0                USBKeyboardDevice
-                0x800175f8                _CUSBKeyboardDevice
-                0x8001764c                USBKeyboardDeviceRegisterKeyPressedHandler
-                0x80017654                USBKeyboardDeviceRegisterSelectConsoleHandler
-                0x8001765c                USBKeyboardDeviceRegisterShutdownHandler
-                0x80017664                USBKeyboardDeviceRegisterKeyStatusHandlerRaw
- .text          0x8001766c      0x120 build/timer.o
-                0x8001766c                enabletimer3irq
-                0x80017684                timer3init
-                0x800176cc                timer3intr
-                0x80017720                delay
-                0x8001774c                led_on
-                0x8001776c                led_off
- .text          0x8001778c      0x20c build/uspi_dwhcirootport.o
-                0x8001778c                DWHCIRootPort
-                0x80017798                _DWHCIRootPort
-                0x800177cc                DWHCIRootPortInitialize
+                0x8000ab58                sys_lseek
+ .text          0x8000abec      0x238 build/bio.o
+                0x8000abec                binit
+                0x8000ac74                bread
+                0x8000ad74                bwrite
+                0x8000ad9c                brelse
+ .text          0x8000ae24      0x230 build/uspi_usbdevicefactory.o
+                0x8000ae24                GetDevice
+                0x8000aff4                USBDeviceFactoryGetDevice
+ .text          0x8000b054      0xd54 build/fs.o
+                0x8000b12c                readsb
+                0x8000b390                iinit
+                0x8000b3c0                ialloc
+                0x8000b470                iupdate
+                0x8000b4ec                idup
+                0x8000b520                ilock
+                0x8000b628                iunlock
+                0x8000b688                iput
+                0x8000b7d8                iunlockput
+                0x8000b7f0                stati
+                0x8000b818                readi
+                0x8000b904                writei
+                0x8000ba20                namecmp
+                0x8000ba28                dirlookup
+                0x8000bca8                dirlink
+                0x8000bd80                namei
+                0x8000bd9c                nameiparent
+ .text          0x8000bda8      0xaa8 build/console.o
+                0x8000bda8                consoleread
+                0x8000be9c                setgpucolour
+                0x8000beac                initframebuf
+                0x8000bf04                drawpixel
+                0x8000bf44                drawcursor
+                0x8000bfb8                drawcharacter
+                0x8000c050                gpuputc
+                0x8000c248                consolewrite
+                0x8000c358                panic
+                0x8000c3cc                cprintf
+                0x8000c550                consputc
+                0x8000c5ec                consoleintr
+                0x8000c758                gpuinit
+                0x8000c7b4                consoleinit
+ .text          0x8000c850      0x104 build/memide.o
+                0x8000c850                ideinit
+                0x8000c884                ideintr
+                0x8000c888                iderw
+                0x8000c938                usbrw
+ .text          0x8000c954      0x108 build/mmu.o
+                0x8000c954                mmuinit0
+                0x8000c9f8                mmuinit1
+ .text          0x8000ca5c      0x194 build/spinlock.o
+                0x8000ca5c                initlock
+                0x8000ca70                getcallerpcs
+                0x8000ca74                holding
+                0x8000ca9c                pushcli
+                0x8000cad4                acquire
+                0x8000cb50                popcli
+                0x8000cbac                release
+ .text          0x8000cbf0      0x3ac build/uspienv_timer.o
+                0x8000cc30                TimerEnvInit
+                0x8000cc80                _Timer
+                0x8000cc94                TimerGetClockTicks
+                0x8000ccb0                TimerGetTicks
+                0x8000ccb8                TimerGetTime
+                0x8000ccc0                TimerStartKernelTimer
+                0x8000cd2c                TimerCancelKernelTimer
+                0x8000cd40                TimerMsDelay
+                0x8000cd54                TimerusDelay
+                0x8000cd68                TimerGet
+                0x8000cd78                TimerSimpleMsDelay
+                0x8000cd94                TimerSimpleusDelay
+                0x8000cda0                TimerPollKernelTimers
+                0x8000ce18                TimerInterruptHandler
+                0x8000ced0                TimerTuneMsDelay
+                0x8000cf34                TimerInitialize
+ .text          0x8000cf9c      0x270 build/main.o
+                0x8000cf9c                OkLoop
+                0x8000cfe0                NotOkLoop
+                0x8000d024                getpmsize
+                0x8000d098                machinit
+                0x8000d0ac                cmain
+ .text          0x8000d20c      0x20c build/uspi_usbendpoint.o
+                0x8000d20c                USBEndpoint
+                0x8000d238                USBEndpoint2
+                0x8000d328                USBEndpointCopy
+                0x8000d364                _USBEndpoint
+                0x8000d370                USBEndpointGetDevice
+                0x8000d378                USBEndpointGetNumber
+                0x8000d380                USBEndpointGetType
+                0x8000d388                USBEndpointIsDirectionIn
+                0x8000d390                USBEndpointSetMaxPacketSize
+                0x8000d398                USBEndpointGetMaxPacketSize
+                0x8000d3a0                USBEndpointGetInterval
+                0x8000d3a8                USBEndpointGetNextPID
+                0x8000d3b8                USBEndpointSkipPID
+                0x8000d40c                USBEndpointResetPID
+ .text          0x8000d418      0x1e4 build/uspi_usbconfigparser.o
+                0x8000d418                USBConfigurationParser
+                0x8000d528                _USBConfigurationParser
+                0x8000d534                USBConfigurationParserIsValid
+                0x8000d53c                USBConfigurationParserGetDescriptor
+                0x8000d5dc                USBConfigurationParserError
+ .text          0x8000d5fc      0x120 build/mailbox.o
+                0x8000d5fc                create_request
+                0x8000d690                mailboxinit
+                0x8000d6a8                readmailbox
+                0x8000d6e0                writemailbox
+ .text          0x8000d71c      0xa34 build/uspi_usbstandardhub.o
+                0x8000d71c                USBStandardHub
+                0x8000d760                _USBStandardHub
+                0x8000d7ec                USBStandardHubInitialize
+                0x8000d7f0                USBStandardHubGetDeviceNames
+                0x8000d8b8                USBStandardHubEnumeratePorts
+                0x8000dea0                USBStandardHubConfigure
+ .text          0x8000e150      0x18c build/uspi_dwhciframeschednper.o
+                0x8000e150                _DWHCIFrameSchedulerNonPeriodic
+                0x8000e15c                DWHCIFrameSchedulerNonPeriodicStartSplit
+                0x8000e168                DWHCIFrameSchedulerNonPeriodicWaitForFrame
+                0x8000e16c                DWHCIFrameSchedulerNonPeriodicIsOddFrame
+                0x8000e174                DWHCIFrameSchedulerNonPeriodicCompleteSplit
+                0x8000e1c8                DWHCIFrameSchedulerNonPeriodicTransactionComplete
+                0x8000e288                DWHCIFrameSchedulerNonPeriodic
+ .text          0x8000e2dc      0x4ac build/uspi_dwhcixferstagedata.o
+                0x8000e2dc                DWHCITransferStageData
+                0x8000e4ac                _DWHCITransferStageData
+                0x8000e508                DWHCITransferStageDataTransactionComplete
+                0x8000e5f4                DWHCITransferStageDataSetSplitComplete
+                0x8000e5fc                DWHCITransferStageDataSetState
+                0x8000e604                DWHCITransferStageDataGetState
+                0x8000e60c                DWHCITransferStageDataSetSubState
+                0x8000e614                DWHCITransferStageDataGetSubState
+                0x8000e61c                DWHCITransferStageDataBeginSplitCycle
+                0x8000e624                DWHCITransferStageDataGetChannelNumber
+                0x8000e62c                DWHCITransferStageDataIsPeriodic
+                0x8000e64c                DWHCITransferStageDataGetDeviceAddress
+                0x8000e654                DWHCITransferStageDataGetEndpointType
+                0x8000e680                DWHCITransferStageDataGetEndpointNumber
+                0x8000e688                DWHCITransferStageDataGetMaxPacketSize
+                0x8000e690                DWHCITransferStageDataGetSpeed
+                0x8000e698                DWHCITransferStageDataGetPID
+                0x8000e6c8                DWHCITransferStageDataIsDirectionIn
+                0x8000e6d0                DWHCITransferStageDataIsStatusStage
+                0x8000e6d8                DWHCITransferStageDataGetDMAAddress
+                0x8000e6e0                DWHCITransferStageDataGetBytesToTransfer
+                0x8000e6e8                DWHCITransferStageDataGetPacketsToTransfer
+                0x8000e6f0                DWHCITransferStageDataIsSplit
+                0x8000e6f8                DWHCITransferStageDataIsSplitComplete
+                0x8000e700                DWHCITransferStageDataGetHubAddress
+                0x8000e708                DWHCITransferStageDataGetHubPortAddress
+                0x8000e710                DWHCITransferStageDataGetSplitPosition
+                0x8000e718                DWHCITransferStageDataGetStatusMask
+                0x8000e74c                DWHCITransferStageDataGetTransactionStatus
+                0x8000e754                DWHCITransferStageDataIsStageComplete
+                0x8000e764                DWHCITransferStageDataGetResultLen
+                0x8000e778                DWHCITransferStageDataGetURB
+                0x8000e780                DWHCITransferStageDataGetFrameScheduler
+ .text          0x8000e788      0x2b8 build/uspi_keymap.o
+                0x8000e788                KeyMap
+                0x8000e7ac                _KeyMap
+                0x8000e7b0                KeyMapClearTable
+                0x8000e7e8                KeyMapSetEntry
+                0x8000e838                KeyMapTranslate
+                0x8000e958                KeyMapGetString
+                0x8000ea10                KeyMapGetLEDStatus
+ .text          0x8000ea40      0x21c build/uspi_dwhciframeschedper.o
+                0x8000ea40                _DWHCIFrameSchedulerPeriodic
+                0x8000ea4c                DWHCIFrameSchedulerPeriodicStartSplit
+                0x8000ea60                DWHCIFrameSchedulerPeriodicIsOddFrame
+                0x8000ea6c                DWHCIFrameSchedulerPeriodicWaitForFrame
+                0x8000eadc                DWHCIFrameSchedulerPeriodicCompleteSplit
+                0x8000eb44                DWHCIFrameSchedulerPeriodicTransactionComplete
+                0x8000ebfc                DWHCIFrameSchedulerPeriodic
+ .text          0x8000ec5c      0x378 build/uspi_usbmidi.o
+                0x8000ecbc                USBMIDIDeviceConfigure
+                0x8000ef50                USBMIDIDevice
+                0x8000ef80                _CUSBMIDIDevice
+                0x8000efcc                USBMIDIDeviceRegisterPacketHandler
+ .text          0x8000efd4      0x6b4 build/uspi_usbdevice.o
+                0x8000efd4                USBDeviceConfigure
+                0x8000f038                USBDevice
+                0x8000f0a8                USBDeviceCopy
+                0x8000f19c                _USBDevice
+                0x8000f234                USBDeviceInitialize
+                0x8000f53c                USBDeviceGetName
+                0x8000f630                USBDeviceGetAddress
+                0x8000f638                USBDeviceGetSpeed
+                0x8000f640                USBDeviceGetHubAddress
+                0x8000f648                USBDeviceGetHubPortNumber
+                0x8000f650                USBDeviceGetEndpoint0
+                0x8000f658                USBDeviceGetHost
+                0x8000f660                USBDeviceGetDeviceDescriptor
+                0x8000f668                USBDeviceGetConfigurationDescriptor
+                0x8000f670                USBDeviceGetDescriptor
+                0x8000f678                USBDeviceConfigurationError
+                0x8000f680                USBDeviceSetAddress
+ .text          0x8000f688      0x118 build/uspi_macaddress.o
+                0x8000f688                MACAddress
+                0x8000f694                _MACAddress
+                0x8000f6a0                MACAddressIsEqual
+                0x8000f6c0                MACAddressSet
+                0x8000f6e0                MACAddress2
+                0x8000f6e4                MACAddressSetBroadcast
+                0x8000f708                MACAddressGet
+                0x8000f710                MACAddressCopyTo
+                0x8000f724                MACAddressIsBroadcast
+                0x8000f750                MACAddressGetSize
+                0x8000f758                MACAddressFormat
+ .text          0x8000f7a0      0x5d0 build/uspi_smsc951x.o
+                0x8000f7a0                SMSC951xDevice
+                0x8000f7d8                _SMSC951xDevice
+                0x8000f844                SMSC951xDeviceGetMACAddress
+                0x8000f84c                SMSC951xDeviceSendFrame
+                0x8000f8ac                SMSC951xDeviceReceiveFrame
+                0x8000f994                SMSC951xDeviceWriteReg
+                0x8000f9fc                SMSC951xDeviceConfigure
+                0x8000fd08                SMSC951xDeviceReadReg
+ .text          0x8000fd70      0x3d8 build/uart.o
+                0x8000fe18                led18_on
+                0x8000fe3c                led18_off
+                0x8000fe60                setgpioval
+                0x8000fec4                setgpiofunc
+                0x8000fed0                enableirqminiuart
+                0x8000fee8                disableirqminiuart
+                0x8000ff00                uartputc
+                0x8000ff94                miniuartintr
+                0x80010074                uartinit
+ .text          0x80010148      0xae4 build/uspi_usbmassdevice.o
+                0x80010148                USBBulkOnlyMassStorageDevice
+                0x80010184                _USBBulkOnlyMassStorageDevice
+                0x800101d8                USBBulkOnlyMassStorageDeviceSeek
+                0x800101e8                USBBulkOnlyMassStorageDeviceGetCapacity
+                0x800101f0                USBBulkOnlyMassStorageDeviceCommand
+                0x800103f8                USBBulkOnlyMassStorageDeviceConfigure
+                0x80010844                USBBulkOnlyMassStorageDeviceTryRead
+                0x80010938                USBBulkOnlyMassStorageDeviceTryWrite
+                0x80010a28                USBBulkOnlyMassStorageDeviceReset
+                0x80010b5c                USBBulkOnlyMassStorageDeviceRead
+                0x80010bc4                USBBulkOnlyMassStorageDeviceWrite
+ .text          0x80010c2c      0x344 build/log.o
+                0x80010d14                initlog
+                0x80010dc0                begin_trans
+                0x80010e18                commit_trans
+                0x80010e74                log_write
+ .text          0x80010f70      0x3e4 build/uspi_usbstring.o
+                0x80010f70                USBString
+                0x80010f98                USBStringCopy
+                0x80011000                _USBString
+                0x80011040                USBStringGetFromDescriptor
+                0x800111e8                USBStringGet
+                0x800111f0                USBStringGetLanguageID
+ .text          0x80011354      0x74c build/uspi_library.o
+                0x80011354                USPiInitialize
+                0x80011564                USPiKeyboardAvailable
+                0x80011580                USPiKeyboardRegisterKeyPressedHandler
+                0x80011598                USPiKeyboardRegisterShutdownHandler
+                0x800115b0                USPiKeyboardRegisterKeyStatusHandlerRaw
+                0x800115c8                USPiMouseAvailable
+                0x800115e4                USPiMouseRegisterStatusHandler
+                0x800115fc                USPiMassStorageDeviceAvailable
+                0x8001162c                USPiMassStorageDeviceRead
+                0x800116a0                USPiMassStorageDeviceWrite
+                0x80011714                USPiMassStorageDeviceGetCapacity
+                0x80011744                USPiEthernetAvailable
+                0x80011774                USPiGetMACAddress
+                0x800117b8                USPiSendFrame
+                0x8001180c                USPiReceiveFrame
+                0x80011860                USPiGamePadAvailable
+                0x80011890                USPiGamePadRegisterStatusHandler
+                0x800118d0                USPiGamePadGetStatus
+                0x80011914                USPiMIDIAvailable
+                0x80011930                USPiMIDIRegisterPacketHandler
+                0x80011948                USPiDeviceGetInformation
+ .text          0x80011aa0      0x7f0 build/vm.o
+                0x80011c9c                setupkvm
+                0x80011cc0                setupkvm_new
+                0x80011d64                kvmalloc
+                0x80011d7c                switchkvm
+                0x80011d80                switchkvm_new
+                0x80011dac                switchuvm
+                0x80011df4                inituvm
+                0x80011e6c                loaduvm
+                0x80011f50                allocuvm
+                0x80012044                deallocuvm
+                0x80012058                freevm
+                0x800120c8                clearpteu
+                0x800120fc                copyuvm
+                0x800121dc                uva2ka
+                0x80012210                copyout
+ .text          0x80012290      0x2f8 build/usb.o
+                0x800122fc                malloc
+                0x80012318                free
+                0x8001231c                MsDelay
+                0x80012350                usDelay
+                0x80012380                StartKernelTimer
+                0x800123b8                CancelKernelTimer
+                0x800123d0                SetPowerStateOn
+                0x8001245c                GetMACAddress
+                0x80012464                LogWrite
+                0x800124c0                usbinit
+ .text          0x80012588      0x1b0 build/sysproc.o
+                0x80012588                sys_fork
+                0x8001258c                sys_exit
+                0x8001259c                sys_wait
+                0x800125a0                sys_kill
+                0x800125d4                sys_getpid
+                0x800125e8                sys_sbrk
+                0x80012638                sys_sleep
+                0x80012708                sys_uptime
+ .text          0x80012738      0x350 build/file.o
+                0x80012738                fileinit
+                0x80012768                filealloc
+                0x800127d4                filedup
+                0x8001281c                fileclose
+                0x800128bc                filestat
+                0x80012900                fileread
+                0x8001298c                filewrite
+ .text          0x80012a88      0x314 build/pipe.o
+                0x80012a88                pipealloc
+                0x80012b64                pipeclose
+                0x80012bc4                pipewrite
+                0x80012c98                piperead
+ .text          0x80012d9c       0xa8 build/uspi_synchronize.o
+                0x80012d9c                uspi_EnterCritical
+                0x80012dd8                uspi_LeaveCritical
+                0x80012e14                uspi_CleanAndInvalidateDataCacheRange
+ .text          0x80012e44       0x10 build/uspienv_memio.o
+                0x80012e44                read32
+                0x80012e4c                write32
+ .text          0x80012e54      0x3fc build/uspi_usbmouse.o
+                0x80012eb4                USBMouseDeviceConfigure
+                0x800131c0                USBMouseDevice
+                0x800131fc                _CUSBMouseDevice
+                0x80013248                USBMouseDeviceRegisterStatusHandler
+ .text          0x80013250      0xad4 build/uspi_lan7800.o
+                0x80013250                LAN7800Device
+                0x80013288                _LAN7800Device
+                0x800132f4                LAN7800DeviceGetMACAddress
+                0x800132fc                LAN7800DeviceSendFrame
+                0x80013360                LAN7800DeviceReceiveFrame
+                0x8001343c                LAN7800DeviceWriteReg
+                0x800134d0                LAN7800DeviceInitMACAddress
+                0x800135b8                LAN7800DeviceReadReg
+                0x80013640                LAN7800DeviceWaitReg
+                0x800136ac                LAN7800DevicePHYWrite
+                0x80013730                LAN7800DevicePHYRead
+                0x800137cc                LAN7800DeviceIsLinkUp
+                0x800137f4                LAN7800DeviceInitPHY
+                0x80013838                LAN7800DeviceReadWriteReg
+                0x80013884                LAN7800DeviceConfigure
+ .text          0x80013d24      0x1f4 build/kalloc.o
+                0x80013d24                kfree
+                0x80013db8                freerange
+                0x80013df4                kinit1
+                0x80013e68                kinit2
+                0x80013eb4                kalloc
+ .text          0x80013f18      0x224 build/uspi_util.o
+                0x80013f18                uspi_memset
+                0x80013f3c                uspi_memcpy
+                0x80013f60                uspi_memcmp
+                0x80013fbc                uspi_strlen
+                0x80013fe4                uspi_strcmp
+                0x8001405c                uspi_strcpy
+                0x80014088                uspi_strncpy
+                0x800140d4                uspi_strcat
+                0x80014118                uspi_char2int
+                0x80014128                uspi_le2be16
+                0x80014134                uspi_le2be32
+ .text          0x8001413c       0x94 build/uart_pl011.o
+                0x8001413c                uartinit_fvp
+                0x80014170                uartputc_fvp
+                0x800141b4                uartgetc_fvp
+ .text          0x800141d0     0x1a9c build/uspi_dwhcidevice.o
+                0x800141d0                DWHCIDeviceCompletionRoutine
+                0x800141dc                DWHCIDevice
+                0x8001421c                _DWHCIDevice
+                0x80014224                DWHCIDeviceEnableGlobalInterrupts
+                0x80014268                DWHCIDeviceEnableCommonInterrupts
+                0x800142a0                DWHCIDeviceEnableHostInterrupts
+                0x800142fc                DWHCIDeviceEnableChannelInterrupt
+                0x80014350                DWHCIDeviceDisableChannelInterrupt
+                0x800143a4                DWHCIDeviceStartChannel
+                0x8001471c                DWHCIDeviceStartTransaction
+                0x800147ec                DWHCIDeviceTimerHandler
+                0x80014854                DWHCIDeviceChannelInterruptHandler
+                0x80014ca8                DWHCIDeviceInterruptHandler
+                0x80014da0                DWHCIDeviceAllocateChannel
+                0x80014e18                DWHCIDeviceTransferStageAsync
+                0x80014f30                DWHCIDeviceSubmitAsyncRequest
+                0x80014f74                DWHCIDeviceTransferStage
+                0x80015004                DWHCIDeviceSubmitBlockingRequest
+                0x80015140                DWHCIDeviceControlMessage
+                0x800151e0                DWHCIDeviceGetDescriptor
+                0x80015220                DWHCIDeviceSetAddress
+                0x80015268                DWHCIDeviceSetConfiguration
+                0x800152b0                DWHCIDeviceTransfer
+                0x80015308                DWHCIDeviceFreeChannel
+                0x80015330                DWHCIDeviceWaitForBit
+                0x8001538c                DWHCIDeviceEnableRootPort
+                0x8001544c                DWHCIDeviceReset
+                0x800154f8                DWHCIDeviceInitCore
+                0x800156cc                DWHCIDeviceFlushTxFIFO
+                0x80015758                DWHCIDeviceFlushRxFIFO
+                0x800157c8                DWHCIDeviceInitHost
+                0x800159c4                DWHCIDeviceInitialize
+                0x80015b90                DWHCIDeviceGetPortSpeed
+                0x80015bdc                DWHCIDeviceOvercurrentDetected
+                0x80015c28                DWHCIDeviceDisableRootPort
+ .text          0x80015c6c      0xbc4 build/uspi_usbgamepad.o
+                0x80016220                USBGamePadDeviceConfigure
+                0x800166a4                USBGamePadDevice
+                0x80016738                _CUSBGamePadDevice
+                0x800167bc                USBGamePadDeviceRegisterStatusHandler
+                0x800167c4                USBGamePadDeviceGetReport
+ .text          0x80016830       0xf4 build/uspi_dwhciregister.o
+                0x80016830                DWHCIRegister
+                0x80016840                DWHCIRegister2
+                0x80016850                _DWHCIRegister
+                0x8001685c                DWHCIRegisterRead
+                0x80016878                DWHCIRegisterWrite
+                0x80016888                DWHCIRegisterGet
+                0x80016890                DWHCIRegisterSet
+                0x800168a0                DWHCIRegisterIsSet
+                0x800168b4                DWHCIRegisterAnd
+                0x800168c4                DWHCIRegisterOr
+                0x800168d4                DWHCIRegisterClearBit
+                0x800168e8                DWHCIRegisterSetBit
+                0x800168fc                DWHCIRegisterClearAll
+                0x80016910                DWHCIRegisterSetAll
+ .text          0x80016924      0x89c build/proc.o
+                0x80016a0c                forkret
+                0x80016a40                pinit
+                0x80016a70                userinit
+                0x80016b20                growproc
+                0x80016b84                fork
+                0x80016c6c                scheduler
+                0x80016d30                sched
+                0x80016dc4                exit
+                0x80016f10                yield
+                0x80016f48                sleep
+                0x80016ffc                wait
+                0x800170d8                wakeup
+                0x80017140                kill
+                0x800171bc                procdump
+ .text          0x800171c0      0x540 build/uspi_usbkeyboard.o
+                0x80017220                USBKeyboardDeviceConfigure
+                0x80017634                USBKeyboardDevice
+                0x8001768c                _CUSBKeyboardDevice
+                0x800176e0                USBKeyboardDeviceRegisterKeyPressedHandler
+                0x800176e8                USBKeyboardDeviceRegisterSelectConsoleHandler
+                0x800176f0                USBKeyboardDeviceRegisterShutdownHandler
+                0x800176f8                USBKeyboardDeviceRegisterKeyStatusHandlerRaw
+ .text          0x80017700      0x120 build/timer.o
+                0x80017700                enabletimer3irq
+                0x80017718                timer3init
+                0x80017760                timer3intr
+                0x800177b4                delay
+                0x800177e0                led_on
+                0x80017800                led_off
+ .text          0x80017820      0x20c build/uspi_dwhcirootport.o
+                0x80017820                DWHCIRootPort
+                0x8001782c                _DWHCIRootPort
+                0x80017860                DWHCIRootPortInitialize
 
-.glue_7         0x80017998        0x0 load address 0x00017998
- .glue_7        0x80017998        0x0 linker stubs
+.glue_7         0x80017a2c        0x0 load address 0x00017a2c
+ .glue_7        0x80017a2c        0x0 linker stubs
 
-.glue_7t        0x80017998        0x0 load address 0x00017998
- .glue_7t       0x80017998        0x0 linker stubs
+.glue_7t        0x80017a2c        0x0 load address 0x00017a2c
+ .glue_7t       0x80017a2c        0x0 linker stubs
 
-.vfp11_veneer   0x80017998        0x0 load address 0x00017998
- .vfp11_veneer  0x80017998        0x0 linker stubs
+.vfp11_veneer   0x80017a2c        0x0 load address 0x00017a2c
+ .vfp11_veneer  0x80017a2c        0x0 linker stubs
 
-.v4_bx          0x80017998        0x0 load address 0x00017998
- .v4_bx         0x80017998        0x0 linker stubs
+.v4_bx          0x80017a2c        0x0 load address 0x00017a2c
+ .v4_bx         0x80017a2c        0x0 linker stubs
 
-.iplt           0x80017998        0x0 load address 0x00017998
- .iplt          0x80017998        0x0 build/entry.o
+.iplt           0x80017a2c        0x0 load address 0x00017a2c
+ .iplt          0x80017a2c        0x0 build/entry.o
 
-.rodata         0x80017998     0x1970 load address 0x00017998
+.rodata         0x80017a2c     0x199c load address 0x00017a2c
  *(.rodata .rodata.*)
- .rodata        0x80017998       0x58 build/syscall.o
+ .rodata        0x80017a2c       0x5c build/syscall.o
  .rodata.str1.4
-                0x800179f0       0x1c build/syscall.o
+                0x80017a88       0x1c build/syscall.o
  .rodata.str1.4
-                0x80017a0c      0x1aa build/trap.o
+                0x80017aa4      0x1aa build/trap.o
  .rodata.str1.4
-                0x80017bb6      0x1aa build/uspi_string.o
+                0x80017c4e      0x1aa build/uspi_string.o
                                   0x1 (size before relaxing)
- *fill*         0x80017bb6        0x2 
+ *fill*         0x80017c4e        0x2 
  .rodata.str1.4
-                0x80017bb8       0x60 build/usb_filestorage.o
+                0x80017c50       0x60 build/usb_filestorage.o
  .rodata.str1.4
-                0x80017c18       0x6b build/sysfile.o
- *fill*         0x80017c83        0x1 
+                0x80017cb0       0x92 build/sysfile.o
+ *fill*         0x80017d42        0x2 
  .rodata.str1.4
-                0x80017c84       0x2b build/bio.o
- *fill*         0x80017caf        0x1 
+                0x80017d44       0x2b build/bio.o
+ *fill*         0x80017d6f        0x1 
  .rodata.str1.4
-                0x80017cb0       0x77 build/uspi_usbdevicefactory.o
- *fill*         0x80017d27        0x1 
+                0x80017d70       0x77 build/uspi_usbdevicefactory.o
+ *fill*         0x80017de7        0x1 
  .rodata.str1.4
-                0x80017d28       0xb9 build/fs.o
+                0x80017de8       0xb9 build/fs.o
                                  0xc4 (size before relaxing)
- *fill*         0x80017de1        0x3 
- .rodata        0x80017de4       0x11 build/console.o
- *fill*         0x80017df5        0x3 
+ *fill*         0x80017ea1        0x3 
+ .rodata        0x80017ea4       0x11 build/console.o
+ *fill*         0x80017eb5        0x3 
  .rodata.str1.4
-                0x80017df8       0x5e build/console.o
+                0x80017eb8       0x5e build/console.o
                                  0x62 (size before relaxing)
- *fill*         0x80017e56        0x2 
+ *fill*         0x80017f16        0x2 
  .rodata.str1.4
-                0x80017e58       0x6e build/memide.o
- *fill*         0x80017ec6        0x2 
+                0x80017f18       0x6e build/memide.o
+ *fill*         0x80017f86        0x2 
  .rodata.str1.4
-                0x80017ec8       0x60 build/spinlock.o
+                0x80017f88       0x60 build/spinlock.o
  .rodata.str1.4
-                0x80017f28       0xf9 build/main.o
- *fill*         0x80018021        0x3 
+                0x80017fe8       0xf9 build/main.o
+ *fill*         0x800180e1        0x3 
  .rodata.str1.4
-                0x80018024       0x2f build/uspi_usbconfigparser.o
- *fill*         0x80018053        0x1 
- .rodata        0x80018054        0x7 build/uspi_usbstandardhub.o
- *fill*         0x8001805b        0x1 
+                0x800180e4       0x2f build/uspi_usbconfigparser.o
+ *fill*         0x80018113        0x1 
+ .rodata        0x80018114        0x7 build/uspi_usbstandardhub.o
+ *fill*         0x8001811b        0x1 
  .rodata.str1.4
-                0x8001805c      0x1e4 build/uspi_usbstandardhub.o
+                0x8001811c      0x1e4 build/uspi_usbstandardhub.o
  .rodata.str1.4
-                0x80018240       0x1c build/uspi_dwhciframeschednper.o
- .rodata        0x8001825c      0x4cc build/uspi_keymap.o
+                0x80018300       0x1c build/uspi_dwhciframeschednper.o
+ .rodata        0x8001831c      0x4cc build/uspi_keymap.o
  .rodata.str1.4
-                0x80018728       0xce build/uspi_keymap.o
+                0x800187e8       0xce build/uspi_keymap.o
                                  0xde (size before relaxing)
  .rodata.str1.4
-                0x800187f6       0x1c build/uspi_dwhciframeschedper.o
- *fill*         0x800187f6        0x2 
- .rodata        0x800187f8       0x48 build/uspi_usbmidi.o
+                0x800188b6       0x1c build/uspi_dwhciframeschedper.o
+ *fill*         0x800188b6        0x2 
+ .rodata        0x800188b8       0x48 build/uspi_usbmidi.o
  .rodata.str1.4
-                0x80018840        0x8 build/uspi_usbmidi.o
+                0x80018900        0x8 build/uspi_usbmidi.o
                                  0x24 (size before relaxing)
- .rodata        0x80018848        0x7 build/uspi_usbdevice.o
- *fill*         0x8001884f        0x1 
+ .rodata        0x80018908        0x7 build/uspi_usbdevice.o
+ *fill*         0x8001890f        0x1 
  .rodata.str1.4
-                0x80018850      0x148 build/uspi_usbdevice.o
+                0x80018910      0x148 build/uspi_usbdevice.o
                                 0x150 (size before relaxing)
  .rodata.str1.4
-                0x80018998       0x1e build/uspi_macaddress.o
- *fill*         0x800189b6        0x2 
- .rodata        0x800189b8        0x9 build/uspi_smsc951x.o
- *fill*         0x800189c1        0x3 
+                0x80018a58       0x1e build/uspi_macaddress.o
+ *fill*         0x80018a76        0x2 
+ .rodata        0x80018a78        0x9 build/uspi_smsc951x.o
+ *fill*         0x80018a81        0x3 
  .rodata.str1.4
-                0x800189c4       0x76 build/uspi_smsc951x.o
+                0x80018a84       0x76 build/uspi_smsc951x.o
                                  0x92 (size before relaxing)
- *fill*         0x80018a3a        0x2 
- .rodata        0x80018a3c        0x5 build/uspi_usbmassdevice.o
- *fill*         0x80018a41        0x3 
+ *fill*         0x80018afa        0x2 
+ .rodata        0x80018afc        0x5 build/uspi_usbmassdevice.o
+ *fill*         0x80018b01        0x3 
  .rodata.str1.4
-                0x80018a44      0x1cc build/uspi_usbmassdevice.o
+                0x80018b04      0x1cc build/uspi_usbmassdevice.o
                                 0x1e8 (size before relaxing)
  .rodata.str1.4
-                0x80018c10       0x33 build/log.o
- *fill*         0x80018c43        0x1 
- .rodata        0x80018c44        0x5 build/uspi_library.o
- *fill*         0x80018c49        0x3 
+                0x80018cd0       0x33 build/log.o
+ *fill*         0x80018d03        0x1 
+ .rodata        0x80018d04        0x5 build/uspi_library.o
+ *fill*         0x80018d09        0x3 
  .rodata.str1.4
-                0x80018c4c       0x86 build/uspi_library.o
+                0x80018d0c       0x86 build/uspi_library.o
                                  0x8e (size before relaxing)
- *fill*         0x80018cd2        0x2 
+ *fill*         0x80018d92        0x2 
  .rodata.str1.4
-                0x80018cd4      0x16e build/vm.o
- *fill*         0x80018e42        0x2 
+                0x80018d94      0x16e build/vm.o
+ *fill*         0x80018f02        0x2 
  .rodata.str1.4
-                0x80018e44      0x122 build/usb.o
- *fill*         0x80018f66        0x2 
+                0x80018f04      0x122 build/usb.o
+ *fill*         0x80019026        0x2 
  .rodata.str1.4
-                0x80018f68       0x42 build/file.o
- *fill*         0x80018faa        0x2 
+                0x80019028       0x42 build/file.o
+ *fill*         0x8001906a        0x2 
  .rodata.str1.4
-                0x80018fac        0x5 build/pipe.o
- *fill*         0x80018fb1        0x3 
- .rodata        0x80018fb4        0x7 build/uspi_usbmouse.o
- *fill*         0x80018fbb        0x1 
+                0x8001906c        0x5 build/pipe.o
+ *fill*         0x80019071        0x3 
+ .rodata        0x80019074        0x7 build/uspi_usbmouse.o
+ *fill*         0x8001907b        0x1 
  .rodata.str1.4
-                0x80018fbc       0x25 build/uspi_usbmouse.o
+                0x8001907c       0x25 build/uspi_usbmouse.o
                                  0x59 (size before relaxing)
- *fill*         0x80018fe1        0x3 
- .rodata        0x80018fe4        0x8 build/uspi_lan7800.o
+ *fill*         0x800190a1        0x3 
+ .rodata        0x800190a4        0x8 build/uspi_lan7800.o
  .rodata.str1.4
-                0x80018fec       0x9c build/uspi_lan7800.o
+                0x800190ac       0x9c build/uspi_lan7800.o
                                  0xea (size before relaxing)
  .rodata.str1.4
-                0x80019088        0x5 build/kalloc.o
+                0x80019148        0x5 build/kalloc.o
                                   0xd (size before relaxing)
- *fill*         0x8001908d        0x3 
- .rodata        0x80019090       0x14 build/uspi_dwhcidevice.o
+ *fill*         0x8001914d        0x3 
+ .rodata        0x80019150       0x14 build/uspi_dwhcidevice.o
  .rodata.str1.4
-                0x800190a4       0xe4 build/uspi_dwhcidevice.o
- .rodata        0x80019188        0xd build/uspi_usbgamepad.o
- *fill*         0x80019195        0x3 
+                0x80019164       0xe4 build/uspi_dwhcidevice.o
+ .rodata        0x80019248        0xd build/uspi_usbgamepad.o
+ *fill*         0x80019255        0x3 
  .rodata.str1.4
-                0x80019198       0x21 build/uspi_usbgamepad.o
+                0x80019258       0x21 build/uspi_usbgamepad.o
                                  0x5f (size before relaxing)
- *fill*         0x800191b9        0x3 
+ *fill*         0x80019279        0x3 
  .rodata.str1.4
-                0x800191bc       0xa9 build/proc.o
+                0x8001927c       0xa9 build/proc.o
                                  0xad (size before relaxing)
- *fill*         0x80019265        0x3 
- .rodata        0x80019268        0x7 build/uspi_usbkeyboard.o
- *fill*         0x8001926f        0x1 
+ *fill*         0x80019325        0x3 
+ .rodata        0x80019328        0x7 build/uspi_usbkeyboard.o
+ *fill*         0x8001932f        0x1 
  .rodata.str1.4
-                0x80019270        0x7 build/uspi_usbkeyboard.o
+                0x80019330        0x7 build/uspi_usbkeyboard.o
                                  0x57 (size before relaxing)
- *fill*         0x80019277        0x1 
- .rodata        0x80019278        0x7 build/uspi_dwhcirootport.o
- *fill*         0x8001927f        0x1 
+ *fill*         0x80019337        0x1 
+ .rodata        0x80019338        0x7 build/uspi_dwhcirootport.o
+ *fill*         0x8001933f        0x1 
  .rodata.str1.4
-                0x80019280       0x88 build/uspi_dwhcirootport.o
+                0x80019340       0x88 build/uspi_dwhcirootport.o
                                  0x87 (size before relaxing)
 
-.rel.dyn        0x80019308        0x0 load address 0x00019308
- .rel.iplt      0x80019308        0x0 build/entry.o
+.rel.dyn        0x800193c8        0x0 load address 0x000193c8
+ .rel.iplt      0x800193c8        0x0 build/entry.o
                 0x8001a000                . = ALIGN (0x1000)
 
 .data           0x8001a000    0x80928 load address 0x0001a000
@@ -1334,7 +1335,7 @@ OUTPUT(build/kernel.elf elf32-littlearm)
  .comment       0x00000034       0x35 build/timer.o
  .comment       0x00000034       0x35 build/uspi_dwhcirootport.o
 
-.debug_line     0x00000000     0x5d66
+.debug_line     0x00000000     0x5d7c
  .debug_line    0x00000000       0xfb build/entry.o
  .debug_line    0x000000fb       0xdd build/exception.o
  .debug_line    0x000001d8       0x4c build/uspienv_delayloop.o
@@ -1347,54 +1348,54 @@ OUTPUT(build/kernel.elf elf32-littlearm)
  .debug_line    0x000008a8      0x2b8 build/uspi_string.o
  .debug_line    0x00000b60       0xd6 build/uspi_devicenameservice.o
  .debug_line    0x00000c36       0xb3 build/usb_filestorage.o
- .debug_line    0x00000ce9      0x29f build/sysfile.o
- .debug_line    0x00000f88      0x103 build/bio.o
- .debug_line    0x0000108b      0x23a build/uspi_usbdevicefactory.o
- .debug_line    0x000012c5      0x3e6 build/fs.o
- .debug_line    0x000016ab      0x354 build/console.o
- .debug_line    0x000019ff       0xaa build/memide.o
- .debug_line    0x00001aa9       0xea build/mmu.o
- .debug_line    0x00001b93       0xbb build/spinlock.o
- .debug_line    0x00001c4e      0x184 build/uspienv_timer.o
- .debug_line    0x00001dd2      0x119 build/main.o
- .debug_line    0x00001eeb      0x12c build/uspi_usbendpoint.o
- .debug_line    0x00002017      0x102 build/uspi_usbconfigparser.o
- .debug_line    0x00002119       0xfc build/mailbox.o
- .debug_line    0x00002215      0x340 build/uspi_usbstandardhub.o
- .debug_line    0x00002555      0x109 build/uspi_dwhciframeschednper.o
- .debug_line    0x0000265e      0x282 build/uspi_dwhcixferstagedata.o
- .debug_line    0x000028e0      0x111 build/uspi_keymap.o
- .debug_line    0x000029f1      0x140 build/uspi_dwhciframeschedper.o
- .debug_line    0x00002b31      0x1da build/uspi_usbmidi.o
- .debug_line    0x00002d0b      0x26d build/uspi_usbdevice.o
- .debug_line    0x00002f78       0xbe build/uspi_macaddress.o
- .debug_line    0x00003036      0x253 build/uspi_smsc951x.o
- .debug_line    0x00003289      0x1cf build/uart.o
- .debug_line    0x00003458      0x393 build/uspi_usbmassdevice.o
- .debug_line    0x000037eb      0x134 build/log.o
- .debug_line    0x0000391f      0x1e8 build/uspi_usbstring.o
- .debug_line    0x00003b07      0x315 build/uspi_library.o
- .debug_line    0x00003e1c      0x22e build/vm.o
- .debug_line    0x0000404a      0x160 build/usb.o
- .debug_line    0x000041aa       0xaa build/sysproc.o
- .debug_line    0x00004254      0x10a build/file.o
- .debug_line    0x0000435e      0x12d build/pipe.o
- .debug_line    0x0000448b       0x73 build/uspi_synchronize.o
- .debug_line    0x000044fe       0x62 build/uspienv_memio.o
- .debug_line    0x00004560      0x1eb build/uspi_usbmouse.o
- .debug_line    0x0000474b      0x2e6 build/uspi_lan7800.o
- .debug_line    0x00004a31       0xff build/kalloc.o
- .debug_line    0x00004b30       0xcd build/uspi_util.o
- .debug_line    0x00004bfd       0x88 build/uart_pl011.o
- .debug_line    0x00004c85      0x556 build/uspi_dwhcidevice.o
- .debug_line    0x000051db      0x3b8 build/uspi_usbgamepad.o
- .debug_line    0x00005593       0xb2 build/uspi_dwhciregister.o
- .debug_line    0x00005645      0x24d build/proc.o
- .debug_line    0x00005892      0x231 build/uspi_usbkeyboard.o
- .debug_line    0x00005ac3       0xee build/timer.o
- .debug_line    0x00005bb1      0x1b5 build/uspi_dwhcirootport.o
+ .debug_line    0x00000ce9      0x2b5 build/sysfile.o
+ .debug_line    0x00000f9e      0x103 build/bio.o
+ .debug_line    0x000010a1      0x23a build/uspi_usbdevicefactory.o
+ .debug_line    0x000012db      0x3e6 build/fs.o
+ .debug_line    0x000016c1      0x354 build/console.o
+ .debug_line    0x00001a15       0xaa build/memide.o
+ .debug_line    0x00001abf       0xea build/mmu.o
+ .debug_line    0x00001ba9       0xbb build/spinlock.o
+ .debug_line    0x00001c64      0x184 build/uspienv_timer.o
+ .debug_line    0x00001de8      0x119 build/main.o
+ .debug_line    0x00001f01      0x12c build/uspi_usbendpoint.o
+ .debug_line    0x0000202d      0x102 build/uspi_usbconfigparser.o
+ .debug_line    0x0000212f       0xfc build/mailbox.o
+ .debug_line    0x0000222b      0x340 build/uspi_usbstandardhub.o
+ .debug_line    0x0000256b      0x109 build/uspi_dwhciframeschednper.o
+ .debug_line    0x00002674      0x282 build/uspi_dwhcixferstagedata.o
+ .debug_line    0x000028f6      0x111 build/uspi_keymap.o
+ .debug_line    0x00002a07      0x140 build/uspi_dwhciframeschedper.o
+ .debug_line    0x00002b47      0x1da build/uspi_usbmidi.o
+ .debug_line    0x00002d21      0x26d build/uspi_usbdevice.o
+ .debug_line    0x00002f8e       0xbe build/uspi_macaddress.o
+ .debug_line    0x0000304c      0x253 build/uspi_smsc951x.o
+ .debug_line    0x0000329f      0x1cf build/uart.o
+ .debug_line    0x0000346e      0x393 build/uspi_usbmassdevice.o
+ .debug_line    0x00003801      0x134 build/log.o
+ .debug_line    0x00003935      0x1e8 build/uspi_usbstring.o
+ .debug_line    0x00003b1d      0x315 build/uspi_library.o
+ .debug_line    0x00003e32      0x22e build/vm.o
+ .debug_line    0x00004060      0x160 build/usb.o
+ .debug_line    0x000041c0       0xaa build/sysproc.o
+ .debug_line    0x0000426a      0x10a build/file.o
+ .debug_line    0x00004374      0x12d build/pipe.o
+ .debug_line    0x000044a1       0x73 build/uspi_synchronize.o
+ .debug_line    0x00004514       0x62 build/uspienv_memio.o
+ .debug_line    0x00004576      0x1eb build/uspi_usbmouse.o
+ .debug_line    0x00004761      0x2e6 build/uspi_lan7800.o
+ .debug_line    0x00004a47       0xff build/kalloc.o
+ .debug_line    0x00004b46       0xcd build/uspi_util.o
+ .debug_line    0x00004c13       0x88 build/uart_pl011.o
+ .debug_line    0x00004c9b      0x556 build/uspi_dwhcidevice.o
+ .debug_line    0x000051f1      0x3b8 build/uspi_usbgamepad.o
+ .debug_line    0x000055a9       0xb2 build/uspi_dwhciregister.o
+ .debug_line    0x0000565b      0x24d build/proc.o
+ .debug_line    0x000058a8      0x231 build/uspi_usbkeyboard.o
+ .debug_line    0x00005ad9       0xee build/timer.o
+ .debug_line    0x00005bc7      0x1b5 build/uspi_dwhcirootport.o
 
-.debug_info     0x00000000    0x2bc27
+.debug_info     0x00000000    0x2bce4
  .debug_info    0x00000000       0x3e build/entry.o
  .debug_info    0x0000003e       0x46 build/exception.o
  .debug_info    0x00000084       0x4e build/uspienv_delayloop.o
@@ -1407,54 +1408,54 @@ OUTPUT(build/kernel.elf elf32-littlearm)
  .debug_info    0x00002e68     0x11e1 build/uspi_string.o
  .debug_info    0x00004049      0x2dd build/uspi_devicenameservice.o
  .debug_info    0x00004326      0x442 build/usb_filestorage.o
- .debug_info    0x00004768     0x15ef build/sysfile.o
- .debug_info    0x00005d57      0x45f build/bio.o
- .debug_info    0x000061b6     0x16c2 build/uspi_usbdevicefactory.o
- .debug_info    0x00007878     0x1a2f build/fs.o
- .debug_info    0x000092a7     0x134e build/console.o
- .debug_info    0x0000a5f5      0x61e build/memide.o
- .debug_info    0x0000ac13      0x17f build/mmu.o
- .debug_info    0x0000ad92      0x6b0 build/spinlock.o
- .debug_info    0x0000b442      0x7df build/uspienv_timer.o
- .debug_info    0x0000bc21      0xb2e build/main.o
- .debug_info    0x0000c74f      0xa01 build/uspi_usbendpoint.o
- .debug_info    0x0000d150      0x581 build/uspi_usbconfigparser.o
- .debug_info    0x0000d6d1      0x839 build/mailbox.o
- .debug_info    0x0000df0a     0x197f build/uspi_usbstandardhub.o
- .debug_info    0x0000f889      0x3b6 build/uspi_dwhciframeschednper.o
- .debug_info    0x0000fc3f     0x13c0 build/uspi_dwhcixferstagedata.o
- .debug_info    0x00010fff      0x588 build/uspi_keymap.o
- .debug_info    0x00011587      0x4d6 build/uspi_dwhciframeschedper.o
- .debug_info    0x00011a5d     0x1134 build/uspi_usbmidi.o
- .debug_info    0x00012b91     0x152c build/uspi_usbdevice.o
- .debug_info    0x000140bd      0x40e build/uspi_macaddress.o
- .debug_info    0x000144cb     0x1504 build/uspi_smsc951x.o
- .debug_info    0x000159cf      0xb9c build/uart.o
- .debug_info    0x0001656b     0x206f build/uspi_usbmassdevice.o
- .debug_info    0x000185da      0x67f build/log.o
- .debug_info    0x00018c59      0xf4c build/uspi_usbstring.o
- .debug_info    0x00019ba5     0x1d3c build/uspi_library.o
- .debug_info    0x0001b8e1     0x118f build/vm.o
- .debug_info    0x0001ca70      0x9d9 build/usb.o
- .debug_info    0x0001d449      0x625 build/sysproc.o
- .debug_info    0x0001da6e      0x742 build/file.o
- .debug_info    0x0001e1b0      0x829 build/pipe.o
- .debug_info    0x0001e9d9      0x10d build/uspi_synchronize.o
- .debug_info    0x0001eae6       0xc5 build/uspienv_memio.o
- .debug_info    0x0001ebab     0x11af build/uspi_usbmouse.o
- .debug_info    0x0001fd5a     0x1dbd build/uspi_lan7800.o
- .debug_info    0x00021b17      0x3d8 build/kalloc.o
- .debug_info    0x00021eef      0x39c build/uspi_util.o
- .debug_info    0x0002228b       0xc7 build/uart_pl011.o
- .debug_info    0x00022352     0x4255 build/uspi_dwhcidevice.o
- .debug_info    0x000265a7     0x18d4 build/uspi_usbgamepad.o
- .debug_info    0x00027e7b      0x33d build/uspi_dwhciregister.o
- .debug_info    0x000281b8      0xdf7 build/proc.o
- .debug_info    0x00028faf     0x175a build/uspi_usbkeyboard.o
- .debug_info    0x0002a709      0x74a build/timer.o
- .debug_info    0x0002ae53      0xdd4 build/uspi_dwhcirootport.o
+ .debug_info    0x00004768     0x16ac build/sysfile.o
+ .debug_info    0x00005e14      0x45f build/bio.o
+ .debug_info    0x00006273     0x16c2 build/uspi_usbdevicefactory.o
+ .debug_info    0x00007935     0x1a2f build/fs.o
+ .debug_info    0x00009364     0x134e build/console.o
+ .debug_info    0x0000a6b2      0x61e build/memide.o
+ .debug_info    0x0000acd0      0x17f build/mmu.o
+ .debug_info    0x0000ae4f      0x6b0 build/spinlock.o
+ .debug_info    0x0000b4ff      0x7df build/uspienv_timer.o
+ .debug_info    0x0000bcde      0xb2e build/main.o
+ .debug_info    0x0000c80c      0xa01 build/uspi_usbendpoint.o
+ .debug_info    0x0000d20d      0x581 build/uspi_usbconfigparser.o
+ .debug_info    0x0000d78e      0x839 build/mailbox.o
+ .debug_info    0x0000dfc7     0x197f build/uspi_usbstandardhub.o
+ .debug_info    0x0000f946      0x3b6 build/uspi_dwhciframeschednper.o
+ .debug_info    0x0000fcfc     0x13c0 build/uspi_dwhcixferstagedata.o
+ .debug_info    0x000110bc      0x588 build/uspi_keymap.o
+ .debug_info    0x00011644      0x4d6 build/uspi_dwhciframeschedper.o
+ .debug_info    0x00011b1a     0x1134 build/uspi_usbmidi.o
+ .debug_info    0x00012c4e     0x152c build/uspi_usbdevice.o
+ .debug_info    0x0001417a      0x40e build/uspi_macaddress.o
+ .debug_info    0x00014588     0x1504 build/uspi_smsc951x.o
+ .debug_info    0x00015a8c      0xb9c build/uart.o
+ .debug_info    0x00016628     0x206f build/uspi_usbmassdevice.o
+ .debug_info    0x00018697      0x67f build/log.o
+ .debug_info    0x00018d16      0xf4c build/uspi_usbstring.o
+ .debug_info    0x00019c62     0x1d3c build/uspi_library.o
+ .debug_info    0x0001b99e     0x118f build/vm.o
+ .debug_info    0x0001cb2d      0x9d9 build/usb.o
+ .debug_info    0x0001d506      0x625 build/sysproc.o
+ .debug_info    0x0001db2b      0x742 build/file.o
+ .debug_info    0x0001e26d      0x829 build/pipe.o
+ .debug_info    0x0001ea96      0x10d build/uspi_synchronize.o
+ .debug_info    0x0001eba3       0xc5 build/uspienv_memio.o
+ .debug_info    0x0001ec68     0x11af build/uspi_usbmouse.o
+ .debug_info    0x0001fe17     0x1dbd build/uspi_lan7800.o
+ .debug_info    0x00021bd4      0x3d8 build/kalloc.o
+ .debug_info    0x00021fac      0x39c build/uspi_util.o
+ .debug_info    0x00022348       0xc7 build/uart_pl011.o
+ .debug_info    0x0002240f     0x4255 build/uspi_dwhcidevice.o
+ .debug_info    0x00026664     0x18d4 build/uspi_usbgamepad.o
+ .debug_info    0x00027f38      0x33d build/uspi_dwhciregister.o
+ .debug_info    0x00028275      0xdf7 build/proc.o
+ .debug_info    0x0002906c     0x175a build/uspi_usbkeyboard.o
+ .debug_info    0x0002a7c6      0x74a build/timer.o
+ .debug_info    0x0002af10      0xdd4 build/uspi_dwhcirootport.o
 
-.debug_abbrev   0x00000000     0x7543
+.debug_abbrev   0x00000000     0x7552
  .debug_abbrev  0x00000000       0x12 build/entry.o
  .debug_abbrev  0x00000012       0x14 build/exception.o
  .debug_abbrev  0x00000026       0x14 build/uspienv_delayloop.o
@@ -1467,52 +1468,52 @@ OUTPUT(build/kernel.elf elf32-littlearm)
  .debug_abbrev  0x00000aef      0x2d7 build/uspi_string.o
  .debug_abbrev  0x00000dc6      0x150 build/uspi_devicenameservice.o
  .debug_abbrev  0x00000f16      0x1a2 build/usb_filestorage.o
- .debug_abbrev  0x000010b8      0x2af build/sysfile.o
- .debug_abbrev  0x00001367      0x1fe build/bio.o
- .debug_abbrev  0x00001565      0x1b1 build/uspi_usbdevicefactory.o
- .debug_abbrev  0x00001716      0x44b build/fs.o
- .debug_abbrev  0x00001b61      0x3e3 build/console.o
- .debug_abbrev  0x00001f44      0x1cc build/memide.o
- .debug_abbrev  0x00002110       0xd0 build/mmu.o
- .debug_abbrev  0x000021e0      0x21b build/spinlock.o
- .debug_abbrev  0x000023fb      0x2da build/uspienv_timer.o
- .debug_abbrev  0x000026d5      0x1ee build/main.o
- .debug_abbrev  0x000028c3      0x186 build/uspi_usbendpoint.o
- .debug_abbrev  0x00002a49      0x154 build/uspi_usbconfigparser.o
- .debug_abbrev  0x00002b9d      0x278 build/mailbox.o
- .debug_abbrev  0x00002e15      0x222 build/uspi_usbstandardhub.o
- .debug_abbrev  0x00003037      0x1c3 build/uspi_dwhciframeschednper.o
- .debug_abbrev  0x000031fa      0x2a3 build/uspi_dwhcixferstagedata.o
- .debug_abbrev  0x0000349d      0x1b0 build/uspi_keymap.o
- .debug_abbrev  0x0000364d      0x1ea build/uspi_dwhciframeschedper.o
- .debug_abbrev  0x00003837      0x23b build/uspi_usbmidi.o
- .debug_abbrev  0x00003a72      0x2be build/uspi_usbdevice.o
- .debug_abbrev  0x00003d30      0x190 build/uspi_macaddress.o
- .debug_abbrev  0x00003ec0      0x212 build/uspi_smsc951x.o
- .debug_abbrev  0x000040d2      0x275 build/uart.o
- .debug_abbrev  0x00004347      0x2ee build/uspi_usbmassdevice.o
- .debug_abbrev  0x00004635      0x1e9 build/log.o
- .debug_abbrev  0x0000481e      0x1ea build/uspi_usbstring.o
- .debug_abbrev  0x00004a08      0x2cb build/uspi_library.o
- .debug_abbrev  0x00004cd3      0x393 build/vm.o
- .debug_abbrev  0x00005066      0x311 build/usb.o
- .debug_abbrev  0x00005377      0x187 build/sysproc.o
- .debug_abbrev  0x000054fe      0x1e8 build/file.o
- .debug_abbrev  0x000056e6      0x1fa build/pipe.o
- .debug_abbrev  0x000058e0       0xc2 build/uspi_synchronize.o
- .debug_abbrev  0x000059a2       0x89 build/uspienv_memio.o
- .debug_abbrev  0x00005a2b      0x22b build/uspi_usbmouse.o
- .debug_abbrev  0x00005c56      0x286 build/uspi_lan7800.o
- .debug_abbrev  0x00005edc      0x24b build/kalloc.o
- .debug_abbrev  0x00006127       0xf2 build/uspi_util.o
- .debug_abbrev  0x00006219       0xae build/uart_pl011.o
- .debug_abbrev  0x000062c7      0x39b build/uspi_dwhcidevice.o
- .debug_abbrev  0x00006662      0x392 build/uspi_usbgamepad.o
- .debug_abbrev  0x000069f4       0xe8 build/uspi_dwhciregister.o
- .debug_abbrev  0x00006adc      0x342 build/proc.o
- .debug_abbrev  0x00006e1e      0x322 build/uspi_usbkeyboard.o
- .debug_abbrev  0x00007140      0x24d build/timer.o
- .debug_abbrev  0x0000738d      0x1b6 build/uspi_dwhcirootport.o
+ .debug_abbrev  0x000010b8      0x2be build/sysfile.o
+ .debug_abbrev  0x00001376      0x1fe build/bio.o
+ .debug_abbrev  0x00001574      0x1b1 build/uspi_usbdevicefactory.o
+ .debug_abbrev  0x00001725      0x44b build/fs.o
+ .debug_abbrev  0x00001b70      0x3e3 build/console.o
+ .debug_abbrev  0x00001f53      0x1cc build/memide.o
+ .debug_abbrev  0x0000211f       0xd0 build/mmu.o
+ .debug_abbrev  0x000021ef      0x21b build/spinlock.o
+ .debug_abbrev  0x0000240a      0x2da build/uspienv_timer.o
+ .debug_abbrev  0x000026e4      0x1ee build/main.o
+ .debug_abbrev  0x000028d2      0x186 build/uspi_usbendpoint.o
+ .debug_abbrev  0x00002a58      0x154 build/uspi_usbconfigparser.o
+ .debug_abbrev  0x00002bac      0x278 build/mailbox.o
+ .debug_abbrev  0x00002e24      0x222 build/uspi_usbstandardhub.o
+ .debug_abbrev  0x00003046      0x1c3 build/uspi_dwhciframeschednper.o
+ .debug_abbrev  0x00003209      0x2a3 build/uspi_dwhcixferstagedata.o
+ .debug_abbrev  0x000034ac      0x1b0 build/uspi_keymap.o
+ .debug_abbrev  0x0000365c      0x1ea build/uspi_dwhciframeschedper.o
+ .debug_abbrev  0x00003846      0x23b build/uspi_usbmidi.o
+ .debug_abbrev  0x00003a81      0x2be build/uspi_usbdevice.o
+ .debug_abbrev  0x00003d3f      0x190 build/uspi_macaddress.o
+ .debug_abbrev  0x00003ecf      0x212 build/uspi_smsc951x.o
+ .debug_abbrev  0x000040e1      0x275 build/uart.o
+ .debug_abbrev  0x00004356      0x2ee build/uspi_usbmassdevice.o
+ .debug_abbrev  0x00004644      0x1e9 build/log.o
+ .debug_abbrev  0x0000482d      0x1ea build/uspi_usbstring.o
+ .debug_abbrev  0x00004a17      0x2cb build/uspi_library.o
+ .debug_abbrev  0x00004ce2      0x393 build/vm.o
+ .debug_abbrev  0x00005075      0x311 build/usb.o
+ .debug_abbrev  0x00005386      0x187 build/sysproc.o
+ .debug_abbrev  0x0000550d      0x1e8 build/file.o
+ .debug_abbrev  0x000056f5      0x1fa build/pipe.o
+ .debug_abbrev  0x000058ef       0xc2 build/uspi_synchronize.o
+ .debug_abbrev  0x000059b1       0x89 build/uspienv_memio.o
+ .debug_abbrev  0x00005a3a      0x22b build/uspi_usbmouse.o
+ .debug_abbrev  0x00005c65      0x286 build/uspi_lan7800.o
+ .debug_abbrev  0x00005eeb      0x24b build/kalloc.o
+ .debug_abbrev  0x00006136       0xf2 build/uspi_util.o
+ .debug_abbrev  0x00006228       0xae build/uart_pl011.o
+ .debug_abbrev  0x000062d6      0x39b build/uspi_dwhcidevice.o
+ .debug_abbrev  0x00006671      0x392 build/uspi_usbgamepad.o
+ .debug_abbrev  0x00006a03       0xe8 build/uspi_dwhciregister.o
+ .debug_abbrev  0x00006aeb      0x342 build/proc.o
+ .debug_abbrev  0x00006e2d      0x322 build/uspi_usbkeyboard.o
+ .debug_abbrev  0x0000714f      0x24d build/timer.o
+ .debug_abbrev  0x0000739c      0x1b6 build/uspi_dwhcirootport.o
 
 .debug_aranges  0x00000000      0x748
  .debug_aranges
@@ -1668,7 +1669,7 @@ OUTPUT(build/kernel.elf elf32-littlearm)
  .debug_ranges  0x00000c48       0x30 build/proc.o
  .debug_ranges  0x00000c78       0x98 build/timer.o
 
-.debug_loc      0x00000000     0xe5af
+.debug_loc      0x00000000     0xe5c6
  .debug_loc     0x00000000       0x9f build/uspi_dwhciframeschednsplit.o
  .debug_loc     0x0000009f      0x2a3 build/exec.o
  .debug_loc     0x00000342      0x3a3 build/syscall.o
@@ -1678,52 +1679,52 @@ OUTPUT(build/kernel.elf elf32-littlearm)
  .debug_loc     0x000013ab     0x1245 build/uspi_string.o
  .debug_loc     0x000025f0      0x12d build/uspi_devicenameservice.o
  .debug_loc     0x0000271d       0xe0 build/usb_filestorage.o
- .debug_loc     0x000027fd      0x47d build/sysfile.o
- .debug_loc     0x00002c7a      0x149 build/bio.o
- .debug_loc     0x00002dc3      0x241 build/uspi_usbdevicefactory.o
- .debug_loc     0x00003004     0x1059 build/fs.o
- .debug_loc     0x0000405d      0x89b build/console.o
- .debug_loc     0x000048f8       0xd5 build/memide.o
- .debug_loc     0x000049cd      0x164 build/mmu.o
- .debug_loc     0x00004b31       0xcb build/spinlock.o
- .debug_loc     0x00004bfc      0x590 build/uspienv_timer.o
- .debug_loc     0x0000518c      0x230 build/uspi_usbendpoint.o
- .debug_loc     0x000053bc      0x309 build/uspi_usbconfigparser.o
- .debug_loc     0x000056c5      0x2a1 build/mailbox.o
- .debug_loc     0x00005966      0x555 build/uspi_usbstandardhub.o
- .debug_loc     0x00005ebb      0x1ff build/uspi_dwhciframeschednper.o
- .debug_loc     0x000060ba      0x6ac build/uspi_dwhcixferstagedata.o
- .debug_loc     0x00006766      0x4b7 build/uspi_keymap.o
- .debug_loc     0x00006c1d      0x2e5 build/uspi_dwhciframeschedper.o
- .debug_loc     0x00006f02      0x305 build/uspi_usbmidi.o
- .debug_loc     0x00007207      0x45b build/uspi_usbdevice.o
- .debug_loc     0x00007662      0x213 build/uspi_macaddress.o
- .debug_loc     0x00007875      0x38f build/uspi_smsc951x.o
- .debug_loc     0x00007c04      0x7b2 build/uart.o
- .debug_loc     0x000083b6      0x84c build/uspi_usbmassdevice.o
- .debug_loc     0x00008c02      0x1e4 build/log.o
- .debug_loc     0x00008de6      0x2b3 build/uspi_usbstring.o
- .debug_loc     0x00009099      0x691 build/uspi_library.o
- .debug_loc     0x0000972a      0xdff build/vm.o
- .debug_loc     0x0000a529      0x307 build/usb.o
- .debug_loc     0x0000a830       0x31 build/sysproc.o
- .debug_loc     0x0000a861      0x4e1 build/file.o
- .debug_loc     0x0000ad42      0x279 build/pipe.o
- .debug_loc     0x0000afbb       0x77 build/uspi_synchronize.o
- .debug_loc     0x0000b032       0x21 build/uspienv_memio.o
- .debug_loc     0x0000b053      0x222 build/uspi_usbmouse.o
- .debug_loc     0x0000b275      0x6c1 build/uspi_lan7800.o
- .debug_loc     0x0000b936      0x27b build/kalloc.o
- .debug_loc     0x0000bbb1      0x4ce build/uspi_util.o
- .debug_loc     0x0000c07f      0xe6e build/uspi_dwhcidevice.o
- .debug_loc     0x0000ceed      0xce8 build/uspi_usbgamepad.o
- .debug_loc     0x0000dbd5       0xe4 build/uspi_dwhciregister.o
- .debug_loc     0x0000dcb9      0x46f build/proc.o
- .debug_loc     0x0000e128      0x25b build/uspi_usbkeyboard.o
- .debug_loc     0x0000e383      0x16a build/timer.o
- .debug_loc     0x0000e4ed       0xc2 build/uspi_dwhcirootport.o
+ .debug_loc     0x000027fd      0x494 build/sysfile.o
+ .debug_loc     0x00002c91      0x149 build/bio.o
+ .debug_loc     0x00002dda      0x241 build/uspi_usbdevicefactory.o
+ .debug_loc     0x0000301b     0x1059 build/fs.o
+ .debug_loc     0x00004074      0x89b build/console.o
+ .debug_loc     0x0000490f       0xd5 build/memide.o
+ .debug_loc     0x000049e4      0x164 build/mmu.o
+ .debug_loc     0x00004b48       0xcb build/spinlock.o
+ .debug_loc     0x00004c13      0x590 build/uspienv_timer.o
+ .debug_loc     0x000051a3      0x230 build/uspi_usbendpoint.o
+ .debug_loc     0x000053d3      0x309 build/uspi_usbconfigparser.o
+ .debug_loc     0x000056dc      0x2a1 build/mailbox.o
+ .debug_loc     0x0000597d      0x555 build/uspi_usbstandardhub.o
+ .debug_loc     0x00005ed2      0x1ff build/uspi_dwhciframeschednper.o
+ .debug_loc     0x000060d1      0x6ac build/uspi_dwhcixferstagedata.o
+ .debug_loc     0x0000677d      0x4b7 build/uspi_keymap.o
+ .debug_loc     0x00006c34      0x2e5 build/uspi_dwhciframeschedper.o
+ .debug_loc     0x00006f19      0x305 build/uspi_usbmidi.o
+ .debug_loc     0x0000721e      0x45b build/uspi_usbdevice.o
+ .debug_loc     0x00007679      0x213 build/uspi_macaddress.o
+ .debug_loc     0x0000788c      0x38f build/uspi_smsc951x.o
+ .debug_loc     0x00007c1b      0x7b2 build/uart.o
+ .debug_loc     0x000083cd      0x84c build/uspi_usbmassdevice.o
+ .debug_loc     0x00008c19      0x1e4 build/log.o
+ .debug_loc     0x00008dfd      0x2b3 build/uspi_usbstring.o
+ .debug_loc     0x000090b0      0x691 build/uspi_library.o
+ .debug_loc     0x00009741      0xdff build/vm.o
+ .debug_loc     0x0000a540      0x307 build/usb.o
+ .debug_loc     0x0000a847       0x31 build/sysproc.o
+ .debug_loc     0x0000a878      0x4e1 build/file.o
+ .debug_loc     0x0000ad59      0x279 build/pipe.o
+ .debug_loc     0x0000afd2       0x77 build/uspi_synchronize.o
+ .debug_loc     0x0000b049       0x21 build/uspienv_memio.o
+ .debug_loc     0x0000b06a      0x222 build/uspi_usbmouse.o
+ .debug_loc     0x0000b28c      0x6c1 build/uspi_lan7800.o
+ .debug_loc     0x0000b94d      0x27b build/kalloc.o
+ .debug_loc     0x0000bbc8      0x4ce build/uspi_util.o
+ .debug_loc     0x0000c096      0xe6e build/uspi_dwhcidevice.o
+ .debug_loc     0x0000cf04      0xce8 build/uspi_usbgamepad.o
+ .debug_loc     0x0000dbec       0xe4 build/uspi_dwhciregister.o
+ .debug_loc     0x0000dcd0      0x46f build/proc.o
+ .debug_loc     0x0000e13f      0x25b build/uspi_usbkeyboard.o
+ .debug_loc     0x0000e39a      0x16a build/timer.o
+ .debug_loc     0x0000e504       0xc2 build/uspi_dwhcirootport.o
 
-.debug_str      0x00000000     0x4ff0
+.debug_str      0x00000000     0x4ffa
  .debug_str     0x00000000      0x2dc build/uspi_dwhciframeschednsplit.o
                                 0x39d (size before relaxing)
  .debug_str     0x000002dc      0x1e6 build/exec.o
@@ -1742,100 +1743,100 @@ OUTPUT(build/kernel.elf elf32-littlearm)
                                 0x253 (size before relaxing)
  .debug_str     0x000010d0       0xd6 build/usb_filestorage.o
                                 0x244 (size before relaxing)
- .debug_str     0x000011a6      0x157 build/sysfile.o
-                                0x453 (size before relaxing)
- .debug_str     0x000012fd       0x6a build/bio.o
+ .debug_str     0x000011a6      0x161 build/sysfile.o
+                                0x465 (size before relaxing)
+ .debug_str     0x00001307       0x6a build/bio.o
                                 0x1d3 (size before relaxing)
- .debug_str     0x00001367      0x666 build/uspi_usbdevicefactory.o
+ .debug_str     0x00001371      0x666 build/uspi_usbdevicefactory.o
                                 0xf4a (size before relaxing)
- .debug_str     0x000019cd       0x94 build/fs.o
+ .debug_str     0x000019d7       0x94 build/fs.o
                                 0x3f4 (size before relaxing)
- .debug_str     0x00001a61      0x1ae build/console.o
+ .debug_str     0x00001a6b      0x1ae build/console.o
                                 0x4a4 (size before relaxing)
- .debug_str     0x00001c0f       0x5f build/memide.o
+ .debug_str     0x00001c19       0x5f build/memide.o
                                 0x299 (size before relaxing)
- .debug_str     0x00001c6e       0x44 build/mmu.o
+ .debug_str     0x00001c78       0x44 build/mmu.o
                                 0x169 (size before relaxing)
- .debug_str     0x00001cb2       0x32 build/spinlock.o
+ .debug_str     0x00001cbc       0x32 build/spinlock.o
                                 0x267 (size before relaxing)
- .debug_str     0x00001ce4      0x23b build/uspienv_timer.o
+ .debug_str     0x00001cee      0x23b build/uspienv_timer.o
                                 0x3c6 (size before relaxing)
- .debug_str     0x00001f1f       0xae build/main.o
+ .debug_str     0x00001f29       0xae build/main.o
                                 0x3e1 (size before relaxing)
- .debug_str     0x00001fcd      0x149 build/uspi_usbendpoint.o
+ .debug_str     0x00001fd7      0x149 build/uspi_usbendpoint.o
                                 0x85b (size before relaxing)
- .debug_str     0x00002116       0xf0 build/uspi_usbconfigparser.o
+ .debug_str     0x00002120       0xf0 build/uspi_usbconfigparser.o
                                 0x51f (size before relaxing)
- .debug_str     0x00002206       0x5c build/mailbox.o
+ .debug_str     0x00002210       0x5c build/mailbox.o
                                 0x320 (size before relaxing)
- .debug_str     0x00002262      0x224 build/uspi_usbstandardhub.o
+ .debug_str     0x0000226c      0x224 build/uspi_usbstandardhub.o
                                 0xdca (size before relaxing)
- .debug_str     0x00002486      0x1a5 build/uspi_dwhciframeschednper.o
+ .debug_str     0x00002490      0x1a5 build/uspi_dwhciframeschednper.o
                                 0x3e6 (size before relaxing)
- .debug_str     0x0000262b      0x554 build/uspi_dwhcixferstagedata.o
+ .debug_str     0x00002635      0x554 build/uspi_dwhcixferstagedata.o
                                0x10a6 (size before relaxing)
- .debug_str     0x00002b7f      0x411 build/uspi_keymap.o
+ .debug_str     0x00002b89      0x411 build/uspi_keymap.o
                                 0x5b9 (size before relaxing)
- .debug_str     0x00002f90      0x10a build/uspi_dwhciframeschedper.o
+ .debug_str     0x00002f9a      0x10a build/uspi_dwhciframeschedper.o
                                 0x442 (size before relaxing)
- .debug_str     0x0000309a      0x111 build/uspi_usbmidi.o
+ .debug_str     0x000030a4      0x111 build/uspi_usbmidi.o
                                 0xcbf (size before relaxing)
- .debug_str     0x000031ab      0x127 build/uspi_usbdevice.o
+ .debug_str     0x000031b5      0x127 build/uspi_usbdevice.o
                                 0xdba (size before relaxing)
- .debug_str     0x000032d2       0xdf build/uspi_macaddress.o
+ .debug_str     0x000032dc       0xdf build/uspi_macaddress.o
                                 0x2a7 (size before relaxing)
- .debug_str     0x000033b1      0x179 build/uspi_smsc951x.o
+ .debug_str     0x000033bb      0x179 build/uspi_smsc951x.o
                                 0xd90 (size before relaxing)
- .debug_str     0x0000352a       0x7a build/uart.o
+ .debug_str     0x00003534       0x7a build/uart.o
                                 0x274 (size before relaxing)
- .debug_str     0x000035a4      0x57c build/uspi_usbmassdevice.o
+ .debug_str     0x000035ae      0x57c build/uspi_usbmassdevice.o
                                0x1286 (size before relaxing)
- .debug_str     0x00003b20       0x67 build/log.o
+ .debug_str     0x00003b2a       0x67 build/log.o
                                 0x272 (size before relaxing)
- .debug_str     0x00003b87       0x50 build/uspi_usbstring.o
+ .debug_str     0x00003b91       0x50 build/uspi_usbstring.o
                                 0xaea (size before relaxing)
- .debug_str     0x00003bd7      0x456 build/uspi_library.o
+ .debug_str     0x00003be1      0x456 build/uspi_library.o
                                0x1649 (size before relaxing)
- .debug_str     0x0000402d       0xc6 build/vm.o
+ .debug_str     0x00004037       0xc6 build/vm.o
                                 0x38f (size before relaxing)
- .debug_str     0x000040f3       0x82 build/usb.o
+ .debug_str     0x000040fd       0x82 build/usb.o
                                 0x4c8 (size before relaxing)
- .debug_str     0x00004175       0x75 build/sysproc.o
+ .debug_str     0x0000417f       0x75 build/sysproc.o
                                 0x2a0 (size before relaxing)
- .debug_str     0x000041ea       0x32 build/file.o
+ .debug_str     0x000041f4       0x32 build/file.o
                                 0x29a (size before relaxing)
- .debug_str     0x0000421c       0x2e build/pipe.o
+ .debug_str     0x00004226       0x2e build/pipe.o
                                 0x310 (size before relaxing)
- .debug_str     0x0000424a       0x67 build/uspi_synchronize.o
+ .debug_str     0x00004254       0x67 build/uspi_synchronize.o
                                 0x1c8 (size before relaxing)
- .debug_str     0x000042b1       0x17 build/uspienv_memio.o
+ .debug_str     0x000042bb       0x17 build/uspienv_memio.o
                                 0x158 (size before relaxing)
- .debug_str     0x000042c8       0x94 build/uspi_usbmouse.o
+ .debug_str     0x000042d2       0x94 build/uspi_usbmouse.o
                                 0xcf2 (size before relaxing)
- .debug_str     0x0000435c      0x16e build/uspi_lan7800.o
+ .debug_str     0x00004366      0x16e build/uspi_lan7800.o
                                 0xe6b (size before relaxing)
- .debug_str     0x000044ca       0x3d build/kalloc.o
+ .debug_str     0x000044d4       0x3d build/kalloc.o
                                 0x1b9 (size before relaxing)
- .debug_str     0x00004507       0x61 build/uspi_util.o
+ .debug_str     0x00004511       0x61 build/uspi_util.o
                                 0x250 (size before relaxing)
- .debug_str     0x00004568       0x45 build/uart_pl011.o
+ .debug_str     0x00004572       0x45 build/uart_pl011.o
                                 0x164 (size before relaxing)
- .debug_str     0x000045ad      0x5be build/uspi_dwhcidevice.o
+ .debug_str     0x000045b7      0x5be build/uspi_dwhcidevice.o
                                0x188d (size before relaxing)
- .debug_str     0x00004b6b      0x1c3 build/uspi_usbgamepad.o
+ .debug_str     0x00004b75      0x1c3 build/uspi_usbgamepad.o
                                 0xf42 (size before relaxing)
- .debug_str     0x00004d2e       0x61 build/uspi_dwhciregister.o
+ .debug_str     0x00004d38       0x61 build/uspi_dwhciregister.o
                                 0x29c (size before relaxing)
- .debug_str     0x00004d8f       0xa9 build/proc.o
+ .debug_str     0x00004d99       0xa9 build/proc.o
                                 0x3cd (size before relaxing)
- .debug_str     0x00004e38      0x152 build/uspi_usbkeyboard.o
+ .debug_str     0x00004e42      0x152 build/uspi_usbkeyboard.o
                                0x12bf (size before relaxing)
- .debug_str     0x00004f8a       0x3c build/timer.o
+ .debug_str     0x00004f94       0x3c build/timer.o
                                 0x2d5 (size before relaxing)
- .debug_str     0x00004fc6       0x2a build/uspi_dwhcirootport.o
+ .debug_str     0x00004fd0       0x2a build/uspi_dwhcirootport.o
                                 0xad1 (size before relaxing)
 
-.debug_frame    0x00000000     0x3ae8
+.debug_frame    0x00000000     0x3b0c
  .debug_frame   0x00000000       0x9c build/uspi_dwhciframeschednsplit.o
  .debug_frame   0x0000009c       0x40 build/exec.o
  .debug_frame   0x000000dc       0x9c build/syscall.o
@@ -1845,49 +1846,49 @@ OUTPUT(build/kernel.elf elf32-littlearm)
  .debug_frame   0x0000046c      0x1b8 build/uspi_string.o
  .debug_frame   0x00000624       0x88 build/uspi_devicenameservice.o
  .debug_frame   0x000006ac       0x74 build/usb_filestorage.o
- .debug_frame   0x00000720      0x248 build/sysfile.o
- .debug_frame   0x00000968       0x8c build/bio.o
- .debug_frame   0x000009f4       0x48 build/uspi_usbdevicefactory.o
- .debug_frame   0x00000a3c      0x30c build/fs.o
- .debug_frame   0x00000d48      0x20c build/console.o
- .debug_frame   0x00000f54       0x60 build/memide.o
- .debug_frame   0x00000fb4       0x3c build/mmu.o
- .debug_frame   0x00000ff0       0xb8 build/spinlock.o
- .debug_frame   0x000010a8      0x194 build/uspienv_timer.o
- .debug_frame   0x0000123c       0x88 build/main.o
- .debug_frame   0x000012c4      0x104 build/uspi_usbendpoint.o
- .debug_frame   0x000013c8       0x78 build/uspi_usbconfigparser.o
- .debug_frame   0x00001440       0x68 build/mailbox.o
- .debug_frame   0x000014a8       0xf0 build/uspi_usbstandardhub.o
- .debug_frame   0x00001598       0xa0 build/uspi_dwhciframeschednper.o
- .debug_frame   0x00001638      0x280 build/uspi_dwhcixferstagedata.o
- .debug_frame   0x000018b8       0x94 build/uspi_keymap.o
- .debug_frame   0x0000194c       0xb0 build/uspi_dwhciframeschedper.o
- .debug_frame   0x000019fc       0xdc build/uspi_usbmidi.o
- .debug_frame   0x00001ad8      0x190 build/uspi_usbdevice.o
- .debug_frame   0x00001c68       0xe8 build/uspi_macaddress.o
- .debug_frame   0x00001d50      0x118 build/uspi_smsc951x.o
- .debug_frame   0x00001e68       0xe8 build/uart.o
- .debug_frame   0x00001f50      0x194 build/uspi_usbmassdevice.o
- .debug_frame   0x000020e4       0xd4 build/log.o
- .debug_frame   0x000021b8       0xd8 build/uspi_usbstring.o
- .debug_frame   0x00002290      0x218 build/uspi_library.o
- .debug_frame   0x000024a8      0x294 build/vm.o
- .debug_frame   0x0000273c      0x12c build/usb.o
- .debug_frame   0x00002868       0xe0 build/sysproc.o
- .debug_frame   0x00002948      0x130 build/file.o
- .debug_frame   0x00002a78       0xa0 build/pipe.o
- .debug_frame   0x00002b18       0x40 build/uspi_synchronize.o
- .debug_frame   0x00002b58       0x30 build/uspienv_memio.o
- .debug_frame   0x00002b88       0xdc build/uspi_usbmouse.o
- .debug_frame   0x00002c64      0x20c build/uspi_lan7800.o
- .debug_frame   0x00002e70       0xa8 build/kalloc.o
- .debug_frame   0x00002f18       0xc0 build/uspi_util.o
- .debug_frame   0x00002fd8       0x40 build/uart_pl011.o
- .debug_frame   0x00003018      0x4c4 build/uspi_dwhcidevice.o
- .debug_frame   0x000034dc      0x158 build/uspi_usbgamepad.o
- .debug_frame   0x00003634       0xf0 build/uspi_dwhciregister.o
- .debug_frame   0x00003724      0x1b8 build/proc.o
- .debug_frame   0x000038dc      0x104 build/uspi_usbkeyboard.o
- .debug_frame   0x000039e0       0x9c build/timer.o
- .debug_frame   0x00003a7c       0x6c build/uspi_dwhcirootport.o
+ .debug_frame   0x00000720      0x26c build/sysfile.o
+ .debug_frame   0x0000098c       0x8c build/bio.o
+ .debug_frame   0x00000a18       0x48 build/uspi_usbdevicefactory.o
+ .debug_frame   0x00000a60      0x30c build/fs.o
+ .debug_frame   0x00000d6c      0x20c build/console.o
+ .debug_frame   0x00000f78       0x60 build/memide.o
+ .debug_frame   0x00000fd8       0x3c build/mmu.o
+ .debug_frame   0x00001014       0xb8 build/spinlock.o
+ .debug_frame   0x000010cc      0x194 build/uspienv_timer.o
+ .debug_frame   0x00001260       0x88 build/main.o
+ .debug_frame   0x000012e8      0x104 build/uspi_usbendpoint.o
+ .debug_frame   0x000013ec       0x78 build/uspi_usbconfigparser.o
+ .debug_frame   0x00001464       0x68 build/mailbox.o
+ .debug_frame   0x000014cc       0xf0 build/uspi_usbstandardhub.o
+ .debug_frame   0x000015bc       0xa0 build/uspi_dwhciframeschednper.o
+ .debug_frame   0x0000165c      0x280 build/uspi_dwhcixferstagedata.o
+ .debug_frame   0x000018dc       0x94 build/uspi_keymap.o
+ .debug_frame   0x00001970       0xb0 build/uspi_dwhciframeschedper.o
+ .debug_frame   0x00001a20       0xdc build/uspi_usbmidi.o
+ .debug_frame   0x00001afc      0x190 build/uspi_usbdevice.o
+ .debug_frame   0x00001c8c       0xe8 build/uspi_macaddress.o
+ .debug_frame   0x00001d74      0x118 build/uspi_smsc951x.o
+ .debug_frame   0x00001e8c       0xe8 build/uart.o
+ .debug_frame   0x00001f74      0x194 build/uspi_usbmassdevice.o
+ .debug_frame   0x00002108       0xd4 build/log.o
+ .debug_frame   0x000021dc       0xd8 build/uspi_usbstring.o
+ .debug_frame   0x000022b4      0x218 build/uspi_library.o
+ .debug_frame   0x000024cc      0x294 build/vm.o
+ .debug_frame   0x00002760      0x12c build/usb.o
+ .debug_frame   0x0000288c       0xe0 build/sysproc.o
+ .debug_frame   0x0000296c      0x130 build/file.o
+ .debug_frame   0x00002a9c       0xa0 build/pipe.o
+ .debug_frame   0x00002b3c       0x40 build/uspi_synchronize.o
+ .debug_frame   0x00002b7c       0x30 build/uspienv_memio.o
+ .debug_frame   0x00002bac       0xdc build/uspi_usbmouse.o
+ .debug_frame   0x00002c88      0x20c build/uspi_lan7800.o
+ .debug_frame   0x00002e94       0xa8 build/kalloc.o
+ .debug_frame   0x00002f3c       0xc0 build/uspi_util.o
+ .debug_frame   0x00002ffc       0x40 build/uart_pl011.o
+ .debug_frame   0x0000303c      0x4c4 build/uspi_dwhcidevice.o
+ .debug_frame   0x00003500      0x158 build/uspi_usbgamepad.o
+ .debug_frame   0x00003658       0xf0 build/uspi_dwhciregister.o
+ .debug_frame   0x00003748      0x1b8 build/proc.o
+ .debug_frame   0x00003900      0x104 build/uspi_usbkeyboard.o
+ .debug_frame   0x00003a04       0x9c build/timer.o
+ .debug_frame   0x00003aa0       0x6c build/uspi_dwhcirootport.o

@@ -53,7 +53,8 @@ int main(int argc, char *argv[]) {
 		printf(1, "%d", buf[i]);
 	}
 	printf(1,"\n");
-	printf(1,"somehow we left the looop\n");
+	printf(1, "lseek returned %d\n", lseek(fd, 0, 0));
+	
  
 	clean();
 }
