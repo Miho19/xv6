@@ -5,56 +5,61 @@
 #include "fs.h"
 #include "file.h"
 
-
-
-
-int fd;
-unsigned char *buf;
-
-void clean(void){
-	free(buf);
-	if(fd > 0)
-		close(fd);
-	exit();
-}
-
 int main(int argc, char *argv[]) {
 	int i;
-	buf = malloc(512*sizeof(buf));	
+	int result;
+	int fd;
+
+	char *read_buf;
+	char *write_buf;
+
+	read_buf = malloc(sizeof(*read_buf) * 512);
+	write_buf = malloc(sizeof(write_buf) * 512);
 
 
-	if(mkdir("dev") != 0){
-		printf(1,"did not make dev\n");
-	}
-	if(chdir("dev") < 0){
-		printf(1,"could not change dir into dev\n");
-	}
+	strcpy(write_buf, "Hello world!");
 
-	if(argc < 1) {
-		printf(1,"Usage: test filepath\n");
-		clean();
-	}
-	
+
+
 	if(mknod(argv[1],15,15) < 0) {
 		printf(1,"mknod failure");
-		clean();
+		goto clean;
 	}
 	
-
 	if( (fd = open(argv[1],O_RDWR)) < 0 ){
 		printf(1,"Could not open %s \n", argv[1]);
-		clean();
+		goto clean;
 	}
 	printf(1,"opened : %s FD: %d\n",argv[1],fd);
 
 
-	read(fd, buf, 512);
-	for(i=0;i<512;i++){
-		printf(1, "%d", buf[i]);
+	result = write(fd, write_buf, 512);
+
+	if(result != 512){
+		printf(1, "write %d\n", result);
 	}
-	printf(1,"\n");
-	printf(1, "lseek returned %d\n", lseek(fd, 0, 0));
+
+
+	result = read(fd, read_buf, 512);
+
+	if(result != 512) {
+		printf(1, "read %d\n", result);
+	}
+
+
+
+
+	for(i=0;i<512;i++){
+		printf(1, "%d", read_buf[i]);
+	}
+
+
 	
- 
-	clean();
+	clean:
+	free(read_buf);
+	free(write_buf);
+	close(fd);
+	
+		
+	return 1;
 }

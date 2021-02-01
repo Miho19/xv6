@@ -20,3 +20,7 @@ void readTest();
 
 // read code
 int usb_fileread(struct file *f, char *buf, int n);
+
+//write code
+
+int usb_filewrite(struct file *f, char *buf, int n);

@@ -93,7 +93,8 @@ sys_write(void)
 
   if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
     return -1;
-//cprintf("inside sys_write\n");
+  if(f->ip->major == 15)
+    return usb_filewrite(f, p, n);
   return filewrite(f, p, n);
 }
 
@@ -452,14 +453,32 @@ sys_lseek(void)
 	int n;
 	int type;
 	int size;
+  int test;
+
+  test = 0;
 	
 	if(argfd(0, 0, &f) < 0 || argint(1, &n) < 0 || argint(2, &type) < 0)
 		return -1;
-	cprintf("current offset %d seek to %d type %d\n",f->off, n, type);
-	size = f->ip->size;
+	//cprintf("current offset %d seek to %d type %d\n",f->off, n, type);
+
+  size = f->ip->size;
+
+  switch(type){
+
+    case SEEK_SET:
+      test = n;
+      break;
+    case SEEK_CUR:
+      test = f->off + n;
+      break;
+    default:
+      return f->off;
+  }
+
 	
-	if(n < 0) n= 0;
-	if(n > size) n = size;	
-	f->off = n;
-	return n;
+	if(test < 0) test = 0;
+	if(test > size) test = size;
+
+	f->off = test;
+	return f->off;
 }
