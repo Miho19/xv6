@@ -17,9 +17,12 @@
 
 #define BUFFER_SIZE 2048
 
+#define array_length(a) (sizeof(a) / sizeof(a[0]))
+
+
 struct device_handler device_handler[MAX_DEVICE];
 
-char *buffer;
+char *usb_temp_buffer;
 
 void dhandlerinit(void) {
 	memset(&device_handler, 0, sizeof(struct device_handler) * MAX_DEVICE);
@@ -30,49 +33,41 @@ void dhandlerinit(void) {
 */
 
 void storageinit(void) {
+	int i;
 	dhandlerinit();
-	buffer = malloc(sizeof(buffer[0]) * BUFFER_SIZE);
+
+	usb_temp_buffer = NULL;
+	
+
+	usb_temp_buffer = malloc(sizeof(usb_temp_buffer[0]) * BUFFER_SIZE);
+
+	if(usb_temp_buffer == NULL){
+		cprintf("usb_temp_buffer not allocated\n");
+	}
+
+	for(i=0;i<BUFFER_SIZE;i++)
+		usb_temp_buffer[i] = 0;
+	cprintf("usb_file_storage init\n");
 }
 
 void storage_free(void){
-	free(buffer);
-}
-
-/** 
-	Test code for reading and writing before schedular 
-*/
-
-
-void readTest(void) {
-	int result;
-	unsigned char readBuffer[512];
-	device_handler[0].usb_active = 0;					// disable yield for before schedular
-	memset(&readBuffer, 0, sizeof(readBuffer[0]) * 512);
-	
-	result = 0;
-	result = USPiMassStorageDeviceRead(512 * 66, readBuffer, 512, DEVICE_NUMBER);
-	if(result != 512){
-		cprintf("Read error %d \n", result);
-		return;
-	}
-	cprintf("USB storage read successful\n");
+	free(usb_temp_buffer);
 }
 
 
 int usb_filewrite(struct file *f, char *buf, int num){
-	unsigned int result;
+	int result;
 	int i;
 
 	result = 0;
 	device_handler[0].usb_active = 1;
 
 	for(i=0;i<num;i++)
-		buffer[i] = buf[i];
+		usb_temp_buffer[i] = buf[i];
 
-	result = USPiMassStorageDeviceWrite(BLOCK_SIZE * f->off, buffer, num, DEVICE_NUMBER);
+	result = USPiMassStorageDeviceWrite(BLOCK_SIZE * f->off, usb_temp_buffer, num, DEVICE_NUMBER);
 
-	cprintf("USB_FILEWRITE DEBUG: file off -> %d\n result -> %d\n new offset -> %d\n",
- f->off, result, f->off + result);
+	cprintf("USB_FILEWRITE DEBUG: file off -> %d\n result -> %d\n new offset -> %d\n",f->off, result, f->off + result);
 
 	f->off += result;
 
@@ -83,20 +78,18 @@ int usb_filewrite(struct file *f, char *buf, int num){
 
 
 int usb_fileread(struct file *f, char *buf, int num) {
-	unsigned int result;
+	int result;
 	int i;
 
 	result = 0;
 	device_handler[0].usb_active = 1;
 	
-	result = USPiMassStorageDeviceRead(BLOCK_SIZE * f->off, buffer, num, DEVICE_NUMBER);
+	result = USPiMassStorageDeviceRead(BLOCK_SIZE * f->off, usb_temp_buffer, num, DEVICE_NUMBER);
 
-		
-	cprintf("USB_FILEREAD DEBUG:file off -> %d\n result -> %d\n new offset -> %d\n",
- f->off, result, f->off + result);
+	cprintf("USB_FILEREAD DEBUG:file off -> %d\n result -> %d\n new offset -> %d\n",f->off, result, f->off + result);
 
-	for(i=0;i<num;i++){
-		buf[i] = buffer[i];
+	for(i=0;i<result;i++){
+		buf[i] = temp_buffer[i];
 	}
 
 	f->off += result;

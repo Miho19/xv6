@@ -5,10 +5,10 @@
 #define MAX_DEVICE 10
 
 struct device_handler {
-	short major;
+	int usb_active;
 	int (*read)(struct file*, char*, int);
 	int (*write)(struct file*, char*, int);
-	int usb_active;
+	short major;
 };
 
 extern struct device_handler device_handler[MAX_DEVICE];
