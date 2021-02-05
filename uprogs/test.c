@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 	int fd;
 
 	read_buf = malloc(sizeof(*read_buf) * 512);
-	write_buf = malloc(sizeof(write_buf) * 512);
+	write_buf = malloc(sizeof(*write_buf) * 512);
 
 
 	char send_text[13] = {72,101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33};

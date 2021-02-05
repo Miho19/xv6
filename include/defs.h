@@ -11,9 +11,8 @@ struct superblock;
 void OkLoop(void);
 void NotOkLoop(void);
 // usb.c
-int usb_read(struct inode *ip, char *buf,int num);
-int usb_fileread(struct file *f, char*buf, int num);
-void test(void);
+int usb_storage_read(struct file *f, char *buf, int n);
+int usb_storage_write(struct file *f, char *buf, int n);
 void storageinit(void);
 // mmu.c
 void mmuinit0(void);

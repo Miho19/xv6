@@ -1,20 +1,16 @@
 /** 
-	USB File storage driver code
+	USB storage driver code
 
 */
 #include "types.h"
 #include "defs.h"
 #include "fs.h"
 #include "file.h"
-#include "usb_filestorage.h"
 #include "uspi.h"
-
 #include "uspios.h"
 
 #define DEVICE_NUMBER 0
-
 #define BLOCK_SIZE 512
-
 #define BUFFER_SIZE 2048
 
 #define array_length(a) (sizeof(a) / sizeof(a[0]))
@@ -55,7 +51,7 @@ void storage_free(void){
 }
 
 
-int usb_filewrite(struct file *f, char *buf, int num){
+int usb_storage_write(struct file *f, char *buf, int num){
 	int result;
 	int i;
 
@@ -77,7 +73,7 @@ int usb_filewrite(struct file *f, char *buf, int num){
 
 
 
-int usb_fileread(struct file *f, char *buf, int num) {
+int usb_storage_read(struct file *f, char *buf, int num) {
 	int result;
 	int i;
 

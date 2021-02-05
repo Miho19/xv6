@@ -78,7 +78,7 @@ sys_read(void)
 	
   // USB FILE READ HARD CODED
   if(f->ip->major == 15) 
-	return usb_fileread(f, p, n);
+	  return usb_storage_read(f, p, n);
  
 	
   return fileread(f, p, n);
@@ -94,7 +94,8 @@ sys_write(void)
   if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
     return -1;
   if(f->ip->major == 15)
-    return usb_filewrite(f, p, n);
+    return usb_storage_write(f, p, n);
+
   return filewrite(f, p, n);
 }
 
@@ -367,7 +368,6 @@ sys_mknod(void)
   commit_trans();
   if(ip->major == 15) {
 	device_handler[0].major = 15;
-	device_handler[0].read = &usb_fileread;
    //input wrapper function calls here		
   }
   return 0;

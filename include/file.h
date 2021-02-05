@@ -37,3 +37,25 @@ struct devsw {
 extern struct devsw devsw[];
 
 #define CONSOLE 1
+
+
+/** 
+	USB storage driver
+*/
+
+#define MAX_DEVICE 10
+
+
+struct device_handler {
+	int usb_active;
+	int (*read)(struct file*, char*, int);
+	int (*write)(struct file*, char*, int);
+	short major;
+};
+
+extern struct device_handler device_handler[MAX_DEVICE];
+
+
+
+
+
