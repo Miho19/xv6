@@ -32,7 +32,6 @@
 #include <fs.h>
 #include <defs.h>
 #include <file.h>
-#include "usb_filestorage.h"
 #define ARM_IRQ_USB		9		// for ConnectInterrupt()
 
 #define DEVICE_ID_USB_HCD	3		// for SetPowerStateOn()
@@ -744,7 +743,7 @@ boolean DWHCIDeviceTransferStage (TDWHCIDevice *pThis, TUSBRequest *pURB, boolea
 	while (pThis->m_bWaiting){
 		if(device_handler[0].usb_active == 1){
 			
-			//LogWrite (FromDWHCI, LOG_ERROR, "Yield CPU for USB writing");
+			LogWrite (FromDWHCI, LOG_ERROR, "Yield CPU for USB writing");
 			yield();
 		} 	
 	}

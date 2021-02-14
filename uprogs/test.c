@@ -5,6 +5,8 @@
 #include "fs.h"
 #include "file.h"
 
+#define pos (512 * 512)
+
 char *read_buf;
 char *write_buf;
 
@@ -15,7 +17,7 @@ void clean(int fd){
 	free(write_buf);
 	if(fd)
 		close(fd);
-	exit(0);
+	
 }
 
 int main(int argc, char *argv[]) {
@@ -51,27 +53,32 @@ int main(int argc, char *argv[]) {
 	}
 	printf(1,"opened : %s FD: %d\n",argv[1],fd);
 
+	
 
-	result = write(fd, write_buf, size);
+	lseek(fd, pos, 0);
+
+	result = write(fd, write_buf, 512);
 
 	if(result != size){
 		printf(1, "write %d\n", result);
 	}
 
-	lseek(fd, 0, 0);
+	lseek(fd, pos, 0);
 
-	size = result;
-	result = read(fd, read_buf, size);
+	
+	
+
+	result = read(fd, read_buf, 512);
 
 	if(result != size) {
 		printf(1, "read %d\n", result);
 	}
 
 	for(i=0;i<result;i++){
-		printf(1, "%d", read_buf[i]);
+		printf(1, "%c ", read_buf[i]);
 	}
 
 	printf(1, "\n");
 
-	return 1;
+	return 0;
 }

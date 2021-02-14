@@ -63,7 +63,6 @@ void machinit(void)
     memset(cpus, 0, sizeof(struct cpu)*NCPU);
 }
 
-
  
 void enableirqminiuart(void);
 
@@ -121,6 +120,7 @@ int cmain()
     cprintf("timer3init: OK\n");
     enableirqminiuart();
     storageinit();
+
     cprintf("Handing off to scheduler...\n");
 
     scheduler();

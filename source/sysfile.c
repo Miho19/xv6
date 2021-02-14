@@ -14,7 +14,6 @@
 #include "file.h"
 #include "fcntl.h"
 
-#include "usb_filestorage.h"
 
 // Fetch the nth word-sized system call argument as a file descriptor
 // and return both the descriptor and the corresponding struct file.
@@ -453,15 +452,15 @@ sys_lseek(void)
 	int n;
 	int type;
 	int size;
-  int test;
+	int test;
 
-  test = 0;
+	test = 0;
 	
 	if(argfd(0, 0, &f) < 0 || argint(1, &n) < 0 || argint(2, &type) < 0)
 		return -1;
 	//cprintf("current offset %d seek to %d type %d\n",f->off, n, type);
 
-  size = f->ip->size;
+  	size = f->ip->size;
 
   switch(type){
 
@@ -476,8 +475,10 @@ sys_lseek(void)
   }
 
 	
-	if(test < 0) test = 0;
-	if(test > size) test = size;
+	if(test < 0){ 
+		test = 0;
+	}
+
 
 	f->off = test;
 	return f->off;
