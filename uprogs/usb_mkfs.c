@@ -7,7 +7,7 @@
 #include "user.h"
 #include "fcntl.h"
 
-void failure(char *line);
+void failure(int line);
 
 #define assert(expression) if(expression){}else failure(__LINE__)
 #define _static_assert(a, b) do { switch (0) case 0: case (a): ; } while (0)
@@ -48,8 +48,8 @@ char* index(char* src, char c);
  *  bzero -> memset();
 */
 
-void failure(char* line){
-  printf(1, "assert failure at line: %s\n", line);
+void failure(int line){
+  printf(1, "assert failure at line: %d\n", line);
   exit();
 }
 
@@ -299,7 +299,7 @@ balloc(int used)
   int i;
 
   printf(1, "balloc: first %d blocks have been allocated\n", used);
-  _static__assert(used < 512*8);
+  assert(used < 512*8);
   memset(buf, 0, 512);
   for(i = 0; i < used; i++){
     buf[i/8] = buf[i/8] | (0x1 << (i%8));

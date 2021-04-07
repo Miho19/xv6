@@ -134,7 +134,8 @@ int usb_storage_write(struct file *f, char *buf, int num){
 	}
 
 
-
+	device_handler[0].usb_active = 0;	/** Disable CPU yield() to await USB response*/
+	
 	f->off = file_position;
 
 	return buf_index;
@@ -219,6 +220,7 @@ int usb_storage_read(struct file *f, char *buf, int num) {
 		
 	
 
+	device_handler[0].usb_active = 0;	/** Disable CPU yield() to await USB response*/
 	f->off = file_position;																							
 	
 	return buf_index;

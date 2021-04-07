@@ -1035,7 +1035,7 @@ void DWHCIDeviceChannelInterruptHandler (TDWHCIDevice *pThis, unsigned nChannel)
 		nStatus = DWHCITransferStageDataGetTransactionStatus (pStageData);
 		if (nStatus & DWHCI_HOST_CHAN_INT_ERROR_MASK)
 		{
-			LogWrite (FromDWHCI, LOG_ERROR, "Transaction failed (status 0x%X)", nStatus);
+			LogWrite (FromDWHCI, LOG_ERROR, "Transaction failed (status 0x%X) (1)", nStatus);
 
 			USBRequestSetStatus (pURB, 0);
 		}
@@ -1077,7 +1077,7 @@ void DWHCIDeviceChannelInterruptHandler (TDWHCIDevice *pThis, unsigned nChannel)
 		    || (nStatus & DWHCI_HOST_CHAN_INT_NAK)
 		    || (nStatus & DWHCI_HOST_CHAN_INT_NYET))
 		{
-			LogWrite (FromDWHCI, LOG_ERROR, "Transaction failed (status 0x%X)", nStatus);
+			LogWrite (FromDWHCI, LOG_ERROR, "Transaction failed (status 0x%X) (2)", nStatus);
 
 			USBRequestSetStatus (pURB, 0);
 
@@ -1110,7 +1110,7 @@ void DWHCIDeviceChannelInterruptHandler (TDWHCIDevice *pThis, unsigned nChannel)
 		nStatus = DWHCITransferStageDataGetTransactionStatus (pStageData);
 		if (nStatus & DWHCI_HOST_CHAN_INT_ERROR_MASK)
 		{
-			LogWrite (FromDWHCI, LOG_ERROR, "Transaction failed (status 0x%X)", nStatus);
+			LogWrite (FromDWHCI, LOG_ERROR, "Transaction failed (status 0x%X) (3)", nStatus);
 
 			USBRequestSetStatus (pURB, 0);
 
