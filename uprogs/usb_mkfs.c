@@ -6,9 +6,10 @@
 #include "param.h"
 #include "user.h"
 #include "fcntl.h"
-#include "../include/uspi/assert.h"
 
+void failure(char *line);
 
+#define assert(expression) if(expression){}else failure(__LINE__)
 #define _static_assert(a, b) do { switch (0) case 0: case (a): ; } while (0)
 
 int nblocks = 985;
@@ -31,6 +32,63 @@ void rinode(uint inum, struct dinode *ip);
 void rsect(uint sec, void *buf);
 uint ialloc(ushort type);
 void iappend(uint inum, void *p, int n);
+char* strncpy(char* dst, const char* src, uint n);
+char* index(char* src, char c);
+
+
+
+
+
+
+/**
+ *  Functions needed since we have no string.h.
+ *  strncpy 
+ *  index 
+ *  bcopy -> memmove();
+ *  bzero -> memset();
+*/
+
+void failure(char* line){
+  printf(1, "assert failure at line: %s\n", line);
+  exit();
+}
+
+char* strncpy(char* dst, const char* src, uint n) {
+  char* _dst;
+  if(!src || !dst)
+    return 0;
+
+  _dst = dst;
+
+  while(*src && n) {
+    *dst = *src;
+    dst++;
+    src++;
+    n--;
+  }
+
+  *dst = '\0';
+  return _dst;
+}
+
+
+char* index(char* src, char c) {
+  int length;
+  length = 0;
+  if(!src || !*src)
+    return 0;
+  length = strlen(src);
+
+  while(*src && length--){
+    if(*src == c)
+      return src;    
+  }
+  return 0;
+}
+
+
+
+
 
 // convert to intel byte order
 ushort
@@ -72,8 +130,8 @@ main(int argc, char *argv[])
     exit();
   }
 
-  assert((512 % sizeof(struct dinode)) == 0);
-  assert((512 % sizeof(struct dirent)) == 0);
+  assert(512 % sizeof(struct dinode) == 0);
+  assert(512 % sizeof(struct dirent) == 0);
 
   /** Create the dev */
   mknod(argv[1], 15, 15);
@@ -108,12 +166,13 @@ main(int argc, char *argv[])
   rootino = ialloc(T_DIR);
   assert(rootino == ROOTINO);
 
-  bzero(&de, sizeof(de));
+  
+  memset(&de, 0, sizeof(de));
   de.inum = xshort(rootino);
   strcpy(de.name, ".");
   iappend(rootino, &de, sizeof(de));
 
-  bzero(&de, sizeof(de));
+  memset(&de, 0, sizeof(de));
   de.inum = xshort(rootino);
   strcpy(de.name, "..");
   iappend(rootino, &de, sizeof(de));
@@ -137,7 +196,7 @@ main(int argc, char *argv[])
 
     inum = ialloc(T_FILE);
 
-    bzero(&de, sizeof(de));
+    memset(&de, 0, sizeof(de));
     de.inum = xshort(inum);
     strncpy(de.name, argv[i], DIRSIZ);
     iappend(rootino, &de, sizeof(de));
@@ -225,7 +284,7 @@ ialloc(ushort type)
   uint inum = freeinode++;
   struct dinode din;
 
-  bzero(&din, sizeof(din));
+  memset(&din, 0, sizeof(din));
   din.type = xshort(type);
   din.nlink = xshort(1);
   din.size = xint(0);
@@ -240,8 +299,8 @@ balloc(int used)
   int i;
 
   printf(1, "balloc: first %d blocks have been allocated\n", used);
-  assert(used < 512*8);
-  bzero(buf, 512);
+  _static__assert(used < 512*8);
+  memset(buf, 0, 512);
   for(i = 0; i < used; i++){
     buf[i/8] = buf[i/8] | (0x1 << (i%8));
   }
@@ -290,7 +349,7 @@ iappend(uint inum, void *xp, int n)
     }
     n1 = min(n, (fbn + 1) * 512 - off);
     rsect(x, buf);
-    bcopy(p, buf + off - (fbn * 512), n1);
+    memmove(p, buf + off - (fbn * 512), n1);
     wsect(x, buf);
     n -= n1;
     off += n1;
