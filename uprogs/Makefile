@@ -63,8 +63,9 @@ UPROGS=\
         _usertests\
         _wc\
         _zombie\
-	_test\
-	_test2\
+		_test\
+		_test2\
+		_usb_mkfs
 	
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)

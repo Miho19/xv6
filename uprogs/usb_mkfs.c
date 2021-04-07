@@ -1,15 +1,13 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <assert.h>
 
 #define stat xv6_stat  // avoid clash with host struct stat
 #include "types.h"
 #include "fs.h"
 #include "stat.h"
 #include "param.h"
+#include "user.h"
+#include "fcntl.h"
+#include "../include/uspi/assert.h"
+
 
 #define _static_assert(a, b) do { switch (0) case 0: case (a): ; } while (0)
 
@@ -70,17 +68,20 @@ main(int argc, char *argv[])
   _static_assert(sizeof(int) == 4, "Integers must be 4 bytes!");
 
   if(argc < 2){
-    fprintf(stderr, "Usage: mkfs fs.img files...\n");
-    exit(1);
+    printf(1, "Usage: mkfs fs.img files...\n");
+    exit();
   }
 
   assert((512 % sizeof(struct dinode)) == 0);
   assert((512 % sizeof(struct dirent)) == 0);
 
-  fsfd = open(argv[1], O_RDWR|O_CREAT|O_TRUNC, 0666);
+  /** Create the dev */
+  mknod(argv[1], 15, 15);
+  fsfd = open(argv[1], O_RDWR);
+
   if(fsfd < 0){
-    perror(argv[1]);
-    exit(1);
+    printf(1, "%s\n", argv[1]);
+    exit();
   }
 
   sb.size = xint(size);
@@ -92,7 +93,7 @@ main(int argc, char *argv[])
   usedblocks = ninodes / IPB + 3 + bitblocks;
   freeblock = usedblocks;
 
-  printf("used %d (bit %d ninode %zu) free %u log %u total %d\n", usedblocks,
+  printf(1, "used %d (bit %d ninode %zu) free %u log %u total %d\n", usedblocks,
          bitblocks, ninodes/IPB + 1, freeblock, nlog, nblocks+usedblocks+nlog);
 
   assert(nblocks + usedblocks + nlog == size);
@@ -117,12 +118,14 @@ main(int argc, char *argv[])
   strcpy(de.name, "..");
   iappend(rootino, &de, sizeof(de));
 
+
+	/** Adds files to file system */
   for(i = 2; i < argc; i++){
     assert(index(argv[i], '/') == 0);
 
     if((fd = open(argv[i], 0)) < 0){
-      perror(argv[i]);
-      exit(1);
+      printf(1, "%s", argv[i]);
+      exit();
     }
     
     // Skip leading _ in name when writing to file system.
@@ -154,19 +157,19 @@ main(int argc, char *argv[])
 
   balloc(usedblocks);
 
-  exit(0);
+  exit();
 }
 
 void
 wsect(uint sec, void *buf)
 {
   if(lseek(fsfd, sec * 512L, 0) != sec * 512L){
-    perror("lseek");
-    exit(1);
+    printf(1, "lseek");
+    exit();
   }
   if(write(fsfd, buf, 512) != 512){
-    perror("write");
-    exit(1);
+    printf(1, "write");
+    exit();
   }
 }
 
@@ -207,12 +210,12 @@ void
 rsect(uint sec, void *buf)
 {
   if(lseek(fsfd, sec * 512L, 0) != sec * 512L){
-    perror("lseek");
-    exit(1);
+    printf(1, "lseek");
+    exit();
   }
   if(read(fsfd, buf, 512) != 512){
-    perror("read");
-    exit(1);
+    printf(1, "read");
+    exit();
   }
 }
 
@@ -236,13 +239,13 @@ balloc(int used)
   uchar buf[512];
   int i;
 
-  printf("balloc: first %d blocks have been allocated\n", used);
+  printf(1, "balloc: first %d blocks have been allocated\n", used);
   assert(used < 512*8);
   bzero(buf, 512);
   for(i = 0; i < used; i++){
     buf[i/8] = buf[i/8] | (0x1 << (i%8));
   }
-  printf("balloc: write bitmap block at sector %zu\n", ninodes/IPB + 3);
+  printf(1, "balloc: write bitmap block at sector %zu\n", ninodes/IPB + 3);
   wsect(ninodes / IPB + 3, buf);
 }
 
