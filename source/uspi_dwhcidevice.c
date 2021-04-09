@@ -725,7 +725,6 @@ boolean DWHCIDeviceTransferStage (TDWHCIDevice *pThis, TUSBRequest *pURB, boolea
 	assert (pThis != 0);
 
 	assert (pURB != 0);
-	
 	USBRequestSetCompletionRoutine (pURB, DWHCIDeviceCompletionRoutine, 0, pThis);
 
 	assert (!pThis->m_bWaiting);
@@ -742,9 +741,9 @@ boolean DWHCIDeviceTransferStage (TDWHCIDevice *pThis, TUSBRequest *pURB, boolea
 				// josh
 	while (pThis->m_bWaiting){
 		if(device_handler[0].usb_active == 1){
-			
 			yield();
-		} 	
+			LogWrite("JOSH", LOG_ERROR, "yield()\n");
+		}
 	}
 	
 	return USBRequestGetStatus (pURB);
@@ -1036,7 +1035,6 @@ void DWHCIDeviceChannelInterruptHandler (TDWHCIDevice *pThis, unsigned nChannel)
 		if (nStatus & DWHCI_HOST_CHAN_INT_ERROR_MASK)
 		{
 			LogWrite (FromDWHCI, LOG_ERROR, "Transaction failed (status 0x%X) (1)", nStatus);
-
 			USBRequestSetStatus (pURB, 0);
 		}
 		else if (   (nStatus & (DWHCI_HOST_CHAN_INT_NAK | DWHCI_HOST_CHAN_INT_NYET))
@@ -1078,7 +1076,7 @@ void DWHCIDeviceChannelInterruptHandler (TDWHCIDevice *pThis, unsigned nChannel)
 		    || (nStatus & DWHCI_HOST_CHAN_INT_NYET))
 		{
 			LogWrite (FromDWHCI, LOG_ERROR, "Transaction failed (status 0x%X) (2)", nStatus);
-
+			
 			USBRequestSetStatus (pURB, 0);
 
 			DWHCIDeviceDisableChannelInterrupt (pThis, nChannel);

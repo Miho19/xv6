@@ -151,7 +151,7 @@ main(int argc, char *argv[])
   usedblocks = ninodes / IPB + 3 + bitblocks;
   freeblock = usedblocks;
 
-  printf(1, "used %d (bit %d ninode %zu) free %u log %u total %d\n", usedblocks,
+  printf(1, "usedblocks number %d (bit %d ninode %d) free %d log %d total %d\n", usedblocks,
          bitblocks, ninodes/IPB + 1, freeblock, nlog, nblocks+usedblocks+nlog);
 
   assert(nblocks + usedblocks + nlog == size);
@@ -183,7 +183,7 @@ main(int argc, char *argv[])
     assert(index(argv[i], '/') == 0);
 
     if((fd = open(argv[i], 0)) < 0){
-      printf(1, "%s", argv[i]);
+      printf(1, "open failure: %s\n", argv[i]);
       exit();
     }
     
@@ -304,7 +304,7 @@ balloc(int used)
   for(i = 0; i < used; i++){
     buf[i/8] = buf[i/8] | (0x1 << (i%8));
   }
-  printf(1, "balloc: write bitmap block at sector %zu\n", ninodes/IPB + 3);
+  printf(1, "balloc: write bitmap block at sector %d\n", ninodes/IPB + 3);
   wsect(ninodes / IPB + 3, buf);
 }
 
@@ -351,6 +351,7 @@ iappend(uint inum, void *xp, int n)
     rsect(x, buf);
     memmove(p, buf + off - (fbn * 512), n1);
     wsect(x, buf);
+	printf(1, "inum: %d data sector %d \n",inum,  x);
     n -= n1;
     off += n1;
     p += n1;
