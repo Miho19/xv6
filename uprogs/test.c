@@ -58,13 +58,6 @@ int main(int argc, char *argv[]) {
 
 	lseek(fd, POS, 0);
 
-	result = write(fd, write_buf, 512);
-
-	if(result != size){
-		printf(1, "write %d\n", result);
-	}
-
-	lseek(fd, POS, 0);
 
 	result = read(fd, read_buf, 512);
 

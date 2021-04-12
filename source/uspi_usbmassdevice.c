@@ -456,7 +456,7 @@ int USBBulkOnlyMassStorageDeviceRead (TUSBBulkOnlyMassStorageDevice *pThis, void
 
 		if (nResult != (int) nCount)
 		{
-			
+		    LogWrite("JOSH", LOG_ERROR, "Try Read Failure\n");	
 			int nStatus = USBBulkOnlyMassStorageDeviceReset (pThis);
 			if (nStatus != 0)
 			{

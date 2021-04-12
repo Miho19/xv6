@@ -37,7 +37,6 @@ void dhandlerinit(void) {
 void storageinit(void) {
 	
 	dhandlerinit();
-	device_handler[0].usb_active = 1;
 }
 
 void storage_free(void){
@@ -151,77 +150,18 @@ int usb_storage_write(struct file *f, char *buf, int num){
 */
 
 int usb_storage_read(struct file *f, char *buf, int num) {
+	int result;
+	char buffer[512];
+	int i;
+	result = 0;
 
-	int result;								/** Amount of bytes read from USB device */
-	int i;									/** increment variable */
+	result = USPiMassStorageDeviceRead(1 * 512, buffer, 512, 0);
 
-	char buffer_read_temp[BLOCK_SIZE];		/** Tempoary buffer which holds data from USB device*/
-	int buf_index;							/** Current index within the users buffer */
-
-
-	int file_position;						/** Current index within the user file */
-	int file_start_of_block_position; 		/** Used to find the nearest start of a block within the USB Device */
-
-	int total_amount_to_read;				/** Amount of bytes we are able to return to the user*/
-	int current_amount_read;				/** Current amount of bytes we have read into the user provided buffer */	
-	
-	result = 0;								/** initialise variables */
-
-	buf_index = 0;
-	file_position = 0;
-	total_amount_to_read = 0;
-	current_amount_read = 0;
-	file_start_of_block_position = 0;
-	device_handler[0].usb_active = 1;		/** Make process yield() when waiting for USB to respond */
-
-
-	total_amount_to_read = num;				/** Determine the correct amount of bytes we can request */
-	if(total_amount_to_read > MAX_INDEX_BYTE) {
-		total_amount_to_read = MAX_INDEX_BYTE;
+	for(i=0;i<512;i++) {
+		buf[i] = buffer[i];
+		 	 
 	}
 
-	file_position = f->off;
-	if(file_position + total_amount_to_read > MAX_INDEX_BYTE) {
-		total_amount_to_read = MAX_INDEX_BYTE - file_position;
-	}
 
-	if(total_amount_to_read <= 0)
-		return 0;
-	
-	while(current_amount_read < total_amount_to_read) {
-
-		if((total_amount_to_read & BLOCK_MASK) != 0 || (file_position & BLOCK_MASK) != 0 ) { /** Make the user request a block request */
-			file_start_of_block_position = file_position;
-
-			while( (file_start_of_block_position &BLOCK_MASK) != 0 && file_start_of_block_position > 0) /** Find nearest start of a block */
-				file_start_of_block_position--;
-
-			result = USPiMassStorageDeviceRead(file_start_of_block_position, buffer_read_temp,BLOCK_SIZE, DEVICE_NUMBER);	/** Read in block */
-			if(result < BLOCK_SIZE) {
-				cprintf("%s adjsuted read expected %d but returned %d \n", name, BLOCK_SIZE, result);
-			}
-
-			for(i=(file_position % BLOCK_SIZE);i<BLOCK_SIZE && buf_index < total_amount_to_read;i++, buf_index++)	/** copy data sent from USB to user buffer */ 
-				buf[buf_index] = buffer_read_temp[i];
-
-			file_position += i;																						/** current_amount_read and buf_index should be equal*/
-			current_amount_read += i;			  			
-		} else {
-			result = USPiMassStorageDeviceRead(file_position, buffer_read_temp, BLOCK_SIZE, DEVICE_NUMBER);			/** request is asking from start of a block and 512 * n amount*/
-			if(result < BLOCK_SIZE) {
-				cprintf("%s standard block read expected %d but returned %d \n", name, BLOCK_SIZE, result);
-			}
-			for(i=0;i<BLOCK_SIZE && buf_index < total_amount_to_read;i++,buf_index++)
-				buf[buf_index] = buffer_read_temp[i];
-			file_position += i;
-			current_amount_read += i;
-		} 		
-	}
-		
-	
-
-//	device_handler[0].usb_active = 0;	/** Disable CPU yield() to await USB response*/
-	f->off = file_position;																							
-	
-	return buf_index;
+	return result;
 }

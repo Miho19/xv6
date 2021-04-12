@@ -311,6 +311,7 @@ boolean DWHCIDeviceSubmitBlockingRequest (TDWHCIDevice *pThis, TUSBRequest *pURB
 			    || !DWHCIDeviceTransferStage (pThis, pURB, TRUE,  FALSE)
 			    || !DWHCIDeviceTransferStage (pThis, pURB, FALSE, TRUE))
 			{
+				LogWrite("Josh", LOG_ERROR, "Failure at (1)\n");
 				return FALSE;
 			}
 		}
@@ -322,6 +323,8 @@ boolean DWHCIDeviceSubmitBlockingRequest (TDWHCIDevice *pThis, TUSBRequest *pURB
 				if (   !DWHCIDeviceTransferStage (pThis, pURB, FALSE, FALSE)
 				    || !DWHCIDeviceTransferStage (pThis, pURB, TRUE,  TRUE))
 				{
+					
+					LogWrite("Josh", LOG_ERROR, "failure at(2)\n");
 					return FALSE;
 				}
 			}
@@ -331,6 +334,8 @@ boolean DWHCIDeviceSubmitBlockingRequest (TDWHCIDevice *pThis, TUSBRequest *pURB
 				    || !DWHCIDeviceTransferStage (pThis, pURB, FALSE, FALSE)
 				    || !DWHCIDeviceTransferStage (pThis, pURB, TRUE,  TRUE))
 				{
+					
+				LogWrite("Josh", LOG_ERROR, "failure at (3)\n");
 					return FALSE;
 				}
 			}
@@ -345,6 +350,8 @@ boolean DWHCIDeviceSubmitBlockingRequest (TDWHCIDevice *pThis, TUSBRequest *pURB
 		
 		if (!DWHCIDeviceTransferStage (pThis, pURB, USBEndpointIsDirectionIn (USBRequestGetEndpoint (pURB)), FALSE))
 		{
+			
+				LogWrite("Josh", LOG_ERROR, "failure at (4)\n");
 			return FALSE;
 		}
 	}
@@ -733,17 +740,18 @@ boolean DWHCIDeviceTransferStage (TDWHCIDevice *pThis, TUSBRequest *pURB, boolea
 	if (!DWHCIDeviceTransferStageAsync (pThis, pURB, bIn, bStatusStage))
 	{
 		pThis->m_bWaiting = FALSE;
-
+		if(device_handler[0].usb_active == 1)
+			LogWrite("JOSH", LOG_ERROR, "Aysnc failure\n");
 		return FALSE;
 	}
 
-
+	if(device_handler[0].usb_active == 1)
+		LogWrite("JOSH", LOG_ERROR, "yield()\n");
 				// josh
 	while (pThis->m_bWaiting){
 		if(device_handler[0].usb_active == 1){
 			yield();
-			LogWrite("JOSH", LOG_ERROR, "yield()\n");
-		}
+		} 
 	}
 	
 	return USBRequestGetStatus (pURB);
@@ -828,6 +836,7 @@ void DWHCIDeviceStartTransaction (TDWHCIDevice *pThis, TDWHCITransferStageData *
 	DWHCIRegisterRead (&Character);
 	if (DWHCIRegisterIsSet (&Character, DWHCI_HOST_CHAN_CHARACTER_ENABLE))
 	{
+
 		DWHCITransferStageDataSetSubState (pStageData, StageSubStateWaitForChannelDisable);
 		
 		DWHCIRegisterAnd (&Character, ~DWHCI_HOST_CHAN_CHARACTER_ENABLE);
