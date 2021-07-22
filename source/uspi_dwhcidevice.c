@@ -740,14 +740,10 @@ boolean DWHCIDeviceTransferStage (TDWHCIDevice *pThis, TUSBRequest *pURB, boolea
 	if (!DWHCIDeviceTransferStageAsync (pThis, pURB, bIn, bStatusStage))
 	{
 		pThis->m_bWaiting = FALSE;
-		if(device_handler[0].usb_active == 1)
-			LogWrite("JOSH", LOG_ERROR, "Aysnc failure\n");
 		return FALSE;
 	}
 
-	if(device_handler[0].usb_active == 1)
-		LogWrite("JOSH", LOG_ERROR, "yield()\n");
-				// josh
+			// josh
 	while (pThis->m_bWaiting){
 		if(device_handler[0].usb_active == 1){
 			yield();
@@ -1114,11 +1110,14 @@ void DWHCIDeviceChannelInterruptHandler (TDWHCIDevice *pThis, unsigned nChannel)
 		break;
 		
 	case StageStateCompleteSplit:
+		
 		nStatus = DWHCITransferStageDataGetTransactionStatus (pStageData);
 		if (nStatus & DWHCI_HOST_CHAN_INT_ERROR_MASK)
 		{
+			
 			LogWrite (FromDWHCI, LOG_ERROR, "Transaction failed (status 0x%X) (3)", nStatus);
-
+			LogWrite(FromDWHCI, LOG_ERROR, "Device info -> %s ", USBStringGet(&pStageData->m_pDevice->m_ProductString));
+			
 			USBRequestSetStatus (pURB, 0);
 
 			DWHCIDeviceDisableChannelInterrupt (pThis, nChannel);
@@ -1132,7 +1131,7 @@ void DWHCIDeviceChannelInterruptHandler (TDWHCIDevice *pThis, unsigned nChannel)
 			USBRequestCallCompletionRoutine (pURB);
 			break;
 		}
-		
+
 		pFrameScheduler->TransactionComplete (pFrameScheduler, nStatus);
 
 		if (pFrameScheduler->CompleteSplit (pFrameScheduler))

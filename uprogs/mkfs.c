@@ -133,7 +133,9 @@ main(int argc, char *argv[])
       ++argv[i];
 
     inum = ialloc(T_FILE);
-
+	if(inum == 15) {
+		break;	
+	}
     bzero(&de, sizeof(de));
     de.inum = xshort(inum);
     strncpy(de.name, argv[i], DIRSIZ);
@@ -145,6 +147,10 @@ main(int argc, char *argv[])
     close(fd);
   }
 
+
+
+
+	
   // fix size of root inode dir
   rinode(rootino, &din);
   off = xint(din.size);

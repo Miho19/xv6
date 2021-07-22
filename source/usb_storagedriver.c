@@ -8,6 +8,7 @@
 #include "file.h"
 #include "uspi.h"
 #include "uspios.h"
+#include "uspi/util.h"
 
 #define DEVICE_NUMBER 0
 #define BLOCK_SIZE 512
@@ -37,6 +38,7 @@ void dhandlerinit(void) {
 void storageinit(void) {
 	
 	dhandlerinit();
+	device_handler[0].usb_active = 1;
 }
 
 void storage_free(void){
@@ -150,18 +152,89 @@ int usb_storage_write(struct file *f, char *buf, int num){
 */
 
 int usb_storage_read(struct file *f, char *buf, int num) {
-	int result;
+
+	int current_read_amount;
+	int progress;
+	int read_amount;
+	char *_buf;
 	char buffer[512];
-	int i;
-	result = 0;
+	int result;
+		
+	uint current_pos;
+	uint block_start_pos;
+	
+	
 
-	result = USPiMassStorageDeviceRead(1 * 512, buffer, 512, 0);
+	progress = 0;
+	read_amount = 0;
+	current_pos = 0;
+	block_start_pos = 0;
+	current_read_amount = 0;
+	_buf = 0;
 
-	for(i=0;i<512;i++) {
-		buf[i] = buffer[i];
-		 	 
+	if(!buf || !num)
+		return 0;
+	_buf = buf;
+
+	device_handler[0].usb_active = 1;
+	current_pos = f->off;
+
+	read_amount = num;
+
+	if(read_amount > MAX_INDEX_BYTE)
+		read_amount = MAX_INDEX_BYTE;
+
+	if(read_amount + f->off > MAX_INDEX_BYTE)
+		read_amount = MAX_INDEX_BYTE - f->off;
+	
+	if(read_amount <= 0)
+		return 0;  
+	
+	while(progress < read_amount) {
+		current_read_amount = (read_amount - BLOCK_SIZE) > 0 ? BLOCK_SIZE : read_amount;
+		
+		if((current_read_amount & BLOCK_MASK) != 0 || (current_pos & BLOCK_MASK) != 0) {
+			block_start_pos = current_pos;
+			
+			while((block_start_pos & BLOCK_MASK) != 0 && block_start_pos > 0)
+				block_start_pos--;
+			
+			memset(buffer, 0, sizeof buffer);
+			result = USPiMassStorageDeviceRead(block_start_pos, buffer, BLOCK_SIZE, 0);
+
+				
+			if (result != BLOCK_SIZE) {
+				cprintf("%s expected read of 512 but got %d\n", name, result);
+				return 0;
+			}
+			
+			
+			
+			memcpy((char *)_buf + progress, buffer + (current_pos % BLOCK_SIZE), current_read_amount);
+			current_pos += current_read_amount;
+			progress += current_read_amount;
+			continue;          
+		}
+		memset(buffer, 0, sizeof buffer);
+		result = USPiMassStorageDeviceRead(current_pos, buffer, current_read_amount, 0);
+
+				
+		if (result != current_read_amount) {
+			cprintf("%s expected read of %d but got %d\n", name, current_read_amount, result);
+			return 0;
+		}
+
+		memcpy((char *)_buf + progress, buffer, current_read_amount);
+		current_pos += current_read_amount;
+		progress += current_read_amount;
+		 
 	}
+	
+		
+	f->off = current_pos;
+		
 
+	
 
-	return result;
+	return progress;
 }
