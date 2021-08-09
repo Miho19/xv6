@@ -116,8 +116,8 @@ xint(uint x)
 int
 main(int argc, char *argv[])
 {
-  int i, cc, fd;
-  uint rootino, inum, off;
+  int i;
+  uint rootino;
   struct dirent de;
   char buf[512];
   struct dinode din;
@@ -131,7 +131,6 @@ main(int argc, char *argv[])
   }
 
   assert(512 % sizeof(struct dinode) == 0);
-  assert(512 % sizeof(struct dirent) == 0);
 
   /** Create the dev */
   mknod(argv[1], 15, 15);
@@ -178,40 +177,9 @@ main(int argc, char *argv[])
   iappend(rootino, &de, sizeof(de));
 
 
-	/** Adds files to file system */
-  for(i = 2; i < argc; i++){
-    assert(index(argv[i], '/') == 0);
-
-    if((fd = open(argv[i], 0)) < 0){
-      printf(1, "open failure: %s\n", argv[i]);
-      exit();
-    }
-    
-    // Skip leading _ in name when writing to file system.
-    // The binaries are named _rm, _cat, etc. to keep the
-    // build operating system from trying to execute them
-    // in place of system binaries like rm and cat.
-    if(argv[i][0] == '_')
-      ++argv[i];
-
-    inum = ialloc(T_FILE);
-
-    memset(&de, 0, sizeof(de));
-    de.inum = xshort(inum);
-    strncpy(de.name, argv[i], DIRSIZ);
-    iappend(rootino, &de, sizeof(de));
-
-    while((cc = read(fd, buf, sizeof(buf))) > 0)
-      iappend(inum, buf, cc);
-
-    close(fd);
-  }
-
   // fix size of root inode dir
   rinode(rootino, &din);
-  off = xint(din.size);
-  off = ((off/BSIZE) + 1) * BSIZE;
-  din.size = xint(off);
+  din.size = xint(BSIZE);
   winode(rootino, &din);
 
   balloc(usedblocks);
@@ -310,52 +278,72 @@ balloc(int used)
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 
-void
-iappend(uint inum, void *xp, int n)
-{
-  char *p = (char*)xp;
-  uint fbn, off, n1;
-  struct dinode din;
-  char buf[512];
-  uint indirect[NINDIRECT];
-  uint x;
+uint bmap(uint inum, struct dinode *din, uint bn) {
+	char buffer[512];
+	uint address;
+	uint *a;
 
-  rinode(inum, &din);
+	if(bn < NDIRECT) {
+		address = din->addrs[bn];
+		if(address == 0) {
+			din->addrs[bn] = xint(freeblock++);
+			usedblocks++;
+			winode(inum, din);
+			address = din->addrs[bn];
+		}
+		return xint(address);
+	}
 
-  off = xint(din.size);
-  while(n > 0){
-    fbn = off / 512;
-    assert(fbn < MAXFILE);
-    if(fbn < NDIRECT){
-      if(xint(din.addrs[fbn]) == 0){
-        din.addrs[fbn] = xint(freeblock++);
-        usedblocks++;
-      }
-      x = xint(din.addrs[fbn]);
-    } else {
-      if(xint(din.addrs[NDIRECT]) == 0){
-        // printf("allocate indirect block\n");
-        din.addrs[NDIRECT] = xint(freeblock++);
-        usedblocks++;
-      }
-      // printf("read indirect block\n");
-      rsect(xint(din.addrs[NDIRECT]), (char*)indirect);
-      if(indirect[fbn - NDIRECT] == 0){
-        indirect[fbn - NDIRECT] = xint(freeblock++);
-        usedblocks++;
-        wsect(xint(din.addrs[NDIRECT]), (char*)indirect);
-      }
-      x = xint(indirect[fbn-NDIRECT]);
-    }
-    n1 = min(n, (fbn + 1) * 512 - off);
-    rsect(x, buf);
-    memmove(p, buf + off - (fbn * 512), n1);
-    wsect(x, buf);
-	printf(1, "inum: %d data sector %d \n",inum,  x);
-    n -= n1;
-    off += n1;
-    p += n1;
-  }
-  din.size = xint(off);
-  winode(inum, &din);
+	bn -= NDIRECT;
+
+	if(din->addrs[NDIRECT] == 0) {
+		din->addrs[NDIRECT] = xint(freeblock++);
+		usedblocks++;
+		winode(inum, din);
+	}
+	memset(buffer, 0, sizeof buffer);
+	rsect(din->addrs[NDIRECT], buffer);
+
+	a = (uint *)buffer;
+
+	address = a[bn];
+
+	if(address == 0) {
+		a[bn] = xint(freeblock++);
+		usedblocks++;
+		wsect(din->addrs[NDIRECT], buffer);
+		address = a[bn];
+	}
+
+	return xint(address);
+}
+
+
+void iappend(uint inum, void *xp, int n){
+
+	char *p = (char*)xp;
+	struct dinode din;
+	char buf[512];
+
+	uint total = 0;
+	uint m = 0;
+	uint offset = 0;
+	uint bn = 0;
+
+	memset(&din, 0, sizeof din);
+	rinode(inum, &din);
+
+	offset = din.size;
+
+	for(total = 0; total < n; total += m, offset += m) {
+		memset(buf, 0, sizeof buf);
+		bn = bmap(inum, &din, offset / 512);
+		rsect(bn, buf);
+		m = min(n - total, 512 - offset%512);
+		memmove(buf + offset % 512, p + total, m);
+		wsect(bn, buf);	
+	}
+
+	din.size = xint(offset);
+	winode(inum, &din); 	
 }

@@ -3,6 +3,7 @@
 # Using native tools (e.g., on X86 Linux)
 #TOOLPREFIX = ~/gcc-arm-none-eabi-5_4-2016q3/bin/arm-none-eabi-
 
+TOOLPREFIX = /usr/bin/arm-none-eabi-
 
 # The intermediate directory for compiled object files.
 BUILD = build/
@@ -63,6 +64,7 @@ UPROGS=\
         _usertests\
         _wc\
         _zombie\
+		_usbmkfs\
 	
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
