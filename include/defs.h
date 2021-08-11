@@ -14,8 +14,8 @@ void NotOkLoop(void);
 
 // usbstorage_handler.c
 
-int usb_storage_read(struct inode *ip, char *buf, int n);
-int usb_storage_write(struct inode *ip, char *buf, int n);
+int usb_rsec(int sec, uchar *buf);
+int usb_wsec(int sec, uchar *buf);
 void storageinit(void);
 
 // mmu.c

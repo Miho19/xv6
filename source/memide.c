@@ -39,8 +39,25 @@ if(b->dev == ROOTDEV) {
 	return;
 }
 
-cprintf("Got to usbrw\n");
+if(b->dev == 2) {
+   if(b->flags & B_DIRTY){
 
+    if(usb_wsec(b->sector, b->data) != 512)
+      return;
+
+    b->flags &= ~B_DIRTY;
+
+  } else {
+    
+    if(usb_rsec(b->sector, b->data) != 512)
+      return;
+
+    b->flags |= B_VALID;
+
+  }
+
+    
+}
 
 }
 

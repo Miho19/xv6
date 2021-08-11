@@ -10,10 +10,10 @@
 #include "uspios.h"
 #include "uspi/util.h"
 
-#define DEVICE_NUMBER 0
-#define BLOCK_SIZE 512
 
-#define BLOCK_MASK (BLOCK_SIZE -1)
+#define BLOCK_MASK (BSIZE -1)
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+
 
 char name[] = "USB STORAGE DRIVER |";
 
@@ -21,7 +21,7 @@ struct usbstorage_handler usbsh;
 
 
 static void handlerinit(void) {
-	memset(&usbsh, 0, sizeof(struct usbstorage_handler));
+	memset(&usbsh, 0, sizeof(usbsh));
 	memset(usbsh.path, 0, sizeof usbsh.path);	
 }
 
@@ -38,7 +38,6 @@ void storage_free(void){
 }
 
 
-
 static uint usbblkstart(uint offset) {
 	
 	if((offset & BLOCK_MASK) == 0)
@@ -51,95 +50,48 @@ static uint usbblkstart(uint offset) {
 	
 	return offset;
 }
-#define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
-
-/**
-*
-*	write function
-*	
-*
+/** 
+ *  sec is the address block -> 0, 1, 2 ... 1024 -> not file offset
+ * 
 */
 
-int usb_wsec(uint num, const char *buf){
+int usb_wsec(int sec, uchar *buf){
+	int result = 0;
 
-	int total = 0;
-	uint offset = 0;
-	uint result = 0;
-	uint m = 0;
-	uint align = 0;
+	if(sec > 1024 || sec < 0 || !buf)
+		return result;
 
-	char buffer[BSIZE];
+	result = USPiMassStorageDeviceWrite(sec * BSIZE, buf, BSIZE, 0);
 
-	if(!ip || !buf || !num)
-		return total;
+	if(result != BSIZE){
+		cprintf("%s (%d) bytes written opposed to (%d)\n", name, result, BSIZE);
+	}
+	return result;
+}
 
 
+int usb_rsec(int sec, uchar *buf) {
+	int result = 0;
 
-	for(total = 0, offset = f->off ; total < num; total += m, offset += m) {
-		memset(buffer, 0, sizeof buffer);
-		align = usbblkstart(offset);
+	if(sec > 1024 || sec < 0 || !buf)
+		return result;
 	
-		result = USPiMassStorageDeviceRead(align, buffer, BSIZE, 0);
+	result = USPiMassStorageDeviceRead(sec * BSIZE, buf, BSIZE, 0);
 
-		if(result != BSIZE) {
-			cprintf("%s write: read: expected (512) bytes recieved (%d) bytes\n", name, result);
-			return 0;
-		}
-
-		m = MIN(BSIZE, num - total);
-		memmove(buffer + offset % 512, buf + total, m);
-		
-		result = USPiMassStorageDeviceWrite(align, buffer, 512, 0);
-
-		if(result != BSIZE) {
-			cprintf("%s write: (%d) were written when expected (512)\n", name, result);
-			return 0;
-		}
-
+	if(result != BSIZE){
+		cprintf("%s (%d) bytes read opposed to (%d)\n", name, result, BSIZE);
 	}
 
-	return total;	
+	return result;
 
 }
 
-/**
-*
-*	Read Function
-*
-*
-*
-*/
 
-int usb_storage_read(struct inode *ip, char *buf, int num) {
 
-	int total = 0;
-	uint offset = 0;
-	uint result = 0;
-	uint m = 0;
-	char buffer[BSIZE];
-	uint align = 0;
 
-	if(!buf || !num || !ip) {
-		return total;
-	}
-	
 
-	for(total = 0, offset = f->off; total < num; total += m, offset += m) {
-		memset(buffer, 0, sizeof buffer);
-		align = usbblkstart(offset);
-		result = USPiMassStorageDeviceRead(align, buffer, BSIZE, 0);
-		
-		if(result != BSIZE){
-			cprintf("%s read: Expected (512) bytes read but recieved (%d)\n", name, result);
-			return 0;
-		}
 
-		m = MIN(result - offset % BSIZE, num - total);
-		memmove(buf + total, buffer + offset % BSIZE, m);   
-	}
 
-	f->off = offset;
 
-	return total;
-} 
+

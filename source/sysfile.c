@@ -73,7 +73,7 @@ sys_read(void)
 
   if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
     return -1;
-	
+
   return fileread(f, p, n);
 }
 
@@ -111,6 +111,7 @@ sys_fstat(void)
   
   if(argfd(0, 0, &f) < 0 || argptr(1, (void*)&st, sizeof(*st)) < 0)
     return -1;
+  
   return filestat(f, st);
 }
 
@@ -333,6 +334,7 @@ sys_mkdir(void)
     commit_trans();
     return -1;
   }
+
   iunlockput(ip);
   commit_trans();
   return 0;
@@ -357,17 +359,6 @@ sys_mknod(void)
   }
   iunlockput(ip);
   commit_trans();
-  
-  if(ip->major == 15 && ip->minor == 15) {
-	usbsh.major			= 15;
-	usbsh.minor			= 15;
-	usbsh.read			= &usb_storage_read;
-	usbsh.write			= &usb_storage_write;
-	usbsh.usb_active 	= 1;
-	ip->dev = 2;
-	strncpy(usbsh.path, path, strlen(path) + 1);
-  }
-
 
   return 0;
 }
@@ -451,7 +442,7 @@ sys_lseek(void)
 	struct file *f;
 	int n;
 	int type;
-	int size;
+	
 	int test;
 
 	test = 0;
@@ -460,16 +451,12 @@ sys_lseek(void)
 		return -1;
 	//cprintf("current offset %d seek to %d type %d\n",f->off, n, type);
 
-  	size = f->ip->size;
-
   switch(type){
 
     case SEEK_SET:
       test = n;
       break;
     case SEEK_CUR:
-      test = f->off + n;
-      break;
     default:
       return f->off;
   }
@@ -479,7 +466,49 @@ sys_lseek(void)
 		test = 0;
 	}
 
-
 	f->off = test;
 	return f->off;
+}
+
+int 
+sys_mount(void)
+{
+  
+  char *mnt = 0;
+  struct inode *ip = 0;
+  struct dinode *dip;
+
+  unsigned char buffer[BSIZE];
+
+
+  if(argstr(0, &mnt) < 0)
+    return -1;
+
+  begin_trans();
+  // create a fake directory -> part of ROOTDEV / FS
+  
+  if((ip = create(mnt, T_FILE, 15, 15)) == 0) { // == 0 is true of already exists
+    commit_trans();
+    return -1;
+  }
+
+  usb_rsec(IBLOCK(1), buffer);
+  dip = (struct dinode *)buffer + (1 % IPB);
+
+  ip->type    = T_DIR;
+  ip->dev     = 2;
+  ip->size    = dip->size;
+  ip->nlink   = dip->nlink;
+  memmove(ip->addrs, dip->addrs, sizeof(dip->addrs));
+  ip->flags |= I_VALID;
+
+  iupdate(ip);
+  
+  iunlockput(ip);
+  commit_trans();
+
+
+
+
+  return 0;
 }
