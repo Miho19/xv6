@@ -102,12 +102,13 @@ fileread(struct file *f, char *addr, int n)
     return -1;
   if(f->type == FD_PIPE)
     return piperead(f->pipe, addr, n);
+
   if(f->type == FD_INODE){
     ilock(f->ip);
-//cprintf("inside fileread\n");
-    if((r = readi(f->ip, addr, f->off, n)) > 0)
+    
+	if((r = readi(f->ip, addr, f->off, n)) > 0)
       f->off += r;
-//cprintf("inside fileread: after readi rv=%x\n", r);
+
     iunlock(f->ip);
     return r;
   }
@@ -124,7 +125,7 @@ filewrite(struct file *f, char *addr, int n)
 
   if(f->writable == 0)
     return -1;
-//cprintf("inside filewrite\n");
+
   if(f->type == FD_PIPE)
     return pipewrite(f->pipe, addr, n);
   if(f->type == FD_INODE){

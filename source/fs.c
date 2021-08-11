@@ -446,7 +446,7 @@ readi(struct inode *ip, char *dst, uint off, uint n)
   if(ip->type == T_DEV){
     if(ip->major < 0 || ip->major >= NDEV || !devsw[ip->major].read)
       return -1;
-//cprintf("inside readi\n");
+
     return devsw[ip->major].read(ip, dst, n);
   }
 

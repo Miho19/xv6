@@ -34,12 +34,12 @@ void
 usbrw(struct buf *b)
 {
 
-if(b->dev == 1) {
+if(b->dev == ROOTDEV) {
 	iderw(b);
 	return;
 }
 
-cprintf("Help\n");
+cprintf("Got to usbrw\n");
 
 
 }

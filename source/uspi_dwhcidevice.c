@@ -745,7 +745,7 @@ boolean DWHCIDeviceTransferStage (TDWHCIDevice *pThis, TUSBRequest *pURB, boolea
 
 			// josh
 	while (pThis->m_bWaiting){
-		if(device_handler[0].usb_active == 1){
+		if(usbsh.usb_active == 1){
 			yield();
 		} 
 	}

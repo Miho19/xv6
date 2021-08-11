@@ -9,11 +9,11 @@ int main(int argc, char *argv[]) {
 	
 	int fd;
 	char buffer[512];
-	struct superblock *s;
 	int result;
+	int offset = 0;
+	struct dirent *de;
 	
 	result = 0;
-	s = 0;
 	fd = 0;
 	memset(buffer, 0, sizeof buffer);
 
@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
 
 	
 
-	lseek(fd, 1 * BLOCK_SIZE, 0);
+	lseek(fd, 29 * BLOCK_SIZE, 0);
 
 
 	result = read(fd,buffer , 512);
@@ -42,12 +42,17 @@ int main(int argc, char *argv[]) {
 		printf(1, "read %d\n", result);
 	}
 
-	s = (struct superblock*)buffer;
+	de = (struct dirent*)buffer;
 	
-	printf(1, "superblock -> size: %d\n", s->size);
+	for(offset = 0; offset < 512; offset += sizeof(struct dirent)){
+		
+		de = (struct dirent*)(buffer + offset % 512);
+		if(de->inum == 0)
+			continue;
+		printf(1, "(%d, %s), ", de->inum, de->name);
+	}
 
-
-
+	printf(1, "\n");
 
 	close(fd);
 	exit();	

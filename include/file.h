@@ -43,19 +43,16 @@ extern struct devsw devsw[];
 	USB storage driver
 */
 
-#define MAX_DEVICE 10
-
-
-struct device_handler {
+struct usbstorage_handler {
 	int usb_active;
-	int (*read)(struct file*, char*, int);
-	int (*write)(struct file*, char*, int);
+	int (*read)(struct inode*, char*, int);
+	int (*write)(struct inode*, char*, int);
 	short major;
+	short minor;
+	char path[512];
 };
 
-extern struct device_handler device_handler[MAX_DEVICE];
-
-
+extern struct usbstorage_handler usbsh;
 
 
 

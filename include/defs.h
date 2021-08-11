@@ -10,10 +10,14 @@ struct superblock;
 
 void OkLoop(void);
 void NotOkLoop(void);
-// usb.c
-int usb_storage_read(struct file *f, char *buf, int n);
-int usb_storage_write(struct file *f, char *buf, int n);
+
+
+// usbstorage_handler.c
+
+int usb_storage_read(struct inode *ip, char *buf, int n);
+int usb_storage_write(struct inode *ip, char *buf, int n);
 void storageinit(void);
+
 // mmu.c
 void mmuinit0(void);
 void mmuinit1(void);

@@ -12,23 +12,17 @@
 
 #define DEVICE_NUMBER 0
 #define BLOCK_SIZE 512
-#define MEGABYTE 1000000
-
-#define DEVICE_STORAGE_MAX 1900
-#define MAX_INDEX_BYTE (DEVICE_STORAGE_MAX * MEGABYTE)
-
-#define array_length(a) (sizeof(a) / sizeof(a[0]))
-
 
 #define BLOCK_MASK (BLOCK_SIZE -1)
 
 char name[] = "USB STORAGE DRIVER |";
 
-struct device_handler device_handler[MAX_DEVICE];
+struct usbstorage_handler usbsh; 
 
 
-void dhandlerinit(void) {
-	memset(&device_handler, 0, sizeof(struct device_handler) * MAX_DEVICE);
+static void handlerinit(void) {
+	memset(&usbsh, 0, sizeof(struct usbstorage_handler));
+	memset(usbsh.path, 0, sizeof usbsh.path);	
 }
 
 /** 
@@ -36,16 +30,30 @@ void dhandlerinit(void) {
 */
 
 void storageinit(void) {
-	
-	dhandlerinit();
-	device_handler[0].usb_active = 1;
+	handlerinit();	
 }
 
 void storage_free(void){
 	
 }
 
+
+
+static uint usbblkstart(uint offset) {
+	
+	if((offset & BLOCK_MASK) == 0)
+		return offset;
+
+
+	while((offset & BLOCK_MASK) != 0 && offset > 0) {
+		offset--;	
+	}
+	
+	return offset;
+}
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
+
+
 /**
 *
 *	write function
@@ -53,52 +61,43 @@ void storage_free(void){
 *
 */
 
-int usb_storage_write(struct file *f, char *buf, int num){
+int usb_wsec(uint num, const char *buf){
 
 	int total = 0;
 	uint offset = 0;
 	uint result = 0;
 	uint m = 0;
+	uint align = 0;
 
-	char buffer[512];
+	char buffer[BSIZE];
 
-	if(!f || !buf || !num)
+	if(!ip || !buf || !num)
 		return total;
 
-	offset = f->off;
 
-	if( (offset & BLOCK_MASK) != 0){
-		cprintf("offset %d % 512 != 0\n", offset);
-		return total;
-	}
 
-	if( (num & BLOCK_MASK) != 0) {
-		cprintf("Num %d % 512 != 0\n", num);
-		return total;
-	}
+	for(total = 0, offset = f->off ; total < num; total += m, offset += m) {
+		memset(buffer, 0, sizeof buffer);
+		align = usbblkstart(offset);
+	
+		result = USPiMassStorageDeviceRead(align, buffer, BSIZE, 0);
 
-	for(total = 0; total < num; total += m, offset += m) {
-		memset(buffer, 0, sizeof buffer);	
-		result = USPiMassStorageDeviceRead(offset, buffer, 512, 0);
-
-		if(result != 512) {
-			cprintf("read attempt not 512\n");
+		if(result != BSIZE) {
+			cprintf("%s write: read: expected (512) bytes recieved (%d) bytes\n", name, result);
 			return 0;
 		}
 
-		m = MIN(512, num - total % 512);
+		m = MIN(BSIZE, num - total);
 		memmove(buffer + offset % 512, buf + total, m);
 		
-		result = USPiMassStorageDeviceWrite(offset, buffer, 512, 0);
+		result = USPiMassStorageDeviceWrite(align, buffer, 512, 0);
 
-		if(result != 512) {
-			cprintf("Write attempt not 512\n");
+		if(result != BSIZE) {
+			cprintf("%s write: (%d) were written when expected (512)\n", name, result);
 			return 0;
 		}
 
 	}
-
-	f->off = offset;
 
 	return total;	
 
@@ -112,42 +111,32 @@ int usb_storage_write(struct file *f, char *buf, int num){
 *
 */
 
-int usb_storage_read(struct file *f, char *buf, int num) {
+int usb_storage_read(struct inode *ip, char *buf, int num) {
 
 	int total = 0;
 	uint offset = 0;
 	uint result = 0;
 	uint m = 0;
-	char buffer[512];
+	char buffer[BSIZE];
+	uint align = 0;
 
-
-	if(!buf || !num || !f) {
+	if(!buf || !num || !ip) {
 		return total;
 	}
-
-	offset = f->off;
-
-	if((offset & BLOCK_MASK) != 0){
-		cprintf("Offset not %d % 512 == 0\n", offset);
-		return total;
-	}
-
-	if((num & BLOCK_MASK) != 0){
-		cprintf("num not %d % 512 == 0\n", num);
-		return total;
-	}
+	
 
 	for(total = 0, offset = f->off; total < num; total += m, offset += m) {
 		memset(buffer, 0, sizeof buffer);
-		result = USPiMassStorageDeviceRead(offset, buffer, 512, 0);
+		align = usbblkstart(offset);
+		result = USPiMassStorageDeviceRead(align, buffer, BSIZE, 0);
 		
-		if(result != 512){
-			cprintf("result != 512\n");
+		if(result != BSIZE){
+			cprintf("%s read: Expected (512) bytes read but recieved (%d)\n", name, result);
 			return 0;
 		}
 
-		m = MIN(result - offset % 512, num - total);
-		memmove(buf + total, buffer + offset % 512, m);   
+		m = MIN(result - offset % BSIZE, num - total);
+		memmove(buf + total, buffer + offset % BSIZE, m);   
 	}
 
 	f->off = offset;

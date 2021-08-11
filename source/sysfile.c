@@ -73,12 +73,6 @@ sys_read(void)
 
   if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
     return -1;
-
-	
-  // USB FILE READ HARD CODED
-  if(f->ip->major == 15) 
-	  return usb_storage_read(f, p, n);
- 
 	
   return fileread(f, p, n);
 }
@@ -92,8 +86,6 @@ sys_write(void)
 
   if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
     return -1;
-  if(f->ip->major == 15)
-    return usb_storage_write(f, p, n);
 
   return filewrite(f, p, n);
 }
@@ -365,10 +357,18 @@ sys_mknod(void)
   }
   iunlockput(ip);
   commit_trans();
-  if(ip->major == 15) {
-	device_handler[0].major = 15;
-   //input wrapper function calls here		
+  
+  if(ip->major == 15 && ip->minor == 15) {
+	usbsh.major			= 15;
+	usbsh.minor			= 15;
+	usbsh.read			= &usb_storage_read;
+	usbsh.write			= &usb_storage_write;
+	usbsh.usb_active 	= 1;
+	ip->dev = 2;
+	strncpy(usbsh.path, path, strlen(path) + 1);
   }
+
+
   return 0;
 }
 
