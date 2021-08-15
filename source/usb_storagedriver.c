@@ -22,7 +22,6 @@ struct usbstorage_handler usbsh;
 
 static void handlerinit(void) {
 	memset(&usbsh, 0, sizeof(usbsh));
-	memset(usbsh.path, 0, sizeof usbsh.path);	
 }
 
 /** 

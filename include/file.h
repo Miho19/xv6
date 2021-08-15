@@ -47,8 +47,6 @@ struct usbstorage_handler {
 	int usb_active;
 	int (*read)(struct inode*, char*, int);
 	int (*write)(struct inode*, char*, int);
-	struct inode *root;
-	char path[512];
 };
 
 extern struct usbstorage_handler usbsh;

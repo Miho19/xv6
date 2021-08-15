@@ -432,39 +432,36 @@ sys_pipe(void)
   return 0;
 }
 
-/**
-* ONLY SEEK_SET
-* type there for expansion	
-*/
 int
 sys_lseek(void)
 {
 	struct file *f;
-	int n;
-	int type;
-	
-	int test;
+	int n 		= 0;
+	int type 	= 0;	
+	int test 	= 0;
 
-	test = 0;
-	
 	if(argfd(0, 0, &f) < 0 || argint(1, &n) < 0 || argint(2, &type) < 0)
 		return -1;
-	//cprintf("current offset %d seek to %d type %d\n",f->off, n, type);
 
   switch(type){
 
     case SEEK_SET:
-      test = n;
-      break;
+		test = n;
+		break;
     case SEEK_CUR:
+		test = f->off + n;
+		break;
+
     default:
       return f->off;
   }
 
 	
-	if(test < 0){ 
+	if(test < 0) 
 		test = 0;
-	}
+
+	if(test > f->ip->size)
+		test = f->ip->size;
 
 	f->off = test;
 	return f->off;
@@ -473,24 +470,25 @@ sys_lseek(void)
 int 
 sys_mount(void)
 {
-	char *mnt = 0;
-	struct inode *root = 0;
-	
-	struct inode *dp = 0;
+	char *mnt			 		= 0;
+	struct inode *usb_root 		= 0;
+	struct inode *dp 			= 0;
 	char name[DIRSIZ];
 
+
+	memset(name, 0, sizeof(DIRSIZ));
 	if(argstr(0, &mnt) < 0)
 		return -1;
 
-	root = usb_iget(1);
+	usb_root = usb_iget(1);
 
-	ilock(root);
+	ilock(usb_root);
 
-	if(root->type != T_DIR){
+	if(usb_root->type != T_DIR){
 		return -1;
 	}	
 
-	iunlock(root);
+	iunlock(usb_root);
 
 	dp = nameiparent(mnt, name);
 	
@@ -510,7 +508,7 @@ sys_mount(void)
 
 	begin_trans();
 
-	if(dirlink(dp, name, root->inum) < 0) {
+	if(dirlink(dp, name, usb_root->inum) < 0) {
 		iunlockput(dp);
 		commit_trans();
 		return -1;
@@ -518,6 +516,6 @@ sys_mount(void)
 
 	iunlockput(dp); 
 	commit_trans();
-
-  return 0;
+	
+	return 0;
 }

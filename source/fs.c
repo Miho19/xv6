@@ -640,11 +640,9 @@ namex(char *path, int nameiparent, char *name)
       return ip;
     }
 
-	if(ip->inum == 1 && ip->dev == 2 && strncmp(name, "..", DIRSIZ) == 0) 
-	{
+	if(ip->inum == 1 && ip->dev == 2 && strncmp(name, "..", DIRSIZ) == 0) {
 			next = iget(ROOTDEV, ROOTINO);
-	} else if(ip->inum == 1 && ip->dev == 1 && strncmp(name, "usb", DIRSIZ) ==0) 
-	{
+	} else if(ip->inum == 1 && ip->dev == 1 && strncmp(name, "usb", DIRSIZ) ==0) {
 			next = usb_iget(1);
 	} else if ((next = dirlookup(ip, name, 0)) == 0){
       		iunlockput(ip);
