@@ -257,6 +257,11 @@ iget(uint dev, uint inum)
   return ip;
 }
 
+struct inode* usb_iget(uint inum){
+	
+	return iget(2, inum);
+}
+
 // Increment reference count for ip.
 // Returns ip to enable ip = idup(ip1) idiom.
 struct inode*
@@ -618,22 +623,34 @@ namex(char *path, int nameiparent, char *name)
     ip = iget(ROOTDEV, ROOTINO);
   else
     ip = idup(curr_proc->cwd);
-
+	
   while((path = skipelem(path, name)) != 0){
-    ilock(ip);
+	
+	ilock(ip);
+ 
     if(ip->type != T_DIR){
       iunlockput(ip);
       return 0;
     }
+
+	
     if(nameiparent && *path == '\0'){
       // Stop one level early.
       iunlock(ip);
       return ip;
     }
-    if((next = dirlookup(ip, name, 0)) == 0){
-      iunlockput(ip);
-      return 0;
+
+	if(ip->inum == 1 && ip->dev == 2 && strncmp(name, "..", DIRSIZ) == 0) 
+	{
+			next = iget(ROOTDEV, ROOTINO);
+	} else if(ip->inum == 1 && ip->dev == 1 && strncmp(name, "usb", DIRSIZ) ==0) 
+	{
+			next = usb_iget(1);
+	} else if ((next = dirlookup(ip, name, 0)) == 0){
+      		iunlockput(ip);
+		 	return 0;
     }
+	
     iunlockput(ip);
     ip = next;
   }

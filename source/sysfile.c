@@ -473,42 +473,51 @@ sys_lseek(void)
 int 
 sys_mount(void)
 {
-  
-  char *mnt = 0;
-  struct inode *ip = 0;
-  struct dinode *dip;
+	char *mnt = 0;
+	struct inode *root = 0;
+	
+	struct inode *dp = 0;
+	char name[DIRSIZ];
 
-  unsigned char buffer[BSIZE];
+	if(argstr(0, &mnt) < 0)
+		return -1;
 
+	root = usb_iget(1);
 
-  if(argstr(0, &mnt) < 0)
-    return -1;
+	ilock(root);
 
-  begin_trans();
-  // create a fake directory -> part of ROOTDEV / FS
-  
-  if((ip = create(mnt, T_FILE, 15, 15)) == 0) { // == 0 is true of already exists
-    commit_trans();
-    return -1;
-  }
+	if(root->type != T_DIR){
+		return -1;
+	}	
 
-  usb_rsec(IBLOCK(1), buffer);
-  dip = (struct dinode *)buffer + (1 % IPB);
+	iunlock(root);
 
-  ip->type    = T_DIR;
-  ip->dev     = 2;
-  ip->size    = dip->size;
-  ip->nlink   = dip->nlink;
-  memmove(ip->addrs, dip->addrs, sizeof(dip->addrs));
-  ip->flags |= I_VALID;
+	dp = nameiparent(mnt, name);
+	
+	if(dp == 0) {
+		return -1;
+	}
 
-  iupdate(ip);
-  
-  iunlockput(ip);
-  commit_trans();
+	ilock(dp);
 
+	if(dp->type != T_DIR || dp->inum != 1 || dp->dev != ROOTDEV) {
+		return -1;
+	}
 
+	if(dirlookup(dp, name, 0) != 0) {
+		return -1;
+	}
 
+	begin_trans();
+
+	if(dirlink(dp, name, root->inum) < 0) {
+		iunlockput(dp);
+		commit_trans();
+		return -1;
+	}
+
+	iunlockput(dp); 
+	commit_trans();
 
   return 0;
 }

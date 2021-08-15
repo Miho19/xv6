@@ -11,7 +11,7 @@
 #include "uspi/util.h"
 
 
-#define BLOCK_MASK (BSIZE -1)
+#define BLOCK_MASK (BSIZE - 1)
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 
@@ -38,18 +38,6 @@ void storage_free(void){
 }
 
 
-static uint usbblkstart(uint offset) {
-	
-	if((offset & BLOCK_MASK) == 0)
-		return offset;
-
-
-	while((offset & BLOCK_MASK) != 0 && offset > 0) {
-		offset--;	
-	}
-	
-	return offset;
-}
 
 /** 
  *  sec is the address block -> 0, 1, 2 ... 1024 -> not file offset
@@ -62,10 +50,14 @@ int usb_wsec(int sec, uchar *buf){
 	if(sec > 1024 || sec < 0 || !buf)
 		return result;
 
+	usbsh.usb_active = 1;
+
 	result = USPiMassStorageDeviceWrite(sec * BSIZE, buf, BSIZE, 0);
 
+	usbsh.usb_active = 0;
+
 	if(result != BSIZE){
-		cprintf("%s (%d) bytes written opposed to (%d)\n", name, result, BSIZE);
+		return result;
 	}
 	return result;
 }
@@ -76,11 +68,15 @@ int usb_rsec(int sec, uchar *buf) {
 
 	if(sec > 1024 || sec < 0 || !buf)
 		return result;
+
+
 	
+	usbsh.usb_active = 1;
 	result = USPiMassStorageDeviceRead(sec * BSIZE, buf, BSIZE, 0);
 
+	usbsh.usb_active = 0;
 	if(result != BSIZE){
-		cprintf("%s (%d) bytes read opposed to (%d)\n", name, result, BSIZE);
+		return result;
 	}
 
 	return result;
