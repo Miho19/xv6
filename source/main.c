@@ -120,6 +120,7 @@ int cmain()
     cprintf("timer3init: OK\n");
     enableirqminiuart();
     storageinit();
+	
 
     cprintf("Handing off to scheduler...\n");
 

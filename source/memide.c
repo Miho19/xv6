@@ -41,17 +41,10 @@ if(b->dev == ROOTDEV) {
 
 if(b->dev == 2) {
    if(b->flags & B_DIRTY){
-
-    if(usb_wsec(b->sector, b->data) != 512)
-      return;
-
+    usb_wsec(b->sector, b->data);
     b->flags &= ~B_DIRTY;
-
   } else {
-    
-    if(usb_rsec(b->sector, b->data) != 512)
-      return;
-
+    usb_rsec(b->sector, b->data);
     b->flags |= B_VALID;
 
   }

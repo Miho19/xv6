@@ -183,8 +183,8 @@ ialloc(uint dev, short type)
   struct buf *bp;
   struct dinode *dip;
   struct superblock sb;
-
-  readsb(dev, &sb);
+  
+	readsb(dev, &sb);
 
   for(inum = 1; inum < sb.ninodes; inum++){
     bp = bread(dev, IBLOCK(inum));

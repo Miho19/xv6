@@ -66,6 +66,7 @@ UPROGS=\
         _zombie\
 		_usbmkfs\
 		_test\
+		_mount\
 	
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)

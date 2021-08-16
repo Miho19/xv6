@@ -67,10 +67,11 @@ readmailbox(u8 channel)
 	uint x, y, z;
 
 again:
-	while ((inw(MAILBOX_BASE+24) & 0x40000000) != 0);
+	while ((inw(MAILBOX_BASE+24) & 0x40000000) != 0); // mailbox empty
 	x = inw(MAILBOX_BASE);
-	z = x & 0xf; y = (uint)(channel & 0xf);
-	if(z != y) goto again;
+	z = x & 0xf;		// read channel 
+	y = (uint)(channel & 0xf); // channel 
+	if(z != y) goto again; // while its not our channel, block
 
 	return x&0xfffffff0;
 }
@@ -88,7 +89,7 @@ writemailbox(uint *addr, u8 channel)
 
 	flush_dcache_all();
 
-	while ((inw(MAILBOX_BASE+24) & 0x80000000) != 0);
+	while ((inw(MAILBOX_BASE+24) & 0x80000000) != 0);  // while register busy/full
 	//while ((inw(MAILBOX_BASE+0x38) & 0x80000000) != 0);
 	outw(MAILBOX_BASE+32, y);
 }

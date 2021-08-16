@@ -84,7 +84,7 @@ consolewrite(struct inode *ip, char *buf, int n)
 		uartputc(buf[i] & 0xff);
 #elif defined (RPI2)
 		gpuputc(buf[i] & 0xff);
-		uartputc(buf[i] & 0xff);
+		//uartputc(buf[i] & 0xff);
 #elif defined (FVP)
 		uartputc_fvp(buf[i] & 0xff);
 #endif
@@ -142,7 +142,9 @@ gpuputc(uint c)
 {
 	#if defined (RPI1) || defined (RPI2)
 
-	if(fbinfo.fbp == 0) return;
+	if(fbinfo.fbp == 0) 
+		return;
+	
 
 	if(c=='\n'){
 		cursor_x = 0;
