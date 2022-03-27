@@ -126,7 +126,7 @@ main(int argc, char *argv[])
   _static_assert(sizeof(int) == 4, "Integers must be 4 bytes!");
 
   if(argc < 2){
-    printf(1, "Usage: mkfs fs.img files...\n");
+    printf(1, "Usage: usbmkfs <device-name> [files...] \n");
     exit();
   }
 
@@ -158,6 +158,8 @@ main(int argc, char *argv[])
   for(i = 0; i < nblocks + usedblocks + nlog; i++)
     wsect(i, zeroes);
 
+  printf(1, "after zero blocks\n");
+
   memset(buf, 0, sizeof(buf));
   memmove(buf, &sb, sizeof(sb));
   wsect(1, buf);
@@ -182,6 +184,7 @@ main(int argc, char *argv[])
   din.size = xint(BSIZE);
   winode(rootino, &din);
 
+
   balloc(usedblocks);
 
   exit();
@@ -190,12 +193,16 @@ main(int argc, char *argv[])
 void
 wsect(uint sec, void *buf)
 {
+  int write_return = 0;
+
   if(lseek(fsfd, sec * 512L, 0) != sec * 512L){
-    printf(1, "lseek");
+    printf(1, "lseek\n");
     exit();
   }
-  if(write(fsfd, buf, 512) != 512){
-    printf(1, "write");
+  write_return = write(fsfd, buf, 512);
+
+  if(write_return != 512){
+    printf(1, "writeL %d\n", write_return);
     exit();
   }
 }
