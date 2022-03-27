@@ -121,6 +121,7 @@ main(int argc, char *argv[])
   struct dirent de;
   char buf[512];
   struct dinode din;
+  int mknodResponse = 0;
 
 
   _static_assert(sizeof(int) == 4, "Integers must be 4 bytes!");
@@ -133,11 +134,13 @@ main(int argc, char *argv[])
   assert(512 % sizeof(struct dinode) == 0);
 
   /** Create the dev */
-  mknod(argv[1], 15, 15);
-  fsfd = open(argv[1], O_RDWR);
+ mknodResponse = mknod(argv[1], 15, 15);
+ printf(1, "mknod: %d\n", mknodResponse);
+
+ fsfd = open(argv[1], O_RDWR);
 
   if(fsfd < 0){
-    printf(1, "%s\n", argv[1]);
+    printf(1, "failed to open: %s\n", argv[1]);
     exit();
   }
 
