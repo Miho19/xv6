@@ -1,65 +1,63 @@
-xv6_rpi2_port is based on MIT xv6 (http://pdos.csail.mit.edu/6.828/2012/v6.html).
-It is ported from x86 to armv6 and then to armv7 in Raspberry Pi (RPI2/3). 
-The rpi port follows the coding style of xv6 as much as possible to hide the architectural
-differences between x86 and armv6/armv7. The port is not for multiprocessor yet
-though RPI2/3 has four cores.
+# xv6_rpi2_port with USB file system
 
-ACKNOWLEDGEMENTS
+This project aimed to reintroduce a persistent file system to the [RPI2/3](https://github.com/zhiyihuang/xv6_rpi2_port) port of xv6 by using the USB driver,[uspi](https://github.com/rsta2/uspi).
 
-xv6_rpi2_port is inspired by MIT xv6 and Alex Chadwick's Baking Pi 
-Tutorials (http://www.cl.cam.ac.uk/projects/raspberrypi/tutorials/os/).
-Most architecture-independent code is directly from MIT xv6 though sometimes
-minor adjustments were done to explicitly initialize data structures.
-Some C code such as the GPU driver is based on the understanding of 
-Alex Chadwick's assembly code. 
+### Installation
 
-Some code for mmu and trap handling is based on the understanding of the
-Plan 9 bcm port (http://plan9.bell-labs.com/sources/plan9/sys/src/9/bcm/),
-though the assembly code was completely rewritten. 
-David Welch's RPI code (https://github.com/dwelch67/raspberrypi) is also
-inspiring for trap handling and uart driver.
+```bash
+git clone https://github.com/Miho19/xv6.git
+cd xv6
+```
 
-Mahdi Amiri Kordestany (mahdi@cs.otago.ac.nz) ported xv6 from RPI1 to
-RPI2/3.
+### Compilation
 
-If you spot errors or suggest improvements, please send email to
-Zhiyi Huang (hzy@cs.otago.ac.nz).
+```bash
+cd uprogs/
+make
+cp fs.img initcode ../source/.
+cd ..
+make loader
+```
 
-Building xv6_rpi2_port:
+### Running
 
-Suppose you have checked out the source with:
+```bash
+sudo cp kernel7.img /boot/kernel-xv6.img
+sudo vim /boot/config
+```
 
-$ git clone https://github.com/zhiyihuang/xv6_rpi2_port.git
+_/boot/config_
+add the following to the end, making sure to comment out kernel= of any older images
 
-On an RPI2/3 installed with Raspbian, type 'make loader' to make 'kernel7.img'.
-
-Copy 'kernel7.img' to /boot with a different name:
-# cp kernel7.img /boot/kernel-xv6.img
-
-Comment out the old entry 'kernel=' and add a new entry
-'kernel=kernel-xv6.img' to /boot/config.txt.
-
-Add the following into /boot/config.txt:
-
+```
+kernel=kernel-xv6.img
 kernel_old=1
 disable_commandline_tags=1
 enable_uart=1
+```
 
+### xv6 File system commands
 
-Reboot the machine.
+Make sure to connect a USB mass storage device i.e. flash drive. **All operations performed on this flash drive are permanent and destructive, previous data will be overridden.**
 
-The USB keyboard is not working yet. The only way to input into
-the console is to use the mini UART (serial port). You can use a 
-USB to TTL Serial Cable to connect the mini UART to a virtual terminal.
-You may use minicom or CoolTerm to create the virtual terminal.
-You have to open the lid to connect the cable to the GPIO pins (14 and 15) 
-of the Pi. 
+```bash
+usbmkfs
+mount
+```
 
-Building xv6 user programs and FS (You don't need this step if you
-don't change the user programs):
+usbmkfs will display the first freeblock which indicates a successful establishment of the file system on the flash drive. Mount allows the native xv6 file system to interact with the USB file system.
 
-cd uprogs
-make 
+**When using the USB, all paths must be absolute. If you cd into the usb you will be unable to access commands present on the host file system.**
 
-copy 'initcode' and 'fs.img' to the directory 'source'
+```bash
+ls /usb
+cat /usb/filename.txt
+```
 
+### Acknowledgements
+
+[Zhiyi Huang](https://github.com/zhiyihuang/xv6_rpi2_port)
+
+### Related Work
+
+[xv6fs](https://github.com/Miho19/xv6fs) is a FUSE interface which allows a host linux system to interact with the USB formatted with the xv6 file system.
