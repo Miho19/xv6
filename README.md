@@ -1,6 +1,6 @@
 # xv6_rpi2_port with USB file system
 
-This project aimed to reintroduce a persistent file system to the [RPI2/3](https://github.com/zhiyihuang/xv6_rpi2_port) port of xv6 by using the USB driver,[uspi](https://github.com/rsta2/uspi).
+This project aimed to reintroduce a persistent file system to the [RPI2/3](https://github.com/zhiyihuang/xv6_rpi2_port) port of xv6 by using the USB driver, [uspi](https://github.com/rsta2/uspi).
 
 ### Installation
 
@@ -24,10 +24,12 @@ make loader
 ```bash
 sudo cp kernel7.img /boot/kernel-xv6.img
 sudo vim /boot/config
+reboot
 ```
 
 _/boot/config_
-add the following to the end, making sure to comment out kernel= of any older images
+
+add the following to the end, making sure to comment out `kernel=` of any older images
 
 ```
 kernel=kernel-xv6.img
@@ -36,7 +38,7 @@ disable_commandline_tags=1
 enable_uart=1
 ```
 
-### xv6 File system commands
+### Usage within xv6
 
 Make sure to connect a USB mass storage device i.e. flash drive. **All operations performed on this flash drive are permanent and destructive, previous data will be overridden.**
 
@@ -45,7 +47,8 @@ usbmkfs
 mount
 ```
 
-usbmkfs will display the first freeblock which indicates a successful establishment of the file system on the flash drive. Mount allows the native xv6 file system to interact with the USB file system.
+- Usbmkfs will display the first freeblock which indicates a successful establishment of the file system on the flash drive.
+- Mount allows the native xv6 file system to interact with the USB file system.
 
 **When using the USB, all paths must be absolute. If you cd into the usb you will be unable to access commands present on the host file system.**
 
