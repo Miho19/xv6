@@ -74,6 +74,8 @@ sys_read(void)
   if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
     return -1;
 
+  if(f->ip->major == 15 && f->ip->minor == 15) return usb_rsec(f->off, (uchar *)p);
+
   return fileread(f, p, n);
 }
 
@@ -86,6 +88,8 @@ sys_write(void)
 
   if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
     return -1;
+
+  if(f->ip->major == 15 && f->ip->minor == 15) return usb_wsec(f->off, (uchar *)p);
 
   return filewrite(f, p, n);
 }
@@ -457,10 +461,11 @@ sys_lseek(void)
   }
 
 	
+
 	if(test < 0) 
 		test = 0;
 
-	if(test > f->ip->size)
+	if(test > f->ip->size && f->ip->major != 15)
 		test = f->ip->size;
 
 	f->off = test;

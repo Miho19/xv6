@@ -19,7 +19,7 @@ int size = 1024;			/** Total number of blocks */
 
 int fsfd;
 struct superblock sb;
-char zeroes[512];
+char buf[512];
 uint freeblock;
 uint usedblocks;
 uint bitblocks;
@@ -116,31 +116,25 @@ xint(uint x)
 int
 main(int argc, char *argv[])
 {
-  int i;
+ // int i;
   uint rootino;
   struct dirent de;
-  char buf[512];
   struct dinode din;
-  int mknodResponse = 0;
+  int i;
 
 
   _static_assert(sizeof(int) == 4, "Integers must be 4 bytes!");
 
-  if(argc < 2){
-    printf(1, "Usage: usbmkfs <device-name> [files...] \n");
-    exit();
-  }
-
+  
   assert(512 % sizeof(struct dinode) == 0);
 
   /** Create the dev */
- mknodResponse = mknod(argv[1], 15, 15);
- printf(1, "mknod: %d\n", mknodResponse);
-
- fsfd = open(argv[1], O_RDWR);
+  mknod("mass-device", 15, 15);
+ 
+  fsfd = open("mass-device", O_RDWR);
 
   if(fsfd < 0){
-    printf(1, "failed to open: %s\n", argv[1]);
+    printf(1, "failed to open: %s\n", "mass-device");
     exit();
   }
 
@@ -159,14 +153,13 @@ main(int argc, char *argv[])
   assert(nblocks + usedblocks + nlog == size);
 
   for(i = 0; i < nblocks + usedblocks + nlog; i++)
-    wsect(i, zeroes);
+    wsect(i, buf);
 
-  printf(1, "after zero blocks\n");
 
   memset(buf, 0, sizeof(buf));
   memmove(buf, &sb, sizeof(sb));
   wsect(1, buf);
-
+  printf(1, "Superblock written\n");
   rootino = ialloc(T_DIR);
   assert(rootino == ROOTINO);
 
@@ -176,15 +169,18 @@ main(int argc, char *argv[])
   strcpy(de.name, ".");
   iappend(rootino, &de, sizeof(de));
 
+
   memset(&de, 0, sizeof(de));
   de.inum = xshort(rootino);
   strcpy(de.name, "..");
   iappend(rootino, &de, sizeof(de));
 
-
+  
   // fix size of root inode dir
   rinode(rootino, &din);
   din.size = xint(BSIZE);
+
+  
   winode(rootino, &din);
 
 
@@ -198,7 +194,7 @@ wsect(uint sec, void *buf)
 {
   int write_return = 0;
 
-  if(lseek(fsfd, sec * 512L, 0) != sec * 512L){
+  if(lseek(fsfd, sec , 0) != sec){
     printf(1, "lseek\n");
     exit();
   }
@@ -246,12 +242,12 @@ rinode(uint inum, struct dinode *ip)
 void
 rsect(uint sec, void *buf)
 {
-  if(lseek(fsfd, sec * 512L, 0) != sec * 512L){
-    printf(1, "lseek");
+  if(lseek(fsfd, sec, 0) != sec){
+    printf(1, "lseek\n");
     exit();
   }
   if(read(fsfd, buf, 512) != 512){
-    printf(1, "read");
+    printf(1, "read\n");
     exit();
   }
 }

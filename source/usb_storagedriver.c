@@ -45,13 +45,25 @@ void storage_free(void){
 
 int usb_wsec(int sec, uchar *buf){
 	int result = 0;
+	char buffer[BSIZE];
+
+
+	memset(buffer, 0, BSIZE);
+
 
 	if(sec > 1024 || sec < 0 || !buf)
 		return result;
 
+
+	memmove(buffer, buf, BSIZE);
+	
+
 	usbsh.usb_active = 1;
 
-	result = USPiMassStorageDeviceWrite(sec * BSIZE, buf, BSIZE, 0);
+	
+	result = USPiMassStorageDeviceWrite(sec * BSIZE, buffer, BSIZE, 0);
+
+	
 
 	usbsh.usb_active = 0;
 
@@ -64,16 +76,22 @@ int usb_wsec(int sec, uchar *buf){
 
 int usb_rsec(int sec, uchar *buf) {
 	int result = 0;
+	char buffer[BSIZE];
+
+	memset(buffer, 0, BSIZE);
 
 	if(sec > 1024 || sec < 0 || !buf)
 		return result;
 
-
 	
 	usbsh.usb_active = 1;
-	result = USPiMassStorageDeviceRead(sec * BSIZE, buf, BSIZE, 0);
+	result = USPiMassStorageDeviceRead(sec * BSIZE, buffer, BSIZE, 0);
 
 	usbsh.usb_active = 0;
+
+
+	memmove(buf, buffer, result);
+
 	if(result != BSIZE){
 		return result;
 	}

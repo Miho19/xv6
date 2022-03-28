@@ -279,7 +279,6 @@ int DWHCIDeviceTransfer (TDWHCIDevice *pThis, TUSBEndpoint *pEndpoint, void *pBu
 		nResult = USBRequestGetResultLength (&URB);
 	}
 
-	
 	_USBRequest (&URB);
 
 	return nResult;
@@ -746,6 +745,7 @@ boolean DWHCIDeviceTransferStage (TDWHCIDevice *pThis, TUSBRequest *pURB, boolea
 			// josh
 	while (pThis->m_bWaiting){
 		if(usbsh.usb_active == 1){
+			
 			yield();
 		} 
 	}
